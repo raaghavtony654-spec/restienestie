@@ -185,24 +185,17 @@ function initScrollReveal() {
    STICKY NAVIGATION (optional enhancement)
    ============================================== */
 function initStickyNav() {
-    const topBar = document.getElementById('top-bar');
-    const mainNav = document.getElementById('main-nav');
+    const pillNav = document.getElementById('pill-nav');
 
-    if (!topBar || !mainNav) return;
-
-    let lastScroll = 0;
-    const topBarHeight = topBar.offsetHeight;
+    if (!pillNav) return;
 
     window.addEventListener('scroll', () => {
         const currentScroll = window.pageYOffset;
 
-        // Add subtle shadow when scrolled
         if (currentScroll > 10) {
-            mainNav.style.boxShadow = '0 2px 10px rgba(0,0,0,0.05)';
+            pillNav.classList.add('scrolled');
         } else {
-            mainNav.style.boxShadow = 'none';
+            pillNav.classList.remove('scrolled');
         }
-
-        lastScroll = currentScroll;
     }, { passive: true });
 }
