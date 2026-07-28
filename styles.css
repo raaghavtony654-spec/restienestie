@@ -179,6 +179,7 @@ button {
     position: relative;
     display: inline-flex;
     align-items: center;
+    white-space: nowrap;
     transition: color 0.3s ease, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
