@@ -269,8 +269,8 @@ button {
    ============================================== */
 .hero {
     position: relative;
-    width: 100%;
-    height: calc(100vh - 6.5rem); /* viewport height minus approximate header height */
+    width: 100vw;
+    height: 100vh;
     min-height: 40rem;
     overflow: hidden;
 }
