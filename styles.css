@@ -52,7 +52,7 @@ body {
     font-family: var(--font-sans);
     color: var(--color-text-dark);
     background-color: var(--color-bg-white);
-    background-image: url('assets/bg-gradient.jpg');
+    background-image: url('assets/bg-smooth.png');
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -118,10 +118,9 @@ button {
    ============================================== */
 .top-bar {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    padding: 0 40px;
-    height: var(--nav-height-top);
+    padding: 10px 40px 0;
     background: transparent;
     border-bottom: none;
     position: relative;
@@ -180,10 +179,20 @@ button {
 }
 
 .top-bar__logo {
-    position: absolute;
-    left: 50%;
-    top: 12px;
-    transform: translateX(-50%);
+    height: 10px;
+    margin-top: 10px;
+    margin-bottom: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.top-bar__nav {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+    padding-bottom: 15px;
 }
 
 .top-bar__logo a {
@@ -194,11 +203,12 @@ button {
 }
 
 .top-bar__logo img {
-    height: 180px; /* the image has a lot of padding, increasing height to make logo visible */
+    height: 140px; /* reduced logo size */
     width: auto;
     object-fit: contain;
     mix-blend-mode: screen;
     pointer-events: none;
+    transform: translateY(10px); /* move the logo slightly lower visually */
 }
 
 .top-bar__logo a:hover {
