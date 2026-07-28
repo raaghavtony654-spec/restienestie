@@ -46,6 +46,14 @@ html {
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* Caps at standard 16px on large monitors to match original size, but scales down beautifully on Macbooks to keep layout uniform */
+    font-size: min(16px, calc(100vw / 110)); 
+}
+
+@media (max-width: 768px) {
+    html {
+        font-size: 16px; /* Fixed size for mobile/vertical screens */
+    }
 }
 
 body {
