@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knots Rugs — Your Floor is the Canvas</title>
+    <meta name="description" content="Experience the artistry of handcrafted, customizable rugs that blend heritage with your unique style. Explore our collections of luxury handmade rugs.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Great+Vibes&family=Inter:wght@300;400;500;600&family=Pinyon+Script&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- SVG filter for wavy sand texture -->
+    <svg style="position:absolute;width:0;height:0;overflow:hidden;" aria-hidden="true">
+        <defs>
+            <filter id="wavy-texture">
+                <feTurbulence type="fractalNoise" baseFrequency="0.015 0.025" numOctaves="5" seed="2" stitchTiles="stitch" result="noise"/>
+                <feColorMatrix type="saturate" values="0" in="noise" result="mono"/>
+                <feComponentTransfer in="mono" result="adjusted">
+                    <feFuncA type="linear" slope="0.08"/>
+                </feComponentTransfer>
+                <feBlend in="SourceGraphic" in2="adjusted" mode="overlay"/>
+            </filter>
+        </defs>
+    </svg>
+    <div class="bg-texture" aria-hidden="true"></div>
+    <!-- ===== TOP BAR ===== -->
+    <header class="top-bar" id="top-bar">
+        <div class="top-bar__left">
+            <a href="#" class="top-bar__link" id="search-link">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                SEARCH
+            </a>
+            <a href="#" class="top-bar__link" id="projects-link">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                </svg>
+                PROJECTS
+            </a>
+        </div>
+        <div class="top-bar__logo">
+            <a href="#" id="logo-link">
+                <img src="assets/logo.png" alt="Restnest Logo">
+            </a>
+        </div>
+        <div class="top-bar__right">
+            <a href="#" class="top-bar__link" id="account-link">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                ACCOUNT
+            </a>
+            <a href="#" class="top-bar__link" id="order-link">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="9" cy="21" r="1"></circle>
+                    <circle cx="20" cy="21" r="1"></circle>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg>
+                ORDER
+            </a>
+        </div>
+    </header>
+
+    <!-- ===== MAIN NAVIGATION ===== -->
+    <nav class="main-nav" id="main-nav">
+        <ul class="main-nav__list">
+            <li><a href="#" class="main-nav__link" id="nav-collections">COLLECTIONS</a></li>
+            <li><a href="#" class="main-nav__link" id="nav-cushions">CUSHIONS</a></li>
+            <li><a href="#" class="main-nav__link" id="nav-collaborations">COLLABORATIONS</a></li>
+            <li><a href="#" class="main-nav__link" id="nav-custom">CUSTOM RUGS</a></li>
+            <li><a href="#" class="main-nav__link" id="nav-press">PRESS</a></li>
+            <li><a href="#" class="main-nav__link" id="nav-about">ABOUT</a></li>
+            <li><a href="#" class="main-nav__link" id="nav-contact">CONTACT</a></li>
+            <li><a href="#" class="main-nav__link" id="nav-journal">JOURNAL</a></li>
+            <li><a href="#" class="main-nav__link" id="nav-sale">ARCHIVE SALE</a></li>
+        </ul>
+    </nav>
+
+    <!-- ===== HERO SLIDER ===== -->
+    <section class="hero" id="hero">
+        <div class="hero__slider" id="hero-slider">
+            <div class="hero__track" id="hero-track">
+                <div class="hero__slide hero__slide--active" data-index="0">
+                    <img src="assets/hero-1.png" alt="Luxurious handcrafted rug in an elegant living room" class="hero__image">
+                    <div class="hero__overlay"></div>
+                    <div class="hero__content">
+                        <h1 class="hero__heading">Your Floor is the Canvas</h1>
+                        <a href="#" class="hero__cta" id="hero-cta">EXPLORE THE COLLECTION</a>
+                    </div>
+                </div>
+                <div class="hero__slide" data-index="1">
+                    <img src="assets/hero-2.png" alt="Beautiful handwoven rug in a modern living room" class="hero__image">
+                    <div class="hero__overlay"></div>
+                    <div class="hero__content">
+                        <h1 class="hero__heading">Crafted with Passion</h1>
+                        <a href="#" class="hero__cta">EXPLORE THE COLLECTION</a>
+                    </div>
+                </div>
+            </div>
+            <div class="hero__nav" id="hero-nav">
+                <button class="hero__arrow hero__arrow--prev" id="hero-prev" aria-label="Previous slide">&#8249;</button>
+                <button class="hero__arrow hero__arrow--next" id="hero-next" aria-label="Next slide">&#8250;</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== THE RUGS STORY ===== -->
+    <section class="story" id="story">
+        <div class="story__container">
+            <h2 class="story__label">THE RUGS STORY</h2>
+            <p class="story__text">
+                Experience the artistry of handcrafted, customizable rugs that blend heritage<br>
+                with your unique style.
+            </p>
+            <div class="story__features">
+                <div class="story__feature" id="feature-fibres">
+                    <div class="story__icon">
+                        <!-- Natural Fibres - Yarn ball icon -->
+                        <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="50" cy="50" r="38"/>
+                            <path d="M12 50 C12 50 30 20 50 12 C70 4 88 20 88 50" stroke-width="1.5"/>
+                            <path d="M12 50 C12 50 30 30 50 25 C70 20 88 30 88 50" stroke-width="1.5"/>
+                            <path d="M12 50 C12 50 30 40 50 38 C70 36 88 40 88 50" stroke-width="1.5"/>
+                            <path d="M12 50 C12 50 30 60 50 62 C70 64 88 60 88 50" stroke-width="1.5"/>
+                            <path d="M12 50 C12 50 30 70 50 75 C70 80 88 70 88 50" stroke-width="1.5"/>
+                            <path d="M12 50 C12 50 30 80 50 88 C70 96 88 80 88 50" stroke-width="1.5"/>
+                            <line x1="50" y1="12" x2="50" y2="88" stroke-width="1.5"/>
+                            <line x1="15" y1="25" x2="85" y2="75" stroke-width="1.5"/>
+                            <line x1="85" y1="25" x2="15" y2="75" stroke-width="1.5"/>
+                        </svg>
+                    </div>
+                    <span class="story__feature-label">Natural Fibres</span>
+                </div>
+                <div class="story__feature" id="feature-pet">
+                    <div class="story__icon">
+                        <!-- Pet Friendly - Paw icon -->
+                        <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <ellipse cx="32" cy="25" rx="10" ry="13"/>
+                            <ellipse cx="68" cy="25" rx="10" ry="13"/>
+                            <ellipse cx="18" cy="50" rx="9" ry="12"/>
+                            <ellipse cx="82" cy="50" rx="9" ry="12"/>
+                            <path d="M30 65 C30 55 40 48 50 48 C60 48 70 55 70 65 C70 80 60 85 50 85 C40 85 30 80 30 65Z"/>
+                            <circle cx="50" cy="72" r="7"/>
+                            <path d="M43 72 L50 65 L57 72" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <span class="story__feature-label">Pet Friendly</span>
+                </div>
+                <div class="story__feature" id="feature-handmade">
+                    <div class="story__icon">
+                        <!-- 100% Handmade - Hand with heart -->
+                        <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="50" cy="50" r="40"/>
+                            <!-- "MADE WITH LOVE" text around circle -->
+                            <path d="M50 85 C40 75 25 65 25 52 C25 44 32 38 40 38 C44 38 47 40 50 44 C53 40 56 38 60 38 C68 38 75 44 75 52 C75 65 60 75 50 85Z" stroke-width="2"/>
+                            <text x="50" y="20" text-anchor="middle" font-size="8" fill="currentColor" stroke="none" font-family="Inter, sans-serif" letter-spacing="2">MADE WITH LOVE</text>
+                            <path d="M45 32 Q30 15 15 30" stroke-width="1" stroke-dasharray="0"/>
+                            <text font-size="6" fill="currentColor" stroke="none" font-family="Inter, sans-serif">
+                                <textPath href="#mwl-path">MADE WITH LOVE</textPath>
+                            </text>
+                        </svg>
+                    </div>
+                    <span class="story__feature-label">100% Handmade</span>
+                </div>
+                <div class="story__feature" id="feature-sustainable">
+                    <div class="story__icon">
+                        <!-- Sustainable - Plant icon -->
+                        <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="50" cy="50" r="40"/>
+                            <path d="M50 80 L50 45" stroke-width="2.5"/>
+                            <path d="M50 60 C35 55 28 42 35 30 C42 30 55 35 50 50" stroke-width="2"/>
+                            <path d="M50 50 C65 45 72 32 65 20 C58 20 45 25 50 40" stroke-width="2"/>
+                            <path d="M35 85 C40 75 50 72 50 80 C50 72 60 75 65 85" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <span class="story__feature-label">Sustainable</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="collections-wrapper">
+    <!-- ===== CATEGORIES ===== -->
+    <section class="categories" id="categories">
+        <div class="categories__container">
+            <h2 class="categories__heading">Categories</h2>
+            <div class="categories__grid">
+                <div class="categories__card" id="cat-abstract">
+                    <a href="#">
+                        <div class="categories__img-wrap">
+                            <img src="assets/cat-abstract.png" alt="Abstract Rugs" class="categories__img">
+                        </div>
+                        <span class="categories__label">Abstract Rugs</span>
+                    </a>
+                </div>
+                <div class="categories__card" id="cat-oriental">
+                    <a href="#">
+                        <div class="categories__img-wrap">
+                            <img src="assets/cat-oriental.png" alt="Oriental Rugs" class="categories__img">
+                        </div>
+                        <span class="categories__label">Oriental Rugs</span>
+                    </a>
+                </div>
+                <div class="categories__card" id="cat-geometrical">
+                    <a href="#">
+                        <div class="categories__img-wrap">
+                            <img src="assets/cat-geometrical.png" alt="Geometrical Rugs" class="categories__img">
+                        </div>
+                        <span class="categories__label">Geometrical Rugs</span>
+                    </a>
+                </div>
+                <div class="categories__card" id="cat-moroccan">
+                    <a href="#">
+                        <div class="categories__img-wrap">
+                            <img src="assets/cat-moroccan.png" alt="Moroccan Rugs" class="categories__img">
+                        </div>
+                        <span class="categories__label">Moroccan Rugs</span>
+                    </a>
+                </div>
+                <div class="categories__card" id="cat-vintage">
+                    <a href="#">
+                        <div class="categories__img-wrap">
+                            <img src="assets/cat-vintage.png" alt="Vintage & Distressed Rugs" class="categories__img">
+                        </div>
+                        <span class="categories__label">Vintage & Distressed Rugs</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== THE 17TH CENTURY COLLECTION ===== -->
+    <section class="collection" id="century-collection">
+        <div class="collection__container">
+            <h2 class="collection__heading">The 17th Century Collection</h2>
+            <p class="collection__subtitle">MASTERPIECES REIMAGINED</p>
+            <div class="collection__grid">
+                <div class="collection__card" id="col-polonaise-01">
+                    <a href="#">
+                        <div class="collection__img-wrap">
+                            <img src="assets/col-polonaise-01.png" alt="Polonaise No.01 Original" class="collection__img">
+                        </div>
+                        <span class="collection__label">POLONAISE NO.01 | ORIGINAL</span>
+                    </a>
+                </div>
+                <div class="collection__card" id="col-polonaise-02">
+                    <a href="#">
+                        <div class="collection__img-wrap">
+                            <img src="assets/col-polonaise-02.png" alt="Polonaise No.02 Original" class="collection__img">
+                        </div>
+                        <span class="collection__label">POLONAISE NO.02 | ORIGINAL</span>
+                    </a>
+                </div>
+                <div class="collection__card" id="col-skull">
+                    <a href="#">
+                        <div class="collection__img-wrap">
+                            <img src="assets/col-skull.png" alt="King Umberto Skull Original" class="collection__img">
+                        </div>
+                        <span class="collection__label">KING UMBERTO SKULL | ORIGINAL</span>
+                    </a>
+                </div>
+                <div class="collection__card" id="col-kumkapi">
+                    <a href="#">
+                        <div class="collection__img-wrap">
+                            <img src="assets/col-kumkapi.png" alt="Kumkapi Original" class="collection__img">
+                        </div>
+                        <span class="collection__label">KUMKAPI | ORIGINAL</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    </div>
+
+    <!-- ===== FULL-WIDTH SHOWCASE ===== -->
+    <section class="showcase" id="showcase">
+        <img src="assets/showcase.png" alt="Handcrafted leaf-shaped rug in an elegant room setting" class="showcase__image">
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html>
