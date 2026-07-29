@@ -2105,20 +2105,28 @@ button {
 
 /* Product Page Button Overrides */
 .product-actions .btn--primary {
-    background-color: #d4af37 !important;
+    background-color: #C3B091 !important; /* Soft premium gold/champagne */
     color: #ffffff !important;
-    border: 1px solid #d4af37 !important;
+    border: 1px solid #C3B091 !important;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
 }
 .product-actions .btn--primary:hover {
-    background-color: #b5952f !important;
-    border-color: #b5952f !important;
+    background-color: #a89578 !important;
+    border-color: #a89578 !important;
 }
 
 .product-actions .btn--secondary {
     background-color: transparent !important;
-    color: #d4af37 !important;
-    border: 1px solid #d4af37 !important;
+    color: #C3B091 !important;
+    border: 1px solid #C3B091 !important;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
 }
 .product-actions .btn--secondary:hover {
-    background-color: rgba(212, 175, 55, 0.1) !important;
+    background-color: rgba(195, 176, 145, 0.1) !important;
 }
