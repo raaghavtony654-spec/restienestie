@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initFeaturesMarquee();
     initProductsSlider();
     initSearchModal();
+    initProductPage();
 });
 
 
@@ -316,4 +317,67 @@ function initSearchModal() {
             closeSearch();
         }
     });
+}
+
+/* ==============================================
+   PRODUCT PAGE INITIALIZATION
+   ============================================== */
+async function initProductPage() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get('id');
+
+    if (!productId || !document.querySelector('.product-page')) return;
+
+    try {
+        const response = await fetch('../assets/products.json');
+        const products = await response.json();
+        
+        const product = products[productId];
+        if (!product) {
+            document.getElementById('product-title').innerText = "Product Not Found";
+            return;
+        }
+
+        document.getElementById('product-title').innerText = product.title;
+        document.getElementById('product-desc').innerText = product.description;
+        document.getElementById('product-sale-price').innerText = product.salePrice;
+        document.getElementById('product-original-price').innerText = product.originalPrice;
+        document.getElementById('product-discount').innerText = product.discount;
+        
+        document.getElementById('product-main-image').src = product.imgUrl;
+
+        // Generate Thumbnails
+        const thumbnailsContainer = document.getElementById('product-thumbnails');
+        if (thumbnailsContainer) {
+            thumbnailsContainer.innerHTML = '';
+            for(let i=0; i<4; i++) {
+                const thumb = document.createElement('div');
+                thumb.className = `thumbnail ${i === 0 ? 'active' : ''}`;
+                thumb.innerHTML = `<img src="${product.imgUrl}" alt="Thumbnail ${i+1}">`;
+                thumbnailsContainer.appendChild(thumb);
+            }
+        }
+
+        // Generate Sizes
+        const sizesContainer = document.getElementById('product-sizes');
+        if (sizesContainer && product.sizes) {
+            sizesContainer.innerHTML = '';
+            product.sizes.forEach((size, index) => {
+                const btn = document.createElement('button');
+                btn.className = `size-btn ${index === 0 ? 'active' : ''}`;
+                btn.innerHTML = `<strong>${size.label}</strong><span>${size.desc}</span>`;
+                sizesContainer.appendChild(btn);
+                
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                });
+            });
+        }
+        
+        document.title = product.title + " – Cloudrest";
+
+    } catch (error) {
+        console.error("Failed to load product data:", error);
+    }
 }
