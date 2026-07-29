@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knots Rugs — Your Floor is the Canvas</title>
+    <meta name="description" content="Experience the artistry of handcrafted, customizable rugs that blend heritage with your unique style. Explore our collections of luxury handmade rugs.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Great+Vibes&family=Inter:wght@300;400;500;600&family=Pinyon+Script&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <!-- SVG filter for wavy sand texture -->
+    <svg style="position:absolute;width:0;height:0;overflow:hidden;" aria-hidden="true">
+        <defs>
+            <filter id="wavy-texture">
+                <feTurbulence type="fractalNoise" baseFrequency="0.015 0.025" numOctaves="5" seed="2" stitchTiles="stitch" result="noise"/>
+                <feColorMatrix type="saturate" values="0" in="noise" result="mono"/>
+                <feComponentTransfer in="mono" result="adjusted">
+                    <feFuncA type="linear" slope="0.08"/>
+                </feComponentTransfer>
+                <feBlend in="SourceGraphic" in2="adjusted" mode="overlay"/>
+            </filter>
+        </defs>
+    </svg>
+    <div class="bg-texture" aria-hidden="true"></div>
+    <!-- ===== UNIFIED PILL NAVIGATION ===== -->
+    <nav id="pill-nav" class="pill-nav">
+        <div class="pill-nav__inner">
+            <!-- Left: Main Nav -->
+            <ul class="pill-nav__list">
+                <li><a href="../index.html" class="main-nav__link" id="nav-home">Home</a></li>
+                <li><a href="../pillows/" class="main-nav__link" id="nav-pillow">Pillow</a></li>
+                <li><a href="../cushions/" class="main-nav__link" id="nav-cushion">Cushion</a></li>
+                <li><a href="#" class="main-nav__link" id="nav-shop-all">Shop all</a></li>
+                <li><a href="#" class="main-nav__link" id="nav-collection">Collection</a></li>
+                <li><a href="#" class="main-nav__link" id="nav-about-us">About us</a></li>
+                <li><a href="#" class="main-nav__link" id="nav-contact">Contact</a></li>
+            </ul>
+
+            <!-- Center: Logo removed and moved to hero slider -->
+
+            <!-- Right: Utilities -->
+            <div class="pill-nav__utils">
+                <a href="#" class="top-bar__link" id="search-link">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    SEARCH
+                </a>
+                <a href="#" class="top-bar__link" id="projects-link">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    PROJECTS
+                </a>
+                <a href="#" class="top-bar__link" id="account-link">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    ACCOUNT
+                </a>
+                <a href="#" class="top-bar__link" id="order-link">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    ORDER
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="page-header"><h1 style="text-align:center; font-family:var(--font-serif); font-size:3rem; font-weight:300; margin:10rem 0 4rem 0;">Our Cushion Collection</h1></section><section class="collection"><div class="collection__container"><div class="products-grid" style="display:grid; grid-template-columns:repeat(3, 1fr); gap:2rem;">
+    <div class="products-slider__card" style="margin-bottom: 2rem;">
+        <a href="#">
+            <span class="products-slider__badge">-44%</span>
+            <div class="products-slider__img-wrap">
+                <img src="https://restnest.in/cdn/shop/files/1_a6f3313d-a03b-4e75-81c5-b1b6cdf0e000.jpg?v=1755690677&width=720" alt="Rest Nest Soft Cushion Pack Of 2 – Premium Recron Fiber (17x27 Inch)">
+            </div>
+            <h3 class="products-slider__name" style="white-space: normal; text-overflow: clip;">Rest Nest Soft Cushion Pack Of 2 – Premium Recron Fiber (17x27 Inch)</h3>
+            <div class="products-slider__price">
+                <span class="products-slider__sale">Rs. 1,065.00</span>
+                <span class="products-slider__original">Rs. 1,913.00</span>
+            </div>
+        </a>
+    </div>
+    
+    <div class="products-slider__card" style="margin-bottom: 2rem;">
+        <a href="#">
+            <span class="products-slider__badge">-47%</span>
+            <div class="products-slider__img-wrap">
+                <img src="https://restnest.in/cdn/shop/files/1_e843ed76-397f-41e8-ba42-ccad9e82bd12.jpg?v=1755686284&width=720" alt="Rest Nest Orthopedic Cervical Memory Foam Cushion – White (1 Pc)">
+            </div>
+            <h3 class="products-slider__name" style="white-space: normal; text-overflow: clip;">Rest Nest Orthopedic Cervical Memory Foam Cushion – White (1 Pc)</h3>
+            <div class="products-slider__price">
+                <span class="products-slider__sale">Rs. 1,175.00</span>
+                <span class="products-slider__original">Rs. 2,229.00</span>
+            </div>
+        </a>
+    </div>
+    
+    <div class="products-slider__card" style="margin-bottom: 2rem;">
+        <a href="#">
+            <span class="products-slider__badge">-47%</span>
+            <div class="products-slider__img-wrap">
+                <img src="https://restnest.in/cdn/shop/files/1_b92871a1-943d-4257-b5f3-a86ff0eb0901.jpg?v=1755690027&width=720" alt="Rest Nest Slim Microfiber Cushion – 17x27 Inch, White 1 Pcs">
+            </div>
+            <h3 class="products-slider__name" style="white-space: normal; text-overflow: clip;">Rest Nest Slim Microfiber Cushion – 17x27 Inch, White 1 Pcs</h3>
+            <div class="products-slider__price">
+                <span class="products-slider__sale">Rs. 1,014.00</span>
+                <span class="products-slider__original">Rs. 1,928.00</span>
+            </div>
+        </a>
+    </div>
+    
+    <div class="products-slider__card" style="margin-bottom: 2rem;">
+        <a href="#">
+            <span class="products-slider__badge">-54%</span>
+            <div class="products-slider__img-wrap">
+                <img src="https://restnest.in/cdn/shop/files/1_92da7dc2-8045-451c-99f9-4743161a2420.jpg?v=1755689166&width=720" alt="Rest Nest Premium White Glace Cotton Cushions – Pack Of 2 (800g Each)">
+            </div>
+            <h3 class="products-slider__name" style="white-space: normal; text-overflow: clip;">Rest Nest Premium White Glace Cotton Cushions – Pack Of 2 (800g Each)</h3>
+            <div class="products-slider__price">
+                <span class="products-slider__sale">Rs. 1,140.00</span>
+                <span class="products-slider__original">Rs. 2,504.00</span>
+            </div>
+        </a>
+    </div>
+    
+    <div class="products-slider__card" style="margin-bottom: 2rem;">
+        <a href="#">
+            <span class="products-slider__badge">-47%</span>
+            <div class="products-slider__img-wrap">
+                <img src="https://restnest.in/cdn/shop/files/1_a2560cc8-5c8b-4a1d-ae3f-36de15dc65af.jpg?v=1755688418&width=720" alt="Rest Nest ContourCare™ Memory Foam Cushion – Orthopedic Support For Perfect Sleep">
+            </div>
+            <h3 class="products-slider__name" style="white-space: normal; text-overflow: clip;">Rest Nest ContourCare™ Memory Foam Cushion – Orthopedic Support For Perfect Sleep</h3>
+            <div class="products-slider__price">
+                <span class="products-slider__sale">Rs. 1,175.00</span>
+                <span class="products-slider__original">Rs. 2,228.00</span>
+            </div>
+        </a>
+    </div>
+    </div></div></section><!-- ===== SEARCH MODAL ===== -->
+    <div class="search-modal" id="search-modal">
+        <div class="search-modal__overlay" id="search-overlay"></div>
+        <div class="search-modal__content">
+            <button class="search-modal__close" id="search-close" aria-label="Close search">&times;</button>
+            <h2 class="search-modal__heading">Search Our Collections</h2>
+            <form class="search-modal__form" onsubmit="event.preventDefault();">
+                <input type="text" class="search-modal__input" placeholder="Type here to search..." aria-label="Search input">
+                <button type="submit" class="search-modal__submit" aria-label="Submit search">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script src="../script.js"></script>
+</body>
+</html>

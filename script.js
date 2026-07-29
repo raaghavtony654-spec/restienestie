@@ -7,7 +7,87 @@ document.addEventListener('DOMContentLoaded', () => {
     initHeroSlider();
     initScrollReveal();
     initStickyNav();
+    initFeaturesMarquee();
+    initProductsSlider();
+    initSearchModal();
 });
+
+
+/* ==============================================
+   PRODUCTS AUTO-SLIDER (2.8s per card)
+   ============================================== */
+function initProductsSlider() {
+    const track = document.getElementById('products-track');
+    if (!track) return;
+
+    const cards = track.querySelectorAll('.products-slider__card');
+    if (!cards.length) return;
+
+    let currentIndex = 0;
+    const totalCards = cards.length;
+    const visibleCards = 4; // show 4 at a time
+
+    function getCardWidth() {
+        const card = cards[0];
+        const style = getComputedStyle(track);
+        const gap = parseFloat(style.gap) || 0;
+        return card.offsetWidth + gap;
+    }
+
+    function slide() {
+        currentIndex++;
+        // When we've scrolled past the last visible set, snap back
+        if (currentIndex > totalCards - visibleCards) {
+            currentIndex = 0;
+            // Instant reset (no transition)
+            track.style.transition = 'none';
+            track.style.transform = `translateX(0)`;
+            // Force reflow then re-enable transition
+            track.offsetHeight;
+            track.style.transition = 'transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            return;
+        }
+        const offset = currentIndex * getCardWidth();
+        track.style.transform = `translateX(-${offset}px)`;
+    }
+
+    setInterval(slide, 2800);
+}
+
+
+/* ==============================================
+   FEATURES MARQUEE (seamless loop)
+   ============================================== */
+function initFeaturesMarquee() {
+    const track = document.getElementById('features-track');
+    if (!track) return;
+
+    const originalSet = track.querySelector('.features-marquee__set');
+    if (!originalSet) return;
+
+    // Dynamically clone enough sets to always cover the full viewport width
+    const setWidth = originalSet.offsetWidth;
+    const clonesNeeded = Math.ceil(window.innerWidth / setWidth) + 1;
+
+    for (let i = 0; i < clonesNeeded; i++) {
+        track.appendChild(originalSet.cloneNode(true));
+    }
+
+    let offset = 0;
+    const speed = 0.5; // pixels per frame
+
+    function animate() {
+        offset -= speed;
+        // When the first set has fully scrolled off-screen, reset seamlessly
+        if (Math.abs(offset) >= setWidth) {
+            offset += setWidth;
+        }
+        track.style.transform = `translateX(${offset}px)`;
+        requestAnimationFrame(animate);
+    }
+
+    requestAnimationFrame(animate);
+}
 
 
 /* ==============================================
@@ -198,4 +278,42 @@ function initStickyNav() {
             pillNav.classList.remove('scrolled');
         }
     }, { passive: true });
+}
+
+/* ==============================================
+   SEARCH MODAL
+   ============================================== */
+function initSearchModal() {
+    const searchLinks = document.querySelectorAll('#search-link, .top-bar__link[id="search-link"]');
+    const searchModal = document.getElementById('search-modal');
+    const searchClose = document.getElementById('search-close');
+    const searchOverlay = document.getElementById('search-overlay');
+
+    if (!searchModal) return;
+
+    function openSearch(e) {
+        if (e) e.preventDefault();
+        searchModal.classList.add('active');
+        const input = searchModal.querySelector('input');
+        if (input) {
+            setTimeout(() => input.focus(), 100);
+        }
+    }
+
+    function closeSearch() {
+        searchModal.classList.remove('active');
+    }
+
+    searchLinks.forEach(link => {
+        link.addEventListener('click', openSearch);
+    });
+
+    if (searchClose) searchClose.addEventListener('click', closeSearch);
+    if (searchOverlay) searchOverlay.addEventListener('click', closeSearch);
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && searchModal.classList.contains('active')) {
+            closeSearch();
+        }
+    });
 }
