@@ -60,7 +60,7 @@ body {
     font-family: var(--font-sans);
     color: var(--color-text-dark);
     background-color: var(--color-bg-white);
-    background-image: url('assets/bg-smooth.png');
+    background-image: url('assets/bg-leaves.png');
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -162,6 +162,11 @@ button {
     background: rgba(15, 20, 25, 0.95);
 }
 
+.pill-nav.scrolled .main-nav__link,
+.pill-nav.scrolled .top-bar__link {
+    color: var(--color-text-dark);
+}
+
 .pill-nav__list {
     display: flex;
     align-items: center;
@@ -182,7 +187,7 @@ button {
 /* Link Styles */
 .top-bar__link,
 .main-nav__link {
-    color: var(--color-text-dark);
+    color: #704214;
     text-decoration: none;
     position: relative;
     display: inline-flex;
@@ -561,13 +566,13 @@ button {
 }
 
 .categories__heading {
-    font-family: var(--font-serif);
-    font-size: 2.625rem;
+    font-family: var(--font-script);
+    font-size: clamp(2.25rem, 5vw, 3.75rem);
     font-weight: 400;
     text-align: center;
-    color: var(--color-cta-dark);
+    color: #4b3621;
     margin-bottom: 3.125rem;
-    letter-spacing: 0.0312rem;
+    letter-spacing: 0.125rem;
 }
 
 .categories__grid {
@@ -647,9 +652,9 @@ button {
     font-family: var(--font-script);
     font-size: clamp(2.25rem, 5vw, 3.75rem);
     font-weight: 400;
-    color: var(--color-cta-dark);
+    color: #4b3621;
     margin-bottom: 0.5rem;
-    line-height: 1.2;
+    line-height: 1.1;
 }
 
 .collection__subtitle {
