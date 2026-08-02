@@ -8,8 +8,8 @@
     --color-bg-cream: #0b1411;
     --color-bg-white: #111e19;
     --color-text-dark: #ffffff;
-    --color-text-body: #e0e0e0;
-    --color-text-light: #b3b3b3;
+    --color-text-body: #4b3621;
+    --color-text-light: #4b3621;
     --color-border: rgba(255, 255, 255, 0.1);
     --color-cta-dark: #e5c599;
     --color-cta-hover: #c4a173;
@@ -1762,8 +1762,10 @@ button {
    PRODUCT PAGE LAYOUT
    ============================================== */
 .product-page {
+    --color-text: #4b3621;
     padding: 8rem 5%;
-    background-color: var(--color-bg);
+    background-color: transparent;
+    color: var(--color-text);
 }
 
 .product-page__container {
@@ -2125,15 +2127,15 @@ button {
 
 .product-actions .btn--secondary {
     background-color: transparent !important;
-    color: #C3B091 !important;
-    border: 1px solid #C3B091 !important;
+    color: #4b3621 !important;
+    border: 1px solid #4b3621 !important;
     font-weight: 500;
     letter-spacing: 0.5px;
     border-radius: 4px;
     transition: all 0.3s ease;
 }
 .product-actions .btn--secondary:hover {
-    background-color: rgba(195, 176, 145, 0.1) !important;
+    background-color: rgba(75, 54, 33, 0.1) !important;
 }
 .product-actions .btn--primary, .product-actions .btn--secondary {
     padding-top: 1.25rem !important;
