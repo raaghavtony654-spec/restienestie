@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knots Rugs — Your Floor is the Canvas</title>
+    <meta name="description" content="Experience the artistry of handcrafted, customizable rugs that blend heritage with your unique style. Explore our collections of luxury handmade rugs.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Great+Vibes&family=Inter:wght@300;400;500;600&family=Pinyon+Script&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- SVG filter for wavy sand texture -->
+    <svg style="position:absolute;width:0;height:0;overflow:hidden;" aria-hidden="true">
+        <defs>
+            <filter id="wavy-texture">
+                <feTurbulence type="fractalNoise" baseFrequency="0.015 0.025" numOctaves="5" seed="2" stitchTiles="stitch" result="noise"/>
+                <feColorMatrix type="saturate" values="0" in="noise" result="mono"/>
+                <feComponentTransfer in="mono" result="adjusted">
+                    <feFuncA type="linear" slope="0.08"/>
+                </feComponentTransfer>
+                <feBlend in="SourceGraphic" in2="adjusted" mode="overlay"/>
+            </filter>
+        </defs>
+    </svg>
+    <div class="bg-texture" aria-hidden="true"></div>
+    <!-- ===== UNIFIED PILL NAVIGATION ===== -->
+    <nav id="pill-nav" class="pill-nav">
+        <div class="pill-nav__inner">
+            <!-- Left: Main Nav -->
+            <ul class="pill-nav__list">
+                <li><a href="index.html" class="main-nav__link" id="nav-home">Home</a></li>
+                <li><a href="pillows/" class="main-nav__link" id="nav-pillow">Pillow</a></li>
+                <li><a href="#" class="main-nav__link" id="nav-cushion">Cushion</a></li>
+                <li><a href="#" class="main-nav__link" id="nav-shop-all">Shop all</a></li>
+                <li><a href="#" class="main-nav__link" id="nav-collection">Collection</a></li>
+                <li><a href="#" class="main-nav__link" id="nav-about-us">About us</a></li>
+                <li><a href="#" class="main-nav__link" id="nav-contact">Contact</a></li>
+            </ul>
+
+            <!-- Center: Logo removed and moved to hero slider -->
+
+            <!-- Right: Utilities -->
+            <div class="pill-nav__utils">
+                <a href="#" class="top-bar__link" id="search-link">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    SEARCH
+                </a>
+                <a href="#" class="top-bar__link" id="projects-link">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    PROJECTS
+                </a>
+                <a href="#" class="top-bar__link" id="account-link">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    ACCOUNT
+                </a>
+                <a href="#" class="top-bar__link" id="order-link">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    ORDER
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="page-header"><h1 style="text-align:center; font-family:var(--font-serif); font-size:3rem; font-weight:300; margin:10rem 0 4rem 0;">Our Pillow Collection</h1></section><section class="collection"><div class="collection__container"><div class="products-grid" style="display:grid; grid-template-columns:repeat(3, 1fr); gap:2rem;">
+    <div class="products-slider__card" style="margin-bottom: 2rem;">
+        <a href="#">
+            <span class="products-slider__badge">-44%</span>
+            <div class="products-slider__img-wrap">
+                <img src="https://restnest.in/cdn/shop/files/1_a6f3313d-a03b-4e75-81c5-b1b6cdf0e000.jpg?v=1755690677&width=720" alt="Rest Nest Soft Pillow Pack Of 2 – Premium Recron Fiber (17x27 Inch)">
+            </div>
+            <h3 class="products-slider__name" style="white-space: normal; text-overflow: clip;">Rest Nest Soft Pillow Pack Of 2 – Premium Recron Fiber (17x27 Inch)</h3>
+            <div class="products-slider__price">
+                <span class="products-slider__sale">Rs. 1,065.00</span>
+                <span class="products-slider__original">Rs. 1,913.00</span>
+            </div>
+        </a>
+    </div>
+    
+    <div class="products-slider__card" style="margin-bottom: 2rem;">
+        <a href="#">
+            <span class="products-slider__badge">-47%</span>
+            <div class="products-slider__img-wrap">
+                <img src="https://restnest.in/cdn/shop/files/1_e843ed76-397f-41e8-ba42-ccad9e82bd12.jpg?v=1755686284&width=720" alt="Rest Nest Orthopedic Cervical Memory Foam Pillow – White (1 Pc)">
+            </div>
+            <h3 class="products-slider__name" style="white-space: normal; text-overflow: clip;">Rest Nest Orthopedic Cervical Memory Foam Pillow – White (1 Pc)</h3>
+            <div class="products-slider__price">
+                <span class="products-slider__sale">Rs. 1,175.00</span>
+                <span class="products-slider__original">Rs. 2,229.00</span>
+            </div>
+        </a>
+    </div>
+    
+    <div class="products-slider__card" style="margin-bottom: 2rem;">
+        <a href="#">
+            <span class="products-slider__badge">-47%</span>
+            <div class="products-slider__img-wrap">
+                <img src="https://restnest.in/cdn/shop/files/1_b92871a1-943d-4257-b5f3-a86ff0eb0901.jpg?v=1755690027&width=720" alt="Rest Nest Slim Microfiber Pillow – 17x27 Inch, White 1 Pcs">
+            </div>
+            <h3 class="products-slider__name" style="white-space: normal; text-overflow: clip;">Rest Nest Slim Microfiber Pillow – 17x27 Inch, White 1 Pcs</h3>
+            <div class="products-slider__price">
+                <span class="products-slider__sale">Rs. 1,014.00</span>
+                <span class="products-slider__original">Rs. 1,928.00</span>
+            </div>
+        </a>
+    </div>
+    
+    <div class="products-slider__card" style="margin-bottom: 2rem;">
+        <a href="#">
+            <span class="products-slider__badge">-54%</span>
+            <div class="products-slider__img-wrap">
+                <img src="https://restnest.in/cdn/shop/files/1_92da7dc2-8045-451c-99f9-4743161a2420.jpg?v=1755689166&width=720" alt="Rest Nest Premium White Glace Cotton Pillows – Pack Of 2 (800g Each)">
+            </div>
+            <h3 class="products-slider__name" style="white-space: normal; text-overflow: clip;">Rest Nest Premium White Glace Cotton Pillows – Pack Of 2 (800g Each)</h3>
+            <div class="products-slider__price">
+                <span class="products-slider__sale">Rs. 1,140.00</span>
+                <span class="products-slider__original">Rs. 2,504.00</span>
+            </div>
+        </a>
+    </div>
+    
+    <div class="products-slider__card" style="margin-bottom: 2rem;">
+        <a href="#">
+            <span class="products-slider__badge">-47%</span>
+            <div class="products-slider__img-wrap">
+                <img src="https://restnest.in/cdn/shop/files/1_a2560cc8-5c8b-4a1d-ae3f-36de15dc65af.jpg?v=1755688418&width=720" alt="Rest Nest ContourCare™ Memory Foam Pillow – Orthopedic Support For Perfect Sleep">
+            </div>
+            <h3 class="products-slider__name" style="white-space: normal; text-overflow: clip;">Rest Nest ContourCare™ Memory Foam Pillow – Orthopedic Support For Perfect Sleep</h3>
+            <div class="products-slider__price">
+                <span class="products-slider__sale">Rs. 1,175.00</span>
+                <span class="products-slider__original">Rs. 2,228.00</span>
+            </div>
+        </a>
+    </div>
+    
+    <div class="products-slider__card" style="margin-bottom: 2rem;">
+        <a href="#">
+            <span class="products-slider__badge">-41%</span>
+            <div class="products-slider__img-wrap">
+                <img src="https://restnest.in/cdn/shop/files/1_4df46894-3ca2-49df-bfa3-f01e50775aab.jpg?v=1755687611&width=720" alt="Rest Nest White & Gold Glace Cotton Sleeping Pillows – Pack Of 2 (Lightweight, 750g Each)">
+            </div>
+            <h3 class="products-slider__name" style="white-space: normal; text-overflow: clip;">Rest Nest White & Gold Glace Cotton Sleeping Pillows – Pack Of 2 (Lightweight, 750g Each)</h3>
+            <div class="products-slider__price">
+                <span class="products-slider__sale">Rs. 1,110.00</span>
+                <span class="products-slider__original">Rs. 1,897.00</span>
+            </div>
+        </a>
+    </div>
+    
+    <div class="products-slider__card" style="margin-bottom: 2rem;">
+        <a href="#">
+            <span class="products-slider__badge">-44%</span>
+            <div class="products-slider__img-wrap">
+                <img src="https://restnest.in/cdn/shop/files/1_d0746433-10cb-4f6c-8541-3d56f3bfa1ab.jpg?v=1755687154&width=720" alt="Rest Nest Premium White Sleeping Pillow | Glace Cotton Fabric | Lightweight & Comfortable | Pack Of 2">
+            </div>
+            <h3 class="products-slider__name" style="white-space: normal; text-overflow: clip;">Rest Nest Premium White Sleeping Pillow | Glace Cotton Fabric | Lightweight & Comfortable | Pack Of 2</h3>
+            <div class="products-slider__price">
+                <span class="products-slider__sale">Rs. 1,063.00</span>
+                <span class="products-slider__original">Rs. 1,920.00</span>
+            </div>
+        </a>
+    </div>
+    
+    <div class="products-slider__card" style="margin-bottom: 2rem;">
+        <a href="#">
+            <span class="products-slider__badge">-41%</span>
+            <div class="products-slider__img-wrap">
+                <img src="https://restnest.in/cdn/shop/files/1_5ecdda45-68b7-4bdb-b2df-b11459a9ed22.jpg?v=1755685988&width=720" alt="Rest Nest Blue & White Polycotton Pillow – Pack Of 2 (16x26 Inch, Light Weight, Soft & Supportive, Filled With Reliance Recron Fiber)">
+            </div>
+            <h3 class="products-slider__name" style="white-space: normal; text-overflow: clip;">Rest Nest Blue & White Polycotton Pillow – Pack Of 2 (16x26 Inch, Light Weight, Soft & Supportive, Filled With Reliance Recron Fiber)</h3>
+            <div class="products-slider__price">
+                <span class="products-slider__sale">Rs. 1,110.00</span>
+                <span class="products-slider__original">Rs. 1,897.00</span>
+            </div>
+        </a>
+    </div>
+    
+    <div class="products-slider__card" style="margin-bottom: 2rem;">
+        <a href="#">
+            <span class="products-slider__badge">-50%</span>
+            <div class="products-slider__img-wrap">
+                <img src="https://restnest.in/cdn/shop/files/1_45de0a17-36f2-479d-85c5-ddc07b5466ee.jpg?v=1755684969&width=720" alt="Rest Nest Premium Polycotton Pillow With Recron Fiber Filling – Black & White, 16x26 Inch (Pack Of 2)">
+            </div>
+            <h3 class="products-slider__name" style="white-space: normal; text-overflow: clip;">Rest Nest Premium Polycotton Pillow With Recron Fiber Filling – Black & White, 16x26 Inch (Pack Of 2)</h3>
+            <div class="products-slider__price">
+                <span class="products-slider__sale">Rs. 964.00</span>
+                <span class="products-slider__original">Rs. 1,928.00</span>
+            </div>
+        </a>
+    </div>
+    </div></div></section><!-- ===== FULL-WIDTH SHOWCASE ===== -->
+    <section class="showcase" id="showcase">
+        <img src="assets/showcase.png" alt="Handcrafted leaf-shaped rug in an elegant room setting" class="showcase__image">
+    </section>
+
+    <!-- ===== 1. WASHABLE RUG ===== -->
+    <section class="washable" id="washable">
+        <div class="washable__content">
+            <h2 class="washable__heading">The Original Washable Rug</h2>
+            <p class="washable__sub">We created the category—and we're still setting the standard.</p>
+            <div class="washable__features">
+                <div class="washable__feature">
+                    <svg class="washable__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><circle cx="12" cy="12" r="4"></circle><path d="M12 10v2"></path></svg>
+                    <span>MACHINE<br>WASHABLE</span>
+                </div>
+                <div class="washable__feature">
+                    <svg class="washable__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 5h8M12 5v14M9 19h6M12 12c-2 0-3-1-3-3s1-3 3-3 3 1 3 3-1 3-3 3z"></path></svg>
+                    <span>STAIN<br>RESISTANT</span>
+                </div>
+                <div class="washable__feature">
+                    <svg class="washable__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"></path><path d="M16 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"></path><path d="M8 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"></path><path d="M12 21a5 5 0 1 0 0-10 5 5 0 0 0 0 10Z"></path></svg>
+                    <span>PET & KID<br>FRIENDLY</span>
+                </div>
+                <div class="washable__feature">
+                    <svg class="washable__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                    <span>HUNDREDS OF<br>DESIGNS</span>
+                </div>
+            </div>
+            <a href="#" class="washable__btn">HOW IT WORKS</a>
+        </div>
+        <div class="washable__image-wrap">
+            <img src="assets/washable_rug.png" alt="Washable Rug" class="washable__img">
+        </div>
+    </section>
+
+    <!-- ===== 2. SHOWROOM LOCATOR ===== -->
+    <section class="showroom-section" id="showroom">
+        <div class="showroom__image-wrap">
+            <img src="assets/showroom.png" alt="Showroom Locator" class="showroom__img">
+        </div>
+        <div class="showroom__content">
+            <span class="showroom__label">VISIT US</span>
+            <h2 class="showroom__heading">SHOWROOM LOCATOR</h2>
+            <p class="showroom__desc">Visit a showroom to consult with our team of experts, view our vast library of rug and carpet offerings, get measuring and installation help, and more.</p>
+            <a href="#" class="showroom__btn">FIND A SHOWROOM</a>
+        </div>
+    </section>
+
+    <!-- ===== 4. TOP REVIEWS ===== -->
+    <section class="reviews" id="reviews">
+        <div class="reviews__header">
+            <span class="reviews__label">Testimonial</span>
+            <h2 class="reviews__heading">Top Reviews</h2>
+        </div>
+        <div class="reviews__carousel">
+            <div class="reviews__track" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; max-width: 80rem; margin: 0 auto; overflow: visible; padding-bottom: 2rem;">
+                <!-- Review 1 -->
+                <div class="review-card">
+                    <img src="assets/story1.png" alt="Reviewer background" class="review-card__bg">
+                    <div class="review-card__content">
+                        <span class="review-card__tag">CUSTOMER <strong>REVIEW</strong></span>
+                        <div class="review-card__box">
+                            <h4 class="review-card__name">Reyansh</h4>
+                            <div class="review-card__stars">★★★★☆</div>
+                            <p class="review-card__text">"Impressed with the durability and feel."</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Review 2 -->
+                <div class="review-card">
+                    <img src="assets/showroom.png" alt="Reviewer background" class="review-card__bg">
+                    <div class="review-card__content">
+                        <span class="review-card__tag">CUSTOMER <strong>REVIEW</strong></span>
+                        <div class="review-card__box">
+                            <h4 class="review-card__name">Ojas</h4>
+                            <div class="review-card__stars">★★★★★</div>
+                            <p class="review-card__text">"A must-have for every bedroom!"</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Review 3 -->
+                <div class="review-card">
+                    <img src="assets/washable_rug.png" alt="Reviewer background" class="review-card__bg">
+                    <div class="review-card__content">
+                        <span class="review-card__tag">CUSTOMER <strong>REVIEW</strong></span>
+                        <div class="review-card__box">
+                            <h4 class="review-card__name">Jhanvi</h4>
+                            <div class="review-card__stars">★★★★★</div>
+                            <p class="review-card__text">"Great design, soft and cozy feel."</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== 5. INSPIRATION MARQUEE ===== -->
+    <section class="social-marquee" id="social-marquee">
+        <!-- Top Row: moves Right to Left -->
+        <div class="marquee-row marquee-row--left">
+            <div class="marquee-track">
+                <div class="marquee-content">
+                    <div class="marquee-item"><img src="assets/washable_rug.png" alt="Inspiration 1"></div>
+                    <div class="marquee-item"><img src="assets/showroom.png" alt="Inspiration 2"></div>
+                    <div class="marquee-item"><img src="assets/story1.png" alt="Inspiration 3"></div>
+                    <div class="marquee-item"><img src="assets/story2.png" alt="Inspiration 4"></div>
+                </div>
+                <div class="marquee-content" aria-hidden="true">
+                    <div class="marquee-item"><img src="assets/washable_rug.png" alt="Inspiration 1"></div>
+                    <div class="marquee-item"><img src="assets/showroom.png" alt="Inspiration 2"></div>
+                    <div class="marquee-item"><img src="assets/story1.png" alt="Inspiration 3"></div>
+                    <div class="marquee-item"><img src="assets/story2.png" alt="Inspiration 4"></div>
+                </div>
+            </div>
+        </div>
+        <!-- Bottom Row: moves Left to Right -->
+        <div class="marquee-row marquee-row--right">
+            <div class="marquee-track marquee-track--reverse">
+                <div class="marquee-content">
+                    <div class="marquee-item"><img src="assets/story3.png" alt="Inspiration 5"></div>
+                    <div class="marquee-item"><img src="assets/washable_rug.png" alt="Inspiration 6"></div>
+                    <div class="marquee-item"><img src="assets/showroom.png" alt="Inspiration 7"></div>
+                    <div class="marquee-item"><img src="assets/story1.png" alt="Inspiration 8"></div>
+                </div>
+                <div class="marquee-content" aria-hidden="true">
+                    <div class="marquee-item"><img src="assets/story3.png" alt="Inspiration 5"></div>
+                    <div class="marquee-item"><img src="assets/washable_rug.png" alt="Inspiration 6"></div>
+                    <div class="marquee-item"><img src="assets/showroom.png" alt="Inspiration 7"></div>
+                    <div class="marquee-item"><img src="assets/story1.png" alt="Inspiration 8"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html>
