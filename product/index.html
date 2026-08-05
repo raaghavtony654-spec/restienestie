@@ -206,7 +206,7 @@
             </div>
         </div>
     </section>
-<!-- ===== SEARCH MODAL ===== -->
+    <!-- ===== SEARCH MODAL ===== -->
     <div class="search-modal" id="search-modal">
         <div class="search-modal__overlay" id="search-overlay"></div>
         <div class="search-modal__content">
@@ -224,6 +224,26 @@
         </div>
     </div>
 
+    <!-- Cart Overlay & Dropdown -->
+    <div class="cart-overlay" id="cartOverlay"></div>
+    <div class="cart-dropdown" id="cartDropdown">
+        <div class="cart-header">
+            <h2>Your Cart</h2>
+            <button class="cart-close-btn" id="cartCloseBtn">&times;</button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <!-- Items injected by JS -->
+        </div>
+        <div class="cart-footer" id="cartFooter" style="display: none;">
+            <div class="cart-total">
+                <span>Total</span>
+                <span id="cartTotal">Rs. 0.00</span>
+            </div>
+            <button class="checkout-btn" id="checkoutBtn">Checkout</button>
+        </div>
+    </div>
+
+    <script src="../shopify-integration.js"></script>
     <script src="../script.js"></script>
 </body>
 </html>

@@ -34,8 +34,8 @@
                 <li><a href="../pillows/" class="main-nav__link" id="nav-pillow">Pillow</a></li>
                 <li><a href="../cushions/" class="main-nav__link" id="nav-cushion">Cushion</a></li>
                 <li><a href="#" class="main-nav__link" id="nav-shop-all">Shop all</a></li>
-                <li><a href="#" class="main-nav__link" id="nav-collection">Collection</a></li>
-                <li><a href="#" class="main-nav__link" id="nav-about-us">About us</a></li>
+
+                <li><a href="../about/" class="main-nav__link" id="nav-about-us">About us</a></li>
                 <li><a href="#" class="main-nav__link" id="nav-contact">Contact</a></li>
             </ul>
 
@@ -50,12 +50,7 @@
                     </svg>
                     SEARCH
                 </a>
-                <a href="#" class="top-bar__link" id="projects-link">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
-                    </svg>
-                    PROJECTS
-                </a>
+
                 <a href="#" class="top-bar__link" id="account-link">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
@@ -63,143 +58,164 @@
                     </svg>
                     ACCOUNT
                 </a>
-                <a href="#" class="top-bar__link" id="order-link">
+                <button class="top-bar__link cart-btn" id="cart-link" aria-label="Cart" style="background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; color: inherit; font-family: inherit; font-size: inherit; text-transform: uppercase;">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="9" cy="21" r="1"></circle>
                         <circle cx="20" cy="21" r="1"></circle>
                         <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                     </svg>
-                    ORDER
-                </a>
+                    CART
+                    <span class="cart-badge" style="background-color: #4B3621; color: #FAF9F6; border-radius: 50%; font-size: 0.7rem; width: 1.25rem; height: 1.25rem; display: none; align-items: center; justify-content: center; margin-left: 0.25rem;">0</span>
+                </button>
             </div>
         </div>
     </nav>
 
-    <section class="page-header"><h1 style="text-align:center; font-family:var(--font-serif); font-size:3rem; font-weight:300; margin:10rem 0 4rem 0;">Our Pillow Collection</h1></section><section class="collection"><div class="collection__container"><div class="products-grid" style="display:grid; grid-template-columns:repeat(3, 1fr); gap:2rem;">
-    <div class="products-slider__card" style="margin-bottom: 2rem;">
-        <a href="../product/?id=rest-nest-soft-pillow-pack-of-2-premium-recron-fiber-17x27-inch">
+    <section class="page-header"><h1 style="text-align:center; font-family:var(--font-serif); font-size:3rem; font-weight:300; margin:10rem 0 4rem 0; color:#4B3621;">Our Pillow Collection</h1></section><section class="collection"><div class="collection__container">
+<div class="sort-container" style="display: flex; justify-content: flex-end; margin-bottom: 2rem;">
+    <label for="product-sort" style="margin-right: 1rem; align-self: center; font-family: var(--font-sans); font-size: 0.9rem;">Sort by:</label>
+    <select id="product-sort" class="product-sort-select" style="padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; font-family: var(--font-sans); background: transparent;">
+        <option value="most-selling">Most Selling</option>
+        <option value="price-low">Price: Low to High</option>
+        <option value="price-high">Price: High to Low</option>
+        <option value="a-z">Alphabetical: A-Z</option>
+        <option value="z-a">Alphabetical: Z-A</option>
+    </select>
+</div>
+<div class="products-grid" id="products-grid" style="display:grid; grid-template-columns:repeat(3, 1fr); gap:2rem;">
+    <div class="products-slider__card" style="margin-bottom: 2rem; position: relative;" data-price="1065.0" data-title="Soft Pillow Pack Of 2 – Premium Recron Fiber (17x27 Inch)" data-order="0" data-variant-id="gid://shopify/ProductVariant/42544537272381">
+        <a href="../product/?id=rest-nest-soft-pillow-pack-of-2-premium-recron-fiber-17x27-inch" style="text-decoration: none; color: inherit;">
             <span class="products-slider__badge">-44%</span>
             <div class="products-slider__img-wrap">
-                <img src="https://restnest.in/cdn/shop/files/1_a6f3313d-a03b-4e75-81c5-b1b6cdf0e000.jpg?v=1755690677&width=720" alt="Rest Nest Soft Pillow Pack Of 2 – Premium Recron Fiber (17x27 Inch)">
+                <img src="https://restnest.in/cdn/shop/files/1_a6f3313d-a03b-4e75-81c5-b1b6cdf0e000.jpg?v=1755690677&width=720" alt="Soft Pillow Pack Of 2 – Premium Recron Fiber (17x27 Inch)">
             </div>
-            <h3 class="products-slider__name" style="white-space: normal; text-overflow: clip;">Rest Nest Soft Pillow Pack Of 2 – Premium Recron Fiber (17x27 Inch)</h3>
+            <h3 class="products-slider__name" style="white-space: normal; text-overflow: clip;">Soft Pillow Pack Of 2 – Premium Recron Fiber (17x27 Inch)</h3>
             <div class="products-slider__price">
                 <span class="products-slider__sale">Rs. 1,065.00</span>
                 <span class="products-slider__original">Rs. 1,913.00</span>
             </div>
         </a>
+        <button class="add-to-cart-btn btn--primary" style="margin-top: 1rem; width: 100%; padding: 0.75rem; background: #4B3621; color: #FAF9F6; border: none; font-weight: bold; cursor: pointer; transition: opacity 0.3s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">Add to Cart</button>
     </div>
     
-    <div class="products-slider__card" style="margin-bottom: 2rem;">
-        <a href="../product/?id=rest-nest-orthopedic-cervical-memory-foam-pillow-white-1-pc">
+    <div class="products-slider__card" style="margin-bottom: 2rem; position: relative;" data-price="1175.0" data-title="Orthopedic Cervical Memory Foam Pillow – White (1 Pc)" data-order="1" data-variant-id="gid://shopify/ProductVariant/42544414785597">
+        <a href="../product/?id=rest-nest-orthopedic-cervical-memory-foam-pillow-white-1-pc" style="text-decoration: none; color: inherit;">
             <span class="products-slider__badge">-47%</span>
             <div class="products-slider__img-wrap">
-                <img src="https://restnest.in/cdn/shop/files/1_e843ed76-397f-41e8-ba42-ccad9e82bd12.jpg?v=1755686284&width=720" alt="Rest Nest Orthopedic Cervical Memory Foam Pillow – White (1 Pc)">
+                <img src="https://restnest.in/cdn/shop/files/1_e843ed76-397f-41e8-ba42-ccad9e82bd12.jpg?v=1755686284&width=720" alt="Orthopedic Cervical Memory Foam Pillow – White (1 Pc)">
             </div>
-            <h3 class="products-slider__name" style="white-space: normal; text-overflow: clip;">Rest Nest Orthopedic Cervical Memory Foam Pillow – White (1 Pc)</h3>
+            <h3 class="products-slider__name" style="white-space: normal; text-overflow: clip;">Orthopedic Cervical Memory Foam Pillow – White (1 Pc)</h3>
             <div class="products-slider__price">
                 <span class="products-slider__sale">Rs. 1,175.00</span>
                 <span class="products-slider__original">Rs. 2,229.00</span>
             </div>
         </a>
+        <button class="add-to-cart-btn btn--primary" style="margin-top: 1rem; width: 100%; padding: 0.75rem; background: #4B3621; color: #FAF9F6; border: none; font-weight: bold; cursor: pointer; transition: opacity 0.3s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">Add to Cart</button>
     </div>
     
-    <div class="products-slider__card" style="margin-bottom: 2rem;">
-        <a href="../product/?id=rest-nest-slim-microfiber-pillow-17x27-inch-white-1-pcs">
+    <div class="products-slider__card" style="margin-bottom: 2rem; position: relative;" data-price="1014.0" data-title="Slim Microfiber Pillow – 17x27 Inch, White 1 Pcs" data-order="2" data-variant-id="gid://shopify/ProductVariant/42544516202557">
+        <a href="../product/?id=rest-nest-slim-microfiber-pillow-17x27-inch-white-1-pcs" style="text-decoration: none; color: inherit;">
             <span class="products-slider__badge">-47%</span>
             <div class="products-slider__img-wrap">
-                <img src="https://restnest.in/cdn/shop/files/1_b92871a1-943d-4257-b5f3-a86ff0eb0901.jpg?v=1755690027&width=720" alt="Rest Nest Slim Microfiber Pillow – 17x27 Inch, White 1 Pcs">
+                <img src="https://restnest.in/cdn/shop/files/1_b92871a1-943d-4257-b5f3-a86ff0eb0901.jpg?v=1755690027&width=720" alt="Slim Microfiber Pillow – 17x27 Inch, White 1 Pcs">
             </div>
-            <h3 class="products-slider__name" style="white-space: normal; text-overflow: clip;">Rest Nest Slim Microfiber Pillow – 17x27 Inch, White 1 Pcs</h3>
+            <h3 class="products-slider__name" style="white-space: normal; text-overflow: clip;">Slim Microfiber Pillow – 17x27 Inch, White 1 Pcs</h3>
             <div class="products-slider__price">
                 <span class="products-slider__sale">Rs. 1,014.00</span>
                 <span class="products-slider__original">Rs. 1,928.00</span>
             </div>
         </a>
+        <button class="add-to-cart-btn btn--primary" style="margin-top: 1rem; width: 100%; padding: 0.75rem; background: #4B3621; color: #FAF9F6; border: none; font-weight: bold; cursor: pointer; transition: opacity 0.3s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">Add to Cart</button>
     </div>
     
-    <div class="products-slider__card" style="margin-bottom: 2rem;">
-        <a href="../product/?id=rest-nest-premium-white-glace-cotton-pillows-pack-of-2-800g-each">
+    <div class="products-slider__card" style="margin-bottom: 2rem; position: relative;" data-price="1140.0" data-title="Premium White Glace Cotton Pillows – Pack Of 2 (800g Each)" data-order="3" data-variant-id="gid://shopify/ProductVariant/42544497819709">
+        <a href="../product/?id=rest-nest-premium-white-glace-cotton-pillows-pack-of-2-800g-each" style="text-decoration: none; color: inherit;">
             <span class="products-slider__badge">-54%</span>
             <div class="products-slider__img-wrap">
-                <img src="https://restnest.in/cdn/shop/files/1_92da7dc2-8045-451c-99f9-4743161a2420.jpg?v=1755689166&width=720" alt="Rest Nest Premium White Glace Cotton Pillows – Pack Of 2 (800g Each)">
+                <img src="https://restnest.in/cdn/shop/files/1_92da7dc2-8045-451c-99f9-4743161a2420.jpg?v=1755689166&width=720" alt="Premium White Glace Cotton Pillows – Pack Of 2 (800g Each)">
             </div>
-            <h3 class="products-slider__name" style="white-space: normal; text-overflow: clip;">Rest Nest Premium White Glace Cotton Pillows – Pack Of 2 (800g Each)</h3>
+            <h3 class="products-slider__name" style="white-space: normal; text-overflow: clip;">Premium White Glace Cotton Pillows – Pack Of 2 (800g Each)</h3>
             <div class="products-slider__price">
                 <span class="products-slider__sale">Rs. 1,140.00</span>
                 <span class="products-slider__original">Rs. 2,504.00</span>
             </div>
         </a>
+        <button class="add-to-cart-btn btn--primary" style="margin-top: 1rem; width: 100%; padding: 0.75rem; background: #4B3621; color: #FAF9F6; border: none; font-weight: bold; cursor: pointer; transition: opacity 0.3s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">Add to Cart</button>
     </div>
     
-    <div class="products-slider__card" style="margin-bottom: 2rem;">
-        <a href="../product/?id=rest-nest-contourcare-memory-foam-pillow-orthopedic-support-for-perfect-sleep">
+    <div class="products-slider__card" style="margin-bottom: 2rem; position: relative;" data-price="1175.0" data-title="ContourCare™ Memory Foam Pillow – Orthopedic Support For Perfect Sleep" data-order="4" data-variant-id="gid://shopify/ProductVariant/42544459055165">
+        <a href="../product/?id=rest-nest-contourcare-memory-foam-pillow-orthopedic-support-for-perfect-sleep" style="text-decoration: none; color: inherit;">
             <span class="products-slider__badge">-47%</span>
             <div class="products-slider__img-wrap">
-                <img src="https://restnest.in/cdn/shop/files/1_a2560cc8-5c8b-4a1d-ae3f-36de15dc65af.jpg?v=1755688418&width=720" alt="Rest Nest ContourCare™ Memory Foam Pillow – Orthopedic Support For Perfect Sleep">
+                <img src="https://restnest.in/cdn/shop/files/1_a2560cc8-5c8b-4a1d-ae3f-36de15dc65af.jpg?v=1755688418&width=720" alt="ContourCare™ Memory Foam Pillow – Orthopedic Support For Perfect Sleep">
             </div>
-            <h3 class="products-slider__name" style="white-space: normal; text-overflow: clip;">Rest Nest ContourCare™ Memory Foam Pillow – Orthopedic Support For Perfect Sleep</h3>
+            <h3 class="products-slider__name" style="white-space: normal; text-overflow: clip;">ContourCare™ Memory Foam Pillow – Orthopedic Support For Perfect Sleep</h3>
             <div class="products-slider__price">
                 <span class="products-slider__sale">Rs. 1,175.00</span>
                 <span class="products-slider__original">Rs. 2,228.00</span>
             </div>
         </a>
+        <button class="add-to-cart-btn btn--primary" style="margin-top: 1rem; width: 100%; padding: 0.75rem; background: #4B3621; color: #FAF9F6; border: none; font-weight: bold; cursor: pointer; transition: opacity 0.3s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">Add to Cart</button>
     </div>
     
-    <div class="products-slider__card" style="margin-bottom: 2rem;">
-        <a href="../product/?id=rest-nest-white-gold-glace-cotton-sleeping-pillows-pack-of-2-lightweight-750g-each">
+    <div class="products-slider__card" style="margin-bottom: 2rem; position: relative;" data-price="1110.0" data-title="White & Gold Glace Cotton Sleeping Pillows – Pack Of 2 (Lightweight, 750g Each)" data-order="5" data-variant-id="gid://shopify/ProductVariant/42544433791037">
+        <a href="../product/?id=rest-nest-white-gold-glace-cotton-sleeping-pillows-pack-of-2-lightweight-750g-each" style="text-decoration: none; color: inherit;">
             <span class="products-slider__badge">-41%</span>
             <div class="products-slider__img-wrap">
-                <img src="https://restnest.in/cdn/shop/files/1_4df46894-3ca2-49df-bfa3-f01e50775aab.jpg?v=1755687611&width=720" alt="Rest Nest White & Gold Glace Cotton Sleeping Pillows – Pack Of 2 (Lightweight, 750g Each)">
+                <img src="https://restnest.in/cdn/shop/files/1_4df46894-3ca2-49df-bfa3-f01e50775aab.jpg?v=1755687611&width=720" alt="White & Gold Glace Cotton Sleeping Pillows – Pack Of 2 (Lightweight, 750g Each)">
             </div>
-            <h3 class="products-slider__name" style="white-space: normal; text-overflow: clip;">Rest Nest White & Gold Glace Cotton Sleeping Pillows – Pack Of 2 (Lightweight, 750g Each)</h3>
+            <h3 class="products-slider__name" style="white-space: normal; text-overflow: clip;">White & Gold Glace Cotton Sleeping Pillows – Pack Of 2 (Lightweight, 750g Each)</h3>
             <div class="products-slider__price">
                 <span class="products-slider__sale">Rs. 1,110.00</span>
                 <span class="products-slider__original">Rs. 1,897.00</span>
             </div>
         </a>
+        <button class="add-to-cart-btn btn--primary" style="margin-top: 1rem; width: 100%; padding: 0.75rem; background: #4B3621; color: #FAF9F6; border: none; font-weight: bold; cursor: pointer; transition: opacity 0.3s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">Add to Cart</button>
     </div>
     
-    <div class="products-slider__card" style="margin-bottom: 2rem;">
-        <a href="../product/?id=rest-nest-premium-white-sleeping-pillow-glace-cotton-fabric-lightweight-comfortable-pack-of-2">
+    <div class="products-slider__card" style="margin-bottom: 2rem; position: relative;" data-price="1063.0" data-title="Premium White Sleeping Pillow | Glace Cotton Fabric | Lightweight & Comfortable | Pack Of 2" data-order="6" data-variant-id="gid://shopify/ProductVariant/42544421371965">
+        <a href="../product/?id=rest-nest-premium-white-sleeping-pillow-glace-cotton-fabric-lightweight-comfortable-pack-of-2" style="text-decoration: none; color: inherit;">
             <span class="products-slider__badge">-44%</span>
             <div class="products-slider__img-wrap">
-                <img src="https://restnest.in/cdn/shop/files/1_d0746433-10cb-4f6c-8541-3d56f3bfa1ab.jpg?v=1755687154&width=720" alt="Rest Nest Premium White Sleeping Pillow | Glace Cotton Fabric | Lightweight & Comfortable | Pack Of 2">
+                <img src="https://restnest.in/cdn/shop/files/1_d0746433-10cb-4f6c-8541-3d56f3bfa1ab.jpg?v=1755687154&width=720" alt="Premium White Sleeping Pillow | Glace Cotton Fabric | Lightweight & Comfortable | Pack Of 2">
             </div>
-            <h3 class="products-slider__name" style="white-space: normal; text-overflow: clip;">Rest Nest Premium White Sleeping Pillow | Glace Cotton Fabric | Lightweight & Comfortable | Pack Of 2</h3>
+            <h3 class="products-slider__name" style="white-space: normal; text-overflow: clip;">Premium White Sleeping Pillow | Glace Cotton Fabric | Lightweight & Comfortable | Pack Of 2</h3>
             <div class="products-slider__price">
                 <span class="products-slider__sale">Rs. 1,063.00</span>
                 <span class="products-slider__original">Rs. 1,920.00</span>
             </div>
         </a>
+        <button class="add-to-cart-btn btn--primary" style="margin-top: 1rem; width: 100%; padding: 0.75rem; background: #4B3621; color: #FAF9F6; border: none; font-weight: bold; cursor: pointer; transition: opacity 0.3s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">Add to Cart</button>
     </div>
     
-    <div class="products-slider__card" style="margin-bottom: 2rem;">
-        <a href="../product/?id=rest-nest-blue-white-polycotton-pillow-pack-of-2-16x26-inch-light-weight-soft-supportive-filled-with-reliance-recron-fiber">
+    <div class="products-slider__card" style="margin-bottom: 2rem; position: relative;" data-price="1110.0" data-title="Blue & White Polycotton Pillow – Pack Of 2 (16x26 Inch, Light Weight, Soft & Supportive, Filled With Reliance Recron Fiber)" data-order="7" data-variant-id="gid://shopify/ProductVariant/42544411344957">
+        <a href="../product/?id=rest-nest-blue-white-polycotton-pillow-pack-of-2-16x26-inch-light-weight-soft-supportive-filled-with-reliance-recron-fiber" style="text-decoration: none; color: inherit;">
             <span class="products-slider__badge">-41%</span>
             <div class="products-slider__img-wrap">
-                <img src="https://restnest.in/cdn/shop/files/1_5ecdda45-68b7-4bdb-b2df-b11459a9ed22.jpg?v=1755685988&width=720" alt="Rest Nest Blue & White Polycotton Pillow – Pack Of 2 (16x26 Inch, Light Weight, Soft & Supportive, Filled With Reliance Recron Fiber)">
+                <img src="https://restnest.in/cdn/shop/files/1_5ecdda45-68b7-4bdb-b2df-b11459a9ed22.jpg?v=1755685988&width=720" alt="Blue & White Polycotton Pillow – Pack Of 2 (16x26 Inch, Light Weight, Soft & Supportive, Filled With Reliance Recron Fiber)">
             </div>
-            <h3 class="products-slider__name" style="white-space: normal; text-overflow: clip;">Rest Nest Blue & White Polycotton Pillow – Pack Of 2 (16x26 Inch, Light Weight, Soft & Supportive, Filled With Reliance Recron Fiber)</h3>
+            <h3 class="products-slider__name" style="white-space: normal; text-overflow: clip;">Blue & White Polycotton Pillow – Pack Of 2 (16x26 Inch, Light Weight, Soft & Supportive, Filled With Reliance Recron Fiber)</h3>
             <div class="products-slider__price">
                 <span class="products-slider__sale">Rs. 1,110.00</span>
                 <span class="products-slider__original">Rs. 1,897.00</span>
             </div>
         </a>
+        <button class="add-to-cart-btn btn--primary" style="margin-top: 1rem; width: 100%; padding: 0.75rem; background: #4B3621; color: #FAF9F6; border: none; font-weight: bold; cursor: pointer; transition: opacity 0.3s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">Add to Cart</button>
     </div>
     
-    <div class="products-slider__card" style="margin-bottom: 2rem;">
-        <a href="../product/?id=rest-nest-premium-polycotton-pillow-with-recron-fiber-filling-black-white-16x26-inch-pack-of-2">
+    <div class="products-slider__card" style="margin-bottom: 2rem; position: relative;" data-price="964.0" data-title="Premium Polycotton Pillow With Recron Fiber Filling – Black & White, 16x26 Inch (Pack Of 2)" data-order="8" data-variant-id="gid://shopify/ProductVariant/42544398106685">
+        <a href="../product/?id=rest-nest-premium-polycotton-pillow-with-recron-fiber-filling-black-white-16x26-inch-pack-of-2" style="text-decoration: none; color: inherit;">
             <span class="products-slider__badge">-50%</span>
             <div class="products-slider__img-wrap">
-                <img src="https://restnest.in/cdn/shop/files/1_45de0a17-36f2-479d-85c5-ddc07b5466ee.jpg?v=1755684969&width=720" alt="Rest Nest Premium Polycotton Pillow With Recron Fiber Filling – Black & White, 16x26 Inch (Pack Of 2)">
+                <img src="https://restnest.in/cdn/shop/files/1_45de0a17-36f2-479d-85c5-ddc07b5466ee.jpg?v=1755684969&width=720" alt="Premium Polycotton Pillow With Recron Fiber Filling – Black & White, 16x26 Inch (Pack Of 2)">
             </div>
-            <h3 class="products-slider__name" style="white-space: normal; text-overflow: clip;">Rest Nest Premium Polycotton Pillow With Recron Fiber Filling – Black & White, 16x26 Inch (Pack Of 2)</h3>
+            <h3 class="products-slider__name" style="white-space: normal; text-overflow: clip;">Premium Polycotton Pillow With Recron Fiber Filling – Black & White, 16x26 Inch (Pack Of 2)</h3>
             <div class="products-slider__price">
                 <span class="products-slider__sale">Rs. 964.00</span>
                 <span class="products-slider__original">Rs. 1,928.00</span>
             </div>
         </a>
+        <button class="add-to-cart-btn btn--primary" style="margin-top: 1rem; width: 100%; padding: 0.75rem; background: #4B3621; color: #FAF9F6; border: none; font-weight: bold; cursor: pointer; transition: opacity 0.3s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">Add to Cart</button>
     </div>
     </div></div></section><!-- ===== SEARCH MODAL ===== -->
     <div class="search-modal" id="search-modal">
@@ -219,6 +235,26 @@
         </div>
     </div>
 
+    <!-- Cart Overlay & Dropdown -->
+    <div class="cart-overlay" id="cartOverlay"></div>
+    <div class="cart-dropdown" id="cartDropdown">
+        <div class="cart-header">
+            <h2>Your Cart</h2>
+            <button class="cart-close-btn" id="cartCloseBtn">&times;</button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <!-- Items injected by JS -->
+        </div>
+        <div class="cart-footer" id="cartFooter" style="display: none;">
+            <div class="cart-total">
+                <span>Total</span>
+                <span id="cartTotal">Rs. 0.00</span>
+            </div>
+            <button class="checkout-btn" id="checkoutBtn">Checkout</button>
+        </div>
+    </div>
+
+    <script src="../shopify-integration.js"></script>
     <script src="../script.js"></script>
 </body>
 </html>

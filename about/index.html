@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knots Rugs — Your Floor is the Canvas</title>
+    <meta name="description" content="Experience the artistry of handcrafted, customizable rugs that blend heritage with your unique style. Explore our collections of luxury handmade rugs.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Great+Vibes&family=Inter:wght@300;400;500;600&family=Pinyon+Script&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <!-- SVG filter for wavy sand texture -->
+    <svg style="position:absolute;width:0;height:0;overflow:hidden;" aria-hidden="true">
+        <defs>
+            <filter id="wavy-texture">
+                <feTurbulence type="fractalNoise" baseFrequency="0.015 0.025" numOctaves="5" seed="2" stitchTiles="stitch" result="noise"/>
+                <feColorMatrix type="saturate" values="0" in="noise" result="mono"/>
+                <feComponentTransfer in="mono" result="adjusted">
+                    <feFuncA type="linear" slope="0.08"/>
+                </feComponentTransfer>
+                <feBlend in="SourceGraphic" in2="adjusted" mode="overlay"/>
+            </filter>
+        </defs>
+    </svg>
+    <div class="bg-texture" aria-hidden="true"></div>
+    <!-- ===== UNIFIED PILL NAVIGATION ===== -->
+    <nav id="pill-nav" class="pill-nav">
+        <div class="pill-nav__inner">
+            <!-- Left: Main Nav -->
+            <ul class="pill-nav__list">
+                <li><a href="../index.html" class="main-nav__link" id="nav-home">Home</a></li>
+                <li><a href="../pillows/" class="main-nav__link" id="nav-pillow">Pillow</a></li>
+                <li><a href="../cushions/" class="main-nav__link" id="nav-cushion">Cushion</a></li>
+                <li><a href="#" class="main-nav__link" id="nav-shop-all">Shop all</a></li>
+
+                <li><a href="../about/" class="main-nav__link" id="nav-about-us">About us</a></li>
+                <li><a href="#" class="main-nav__link" id="nav-contact">Contact</a></li>
+            </ul>
+
+            <!-- Center: Logo removed and moved to hero slider -->
+
+            <!-- Right: Utilities -->
+            <div class="pill-nav__utils">
+                <a href="#" class="top-bar__link" id="search-link">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    SEARCH
+                </a>
+
+                <a href="#" class="top-bar__link" id="account-link">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    ACCOUNT
+                </a>
+                <button class="top-bar__link cart-btn" id="cart-link" aria-label="Cart" style="background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; color: inherit; font-family: inherit; font-size: inherit; text-transform: uppercase;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    CART
+                    <span class="cart-badge" style="background-color: #4B3621; color: #FAF9F6; border-radius: 50%; font-size: 0.7rem; width: 1.25rem; height: 1.25rem; display: none; align-items: center; justify-content: center; margin-left: 0.25rem;">0</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    
+<section class="page-header">
+    <h1 style="text-align:center; font-family:var(--font-serif); font-size:3.5rem; font-weight:300; margin:8rem 0 1rem 0; color:#4B3621;">About RestNest</h1>
+    <p style="text-align:center; font-family:var(--font-sans); font-size:1.25rem; font-weight:400; color:#7a5c40; margin-bottom:4rem;">Where Comfort Meets Timeless Design</p>
+</section>
+
+<section class="about-section" style="padding: 4rem 1rem; max-width: 800px; margin: 0 auto; text-align: center;">
+    <p style="font-size: 1.125rem; line-height: 1.8; color: #4B3621; margin-bottom: 2rem;">
+        At RestNest, we believe every home deserves furniture that feels as good as it looks. We create thoughtfully designed pieces that combine comfort, durability, and modern aesthetics, helping you transform everyday spaces into places you'll love coming home to.
+    </p>
+    <p style="font-size: 1.125rem; line-height: 1.8; color: #4B3621; margin-bottom: 2rem;">
+        Whether you're furnishing a new home or refreshing your favorite corner, our collections are crafted to bring warmth, elegance, and functionality into every room.
+    </p>
+</section>
+
+<section class="about-section" style="padding: 4rem 1rem; background-color: #FAF9F6; text-align: center;">
+    <div style="max-width: 800px; margin: 0 auto;">
+        <h2 style="font-family:var(--font-serif); font-size:2.5rem; font-weight:300; margin-bottom:2rem; color:#4B3621;">Our Story</h2>
+        <h3 style="font-family:var(--font-serif); font-size:1.5rem; font-style:italic; margin-bottom:2rem; color:#7a5c40;">Every great home begins with furniture that reflects the people who live in it.</h3>
+        <p style="font-size: 1.125rem; line-height: 1.8; color: #4B3621; margin-bottom: 2rem;">
+            RestNest was founded with a simple vision—to make premium-quality furniture accessible without compromising on design or craftsmanship. We work with skilled artisans, trusted manufacturers, and carefully selected materials to create products that are built for everyday living and made to last.
+        </p>
+        <p style="font-size: 1.125rem; line-height: 1.8; color: #4B3621; margin-bottom: 2rem;">
+            From contemporary designs to timeless classics, every collection is developed with attention to detail, ensuring beauty, comfort, and reliability in every piece.
+        </p>
+    </div>
+</section>
+
+<section class="about-section" style="padding: 4rem 1rem; max-width: 800px; margin: 0 auto; text-align: center;">
+    <h2 style="font-family:var(--font-serif); font-size:2.5rem; font-weight:300; margin-bottom:2rem; color:#4B3621;">Our Mission</h2>
+    <p style="font-size: 1.125rem; line-height: 1.8; color: #4B3621; margin-bottom: 2rem;">
+        Our mission is to create furniture that enhances everyday life by blending exceptional craftsmanship, functional design, and lasting quality.
+    </p>
+    <p style="font-size: 1.125rem; line-height: 1.8; color: #4B3621; margin-bottom: 2rem;">
+        We strive to deliver products that make homes more inviting while providing a seamless shopping experience from selection to delivery.
+    </p>
+</section>
+
+<section class="about-section" style="padding: 4rem 1rem; background-color: #FAF9F6; text-align: center;">
+    <div style="max-width: 800px; margin: 0 auto;">
+        <h2 style="font-family:var(--font-serif); font-size:2.5rem; font-weight:300; margin-bottom:2rem; color:#4B3621;">Our Vision</h2>
+        <p style="font-size: 1.125rem; line-height: 1.8; color: #4B3621; margin-bottom: 2rem;">
+            To become one of India's most trusted furniture brands by inspiring beautiful living spaces through innovative designs, premium quality, and customer-first service.
+        </p>
+    </div>
+</section>
+
+<section class="about-section" style="padding: 4rem 1rem; max-width: 1200px; margin: 0 auto;">
+    <h2 style="font-family:var(--font-serif); font-size:2.5rem; font-weight:300; margin-bottom:3rem; color:#4B3621; text-align: center;">What Makes Us Different</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; text-align: center;">
+        <div>
+            <h3 style="font-family:var(--font-sans); font-size:1.25rem; font-weight:600; margin-bottom:1rem; color:#4B3621;">Premium Craftsmanship</h3>
+            <p style="font-size: 1rem; line-height: 1.6; color: #7a5c40;">Every product is thoughtfully designed and manufactured using carefully selected materials for lasting durability and comfort.</p>
+        </div>
+        <div>
+            <h3 style="font-family:var(--font-sans); font-size:1.25rem; font-weight:600; margin-bottom:1rem; color:#4B3621;">Modern & Timeless Designs</h3>
+            <p style="font-size: 1rem; line-height: 1.6; color: #7a5c40;">Our collections are created to complement a variety of interior styles, ensuring they remain stylish for years to come.</p>
+        </div>
+        <div>
+            <h3 style="font-family:var(--font-sans); font-size:1.25rem; font-weight:600; margin-bottom:1rem; color:#4B3621;">Quality You Can Trust</h3>
+            <p style="font-size: 1rem; line-height: 1.6; color: #7a5c40;">Each piece undergoes rigorous quality checks before reaching your home, ensuring exceptional standards in every detail.</p>
+        </div>
+        <div>
+            <h3 style="font-family:var(--font-sans); font-size:1.25rem; font-weight:600; margin-bottom:1rem; color:#4B3621;">Customer-Centric Experience</h3>
+            <p style="font-size: 1rem; line-height: 1.6; color: #7a5c40;">From browsing to delivery and after-sales support, we're committed to making every step of your journey simple, transparent, and enjoyable.</p>
+        </div>
+    </div>
+</section>
+
+<section class="about-section" style="padding: 4rem 1rem; background-color: #FAF9F6;">
+    <div style="max-width: 800px; margin: 0 auto;">
+        <h2 style="font-family:var(--font-serif); font-size:2.5rem; font-weight:300; margin-bottom:3rem; color:#4B3621; text-align: center;">Our Values</h2>
+        <ul style="list-style: none; padding: 0; font-size: 1.125rem; line-height: 2; color: #4B3621;">
+            <li style="margin-bottom: 1rem;"><strong>Quality First</strong> – We never compromise on materials or craftsmanship.</li>
+            <li style="margin-bottom: 1rem;"><strong>Customer Commitment</strong> – Your satisfaction is at the heart of everything we do.</li>
+            <li style="margin-bottom: 1rem;"><strong>Honest Practices</strong> – Transparency and trust guide every decision.</li>
+            <li style="margin-bottom: 1rem;"><strong>Innovation</strong> – We continuously improve our designs to meet evolving lifestyles.</li>
+            <li style="margin-bottom: 1rem;"><strong>Sustainability</strong> – We strive to make responsible choices in sourcing and manufacturing whenever possible.</li>
+        </ul>
+    </div>
+</section>
+
+<section class="about-section" style="padding: 4rem 1rem; max-width: 800px; margin: 0 auto; text-align: center;">
+    <h2 style="font-family:var(--font-serif); font-size:2.5rem; font-weight:300; margin-bottom:2rem; color:#4B3621;">Bringing Homes to Life</h2>
+    <p style="font-size: 1.125rem; line-height: 1.8; color: #4B3621; margin-bottom: 2rem;">
+        Furniture is more than décor—it's where conversations begin, families gather, memories are created, and comfort becomes a part of everyday life.
+    </p>
+    <p style="font-size: 1.125rem; line-height: 1.8; color: #4B3621; margin-bottom: 2rem;">
+        At RestNest, we're proud to be part of those moments by offering furniture that combines thoughtful design, dependable quality, and lasting comfort for modern homes.
+    </p>
+</section>
+
+<section class="about-section" style="padding: 6rem 1rem; background-color: #4B3621; color: #FFF; text-align: center;">
+    <div style="max-width: 800px; margin: 0 auto;">
+        <h2 style="font-family:var(--font-serif); font-size:3rem; font-weight:300; margin-bottom:2rem; color:#FFF;">Build Your Perfect Space with RestNest</h2>
+        <p style="font-size: 1.25rem; line-height: 1.8; color: rgba(255,255,255,0.8); margin-bottom: 3rem;">
+            Discover furniture designed to elevate every room with style, comfort, and functionality. Explore our collections and find pieces that make your house truly feel like home.
+        </p>
+        <a href="../" class="cta-button" style="display: inline-block; padding: 1rem 2.5rem; background: transparent; border: 1px solid #FFF; color: #FFF; text-decoration: none; font-family: var(--font-sans); font-size: 0.875rem; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase;">Explore Our Collections</a>
+    </div>
+</section>
+<!-- ===== SEARCH MODAL ===== -->
+    <div class="search-modal" id="search-modal">
+        <div class="search-modal__overlay" id="search-overlay"></div>
+        <div class="search-modal__content">
+            <button class="search-modal__close" id="search-close" aria-label="Close search">&times;</button>
+            <h2 class="search-modal__heading">Search Our Collections</h2>
+            <form class="search-modal__form" onsubmit="event.preventDefault();">
+                <input type="text" class="search-modal__input" placeholder="Type here to search..." aria-label="Search input">
+                <button type="submit" class="search-modal__submit" aria-label="Submit search">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Cart Overlay & Dropdown -->
+    <div class="cart-overlay" id="cartOverlay"></div>
+    <div class="cart-dropdown" id="cartDropdown">
+        <div class="cart-header">
+            <h2>Your Cart</h2>
+            <button class="cart-close-btn" id="cartCloseBtn">&times;</button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <!-- Items injected by JS -->
+        </div>
+        <div class="cart-footer" id="cartFooter" style="display: none;">
+            <div class="cart-total">
+                <span>Total</span>
+                <span id="cartTotal">Rs. 0.00</span>
+            </div>
+            <button class="checkout-btn" id="checkoutBtn">Checkout</button>
+        </div>
+    </div>
+
+    <script src="../shopify-integration.js"></script>
+    <script src="../script.js"></script>
+</body>
+</html>
