@@ -3,6 +3,9 @@
    Hero Slider, Scroll Reveal, Interactions
    ============================================ */
 
+const basePath = window.location.pathname.includes('/product/') || window.location.pathname.includes('/cushions/') || window.location.pathname.includes('/pillows/') || window.location.pathname.includes('/about/') ? '../' : './';
+const resolveImg = (url) => url ? (url.startsWith('http') ? url : (basePath + 'assets/' + url)) : '';
+
 document.addEventListener('DOMContentLoaded', () => {
     initHeroSlider();
     initScrollReveal();
@@ -374,7 +377,7 @@ function initSearchModal() {
         // Fetch products lazily when search is opened
         if (!productData) {
             const basePath = window.location.pathname.includes('/product/') || window.location.pathname.includes('/cushions/') || window.location.pathname.includes('/pillows/') || window.location.pathname.includes('/about/') ? '../' : './';
-            fetch(basePath + 'assets/products.json')
+            fetch(basePath + 'assets/products.json?v=' + new Date().getTime())
                 .then(res => res.json())
                 .then(data => {
                     productData = Object.values(data);
@@ -459,7 +462,7 @@ async function initProductPage() {
     if (!productId || !document.querySelector('.product-page')) return;
 
     try {
-        const response = await fetch('../assets/products.json');
+        const response = await fetch('../assets/products.json?v=' + new Date().getTime());
         const products = await response.json();
         
         const product = products[productId];
@@ -474,7 +477,8 @@ async function initProductPage() {
         document.getElementById('product-original-price').innerText = product.originalPrice;
         document.getElementById('product-discount').innerText = product.discount;
         
-        document.getElementById('product-main-image').src = product.imgUrl;
+        const images = product.images || [product.imgUrl];
+        document.getElementById('product-main-image').src = resolveImg(images[0]);
         
         const productInfo = document.querySelector('.product-details');
         if (productInfo && product.variantId) {
@@ -485,12 +489,19 @@ async function initProductPage() {
         const thumbnailsContainer = document.getElementById('product-thumbnails');
         if (thumbnailsContainer) {
             thumbnailsContainer.innerHTML = '';
-            for(let i=0; i<4; i++) {
+            images.forEach((img, index) => {
                 const thumb = document.createElement('div');
-                thumb.className = `thumbnail ${i === 0 ? 'active' : ''}`;
-                thumb.innerHTML = `<img src="${product.imgUrl}" alt="Thumbnail ${i+1}">`;
+                thumb.className = `thumbnail ${index === 0 ? 'active' : ''}`;
+                thumb.innerHTML = `<img src="${resolveImg(img)}" alt="Thumbnail ${index+1}">`;
+                
+                thumb.addEventListener('click', () => {
+                    document.getElementById('product-main-image').src = resolveImg(img);
+                    document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
+                    thumb.classList.add('active');
+                });
+                
                 thumbnailsContainer.appendChild(thumb);
-            }
+            });
         }
 
         // Generate Sizes
