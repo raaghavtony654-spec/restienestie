@@ -289,20 +289,36 @@ function initSearchModal() {
     const searchModal = document.getElementById('search-modal');
     const searchClose = document.getElementById('search-close');
     const searchOverlay = document.getElementById('search-overlay');
+    const searchInput = document.querySelector('.search-modal__input');
+    const searchResults = document.getElementById('search-results');
+    
+    let productData = null;
 
     if (!searchModal) return;
 
     function openSearch(e) {
         if (e) e.preventDefault();
         searchModal.classList.add('active');
-        const input = searchModal.querySelector('input');
-        if (input) {
-            setTimeout(() => input.focus(), 100);
+        if (searchInput) {
+            setTimeout(() => searchInput.focus(), 100);
+        }
+        
+        // Fetch products lazily when search is opened
+        if (!productData) {
+            const basePath = window.location.pathname.includes('/product/') || window.location.pathname.includes('/cushions/') || window.location.pathname.includes('/pillows/') || window.location.pathname.includes('/about/') ? '../' : './';
+            fetch(basePath + 'assets/products.json')
+                .then(res => res.json())
+                .then(data => {
+                    productData = Object.values(data);
+                })
+                .catch(err => console.error("Error loading products for search", err));
         }
     }
 
     function closeSearch() {
         searchModal.classList.remove('active');
+        if (searchInput) searchInput.value = '';
+        if (searchResults) searchResults.innerHTML = '';
     }
 
     searchLinks.forEach(link => {
@@ -317,6 +333,52 @@ function initSearchModal() {
             closeSearch();
         }
     });
+
+    if (searchInput && searchResults) {
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            searchResults.innerHTML = '';
+            
+            if (!query || !productData) return;
+            
+            const matches = productData.filter(p => p.title.toLowerCase().includes(query));
+            
+            if (matches.length === 0) {
+                searchResults.innerHTML = '<p style="color: #666; font-style: italic;">No products found.</p>';
+                return;
+            }
+            
+            const basePath = window.location.pathname.includes('/product/') || window.location.pathname.includes('/cushions/') || window.location.pathname.includes('/pillows/') || window.location.pathname.includes('/about/') ? '../' : './';
+            
+            matches.forEach(p => {
+                const item = document.createElement('a');
+                item.href = `${basePath}product/?id=${p.id || p.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}`;
+                item.style.display = 'flex';
+                item.style.alignItems = 'center';
+                item.style.textDecoration = 'none';
+                item.style.color = '#333';
+                item.style.gap = '1rem';
+                item.style.padding = '0.5rem';
+                item.style.border = '1px solid #eee';
+                item.style.borderRadius = '8px';
+                
+                item.innerHTML = `
+                    <img src="${p.imgUrl}" alt="${p.title}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px;">
+                    <div style="flex: 1;">
+                        <h4 style="margin: 0; font-size: 0.95rem;">${p.title}</h4>
+                        <span style="font-weight: bold; color: #4B3621;">${p.salePrice}</span>
+                        ${p.available === false ? '<span style="color: red; font-size: 0.8rem; margin-left: 0.5rem;">(Out of Stock)</span>' : ''}
+                    </div>
+                `;
+                
+                // Add hover effect
+                item.addEventListener('mouseenter', () => item.style.backgroundColor = '#f9f9f9');
+                item.addEventListener('mouseleave', () => item.style.backgroundColor = 'transparent');
+                
+                searchResults.appendChild(item);
+            });
+        });
+    }
 }
 
 /* ==============================================
@@ -381,6 +443,21 @@ async function initProductPage() {
         }
         
         document.title = product.title + " – Cloudrest";
+
+        if (product.available === false) {
+            const addToCartBtn = document.querySelector('.product-actions .btn--primary');
+            const buyNowBtn = document.querySelector('.product-actions .btn--secondary');
+            if (addToCartBtn) {
+                addToCartBtn.innerHTML = 'Out of Stock';
+                addToCartBtn.disabled = true;
+                addToCartBtn.style.cursor = 'not-allowed';
+                addToCartBtn.style.opacity = '0.5';
+                addToCartBtn.classList.remove('add-to-cart-btn');
+            }
+            if (buyNowBtn) {
+                buyNowBtn.style.display = 'none';
+            }
+        }
 
     } catch (error) {
         console.error("Failed to load product data:", error);

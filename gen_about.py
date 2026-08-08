@@ -118,9 +118,9 @@ header = header.replace('href="pillows/" class="main-nav__link" id="nav-pillow"'
 header = header.replace('href="cushions/" class="main-nav__link" id="nav-cushion"', 'href="../cushions/" class="main-nav__link" id="nav-cushion"')
 header = header.replace('href="about/" class="main-nav__link" id="nav-about-us"', 'href="../about/" class="main-nav__link" id="nav-about-us"')
 header = header.replace('<body class="landing-page">', '<body>')
-header = header.replace('href="styles.css"', 'href="../styles.css"')
+header = header.replace('href="styles.css', 'href="../styles.css')
 footer = footer.replace('src="shopify-integration.js"', 'src="../shopify-integration.js"')
-footer = footer.replace('src="script.js"', 'src="../script.js"')
+footer = footer.replace('src="script.js', 'src="../script.js')
 
 full_page = header + about_html + footer
 

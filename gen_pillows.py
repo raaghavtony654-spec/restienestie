@@ -129,6 +129,9 @@ products_html += '<div class="products-grid" id="products-grid" style="display:g
 for idx, p in enumerate(products):
     title = re.sub(r'^(Rest\s*Nest(?:\u2122)?\s*-?\s*)', '', p['title'], flags=re.IGNORECASE)
     price_val = float(p['salePrice'].replace('Rs. ', '').replace(',', ''))
+    
+    btn_html = '<button class="btn--primary" style="margin-top: 1rem; width: 100%; padding: 0.75rem; background: #4B3621; color: #FAF9F6; border: none; font-weight: bold; cursor: not-allowed; opacity: 0.5;" disabled>Out of Stock</button>'
+    
     products_html += f"""
     <div class="products-slider__card" style="margin-bottom: 2rem; position: relative;" data-price="{price_val}" data-title="{title}" data-order="{idx}" data-variant-id="{get_variant_id_from_image(p['imgUrl'])}">
         <a href="../product/?id={slugify(p['title'])}" style="text-decoration: none; color: inherit;">
@@ -142,7 +145,7 @@ for idx, p in enumerate(products):
                 <span class="products-slider__original">{p['originalPrice']}</span>
             </div>
         </a>
-        <button class="add-to-cart-btn btn--primary" style="margin-top: 1rem; width: 100%; padding: 0.75rem; background: #4B3621; color: #FAF9F6; border: none; font-weight: bold; cursor: pointer; transition: opacity 0.3s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">Add to Cart</button>
+        {btn_html}
     </div>
     """
 
@@ -155,9 +158,9 @@ header = header.replace('href="pillows/" class="main-nav__link" id="nav-pillow"'
 header = header.replace('href="cushions/" class="main-nav__link" id="nav-cushion"', 'href="../cushions/" class="main-nav__link" id="nav-cushion"')
 header = header.replace('href="about/" class="main-nav__link" id="nav-about-us"', 'href="../about/" class="main-nav__link" id="nav-about-us"')
 header = header.replace('<body class="landing-page">', '<body>')
-header = header.replace('href="styles.css"', 'href="../styles.css"')
+header = header.replace('href="styles.css', 'href="../styles.css')
 footer = footer.replace('src="shopify-integration.js"', 'src="../shopify-integration.js"')
-footer = footer.replace('src="script.js"', 'src="../script.js"')
+footer = footer.replace('src="script.js', 'src="../script.js')
 full_page = header + products_html + footer
 
 with open('pillows/index.html', 'w', encoding='utf-8') as f:
