@@ -159,7 +159,12 @@ button {
     border-right: none;
     border-top: none;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(166, 124, 82, 0.95);
+    background: rgba(75, 54, 33, 0.95);
+}
+
+.pill-nav.scrolled .main-nav__link,
+.pill-nav.scrolled .top-bar__link {
+    color: #ffffff;
 }
 
 .pill-nav__list {
