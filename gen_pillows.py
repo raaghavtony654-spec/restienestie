@@ -126,15 +126,26 @@ products_html += '<section class="collection"><div class="collection__container"
 products_html += sort_ui
 products_html += '<div class="products-grid" id="products-grid" style="display:grid; grid-template-columns:repeat(3, 1fr); gap:2rem;">'
 
+
+import json
+with open('assets/products.json', 'r', encoding='utf-8') as f:
+    products_db = json.load(f)
+products = [v for k, v in products_db.items() if v.get('category', '') == 'Pillow']
+
 for idx, p in enumerate(products):
     title = re.sub(r'^(Rest\s*Nest(?:\u2122)?\s*-?\s*)', '', p['title'], flags=re.IGNORECASE)
     price_val = float(p['salePrice'].replace('Rs. ', '').replace(',', ''))
     
-    btn_html = '<button class="btn--primary" style="margin-top: 1rem; width: 100%; padding: 0.75rem; background: #4B3621; color: #FAF9F6; border: none; font-weight: bold; cursor: not-allowed; opacity: 0.5;" disabled>Out of Stock</button>'
+    is_available = p.get('available', False)
+    if is_available:
+        btn_html = '<button class="add-to-cart-btn btn--primary" style="margin-top: 1rem; width: 100%; padding: 0.75rem; background: #4B3621; color: #FAF9F6; border: none; font-weight: bold; cursor: pointer;">Add to Cart</button>'
+    else:
+        btn_html = '<button class="btn--primary" style="margin-top: 1rem; width: 100%; padding: 0.75rem; background: #4B3621; color: #FAF9F6; border: none; font-weight: bold; cursor: not-allowed; opacity: 0.5;" disabled>Out of Stock</button>'
+
     
     products_html += f"""
-    <div class="products-slider__card" style="margin-bottom: 2rem; position: relative;" data-price="{price_val}" data-title="{title}" data-order="{idx}" data-variant-id="{get_variant_id_from_image(p['imgUrl'])}">
-        <a href="../product/?id={slugify(p['title'])}" style="text-decoration: none; color: inherit;">
+    <div class="products-slider__card" style="margin-bottom: 2rem; position: relative;" data-price="{price_val}" data-title="{title}" data-order="{idx}" data-variant-id="{p.get('variantId', '')}">
+        <a href="../product/?id={p['id']}" style="text-decoration: none; color: inherit;">
             <span class="products-slider__badge">{p['discount']}</span>
             <div class="products-slider__img-wrap">
                 <img src="{p['imgUrl']}" alt="{title}">

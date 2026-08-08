@@ -1018,68 +1018,16 @@ button {
 }
 .washable__image-wrap {
     flex: 1;
+    padding: 2rem;
 }
 .washable__img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    border-radius: 20px;
 }
 
-/* ==============================================
-   2. SHOWROOM LOCATOR
-   ============================================== */
-.showroom-section {
-    display: flex;
-    background-color: transparent;
-    color: var(--color-text-dark);
-}
-.showroom__image-wrap {
-    flex: 1;
-    background: transparent;
-    padding: 4rem;
-}
-.showroom__img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    box-shadow: 0 0.625rem 1.875rem rgba(0,0,0,0.1);
-}
-.showroom__content {
-    flex: 1;
-    padding: 6rem 4rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-}
-.showroom__label {
-    font-size: 0.8rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-}
-.showroom__heading {
-    font-family: var(--font-serif);
-    font-size: 2.5rem;
-    margin-bottom: 1.5rem;
-}
-.showroom__desc {
-    font-size: 1rem;
-    max-width: 25rem;
-    line-height: 1.6;
-    margin-bottom: 2.5rem;
-}
-.showroom__btn {
-    background-color: #555;
-    color: #fff;
-    padding: 1rem 2rem;
-    font-size: 0.8rem;
-    letter-spacing: 0.1rem;
-    transition: background 0.3s;
-}
-.showroom__btn:hover {
-    background-color: #333;
-}
+
 
 /* ==============================================
    3. WOVEN STORIES
@@ -2344,4 +2292,36 @@ button {
     color: #4B3621;
     min-width: 20px;
     text-align: center;
+}
+
+/* ==============================================
+   SHOWCASE PLACEHOLDERS
+   ============================================== */
+.showcase {
+    background-color: var(--color-bg);
+}
+.showcase__placeholders {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    padding: 4rem 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+.showcase__placeholder {
+    height: 450px;
+    background-color: #e8e6e1;
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+@media (max-width: 900px) {
+    .showcase__placeholders {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+@media (max-width: 500px) {
+    .showcase__placeholders {
+        grid-template-columns: 1fr;
+    }
 }
