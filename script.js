@@ -1,5 +1,5 @@
 /* ============================================
-   KNOTS RUGS — Landing Page Scripts
+   RESTNEST — Landing Page Scripts
    Hero Slider, Scroll Reveal, Interactions
    ============================================ */
 
