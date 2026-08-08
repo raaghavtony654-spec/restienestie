@@ -408,7 +408,7 @@ async function initProductPage() {
         
         document.getElementById('product-main-image').src = product.imgUrl;
         
-        const productInfo = document.querySelector('.product-info');
+        const productInfo = document.querySelector('.product-details');
         if (productInfo && product.variantId) {
             productInfo.setAttribute('data-variant-id', product.variantId);
         }
@@ -444,18 +444,56 @@ async function initProductPage() {
         
         document.title = product.title + " – Cloudrest";
 
+        const addToCartBtn = document.querySelector('.product-actions .btn--primary');
+        const buyNowBtn = document.querySelector('.product-actions .btn--secondary');
+        const qtyMinus = document.getElementById('qty-minus');
+        const qtyPlus = document.getElementById('qty-plus');
+        const qtyInput = document.getElementById('qty-input');
+        
+        if (qtyMinus && qtyPlus && qtyInput) {
+            qtyMinus.addEventListener('click', () => {
+                let current = parseInt(qtyInput.value) || 1;
+                if (current > 1) qtyInput.value = current - 1;
+            });
+            qtyPlus.addEventListener('click', () => {
+                let current = parseInt(qtyInput.value) || 1;
+                qtyInput.value = current + 1;
+            });
+        }
+
         if (product.available === false) {
-            const addToCartBtn = document.querySelector('.product-actions .btn--primary');
-            const buyNowBtn = document.querySelector('.product-actions .btn--secondary');
             if (addToCartBtn) {
                 addToCartBtn.innerHTML = 'Out of Stock';
                 addToCartBtn.disabled = true;
                 addToCartBtn.style.cursor = 'not-allowed';
                 addToCartBtn.style.opacity = '0.5';
                 addToCartBtn.classList.remove('add-to-cart-btn');
+                addToCartBtn.classList.remove('btn--primary');
             }
             if (buyNowBtn) {
                 buyNowBtn.style.display = 'none';
+            }
+        } else {
+            if (buyNowBtn) {
+                buyNowBtn.addEventListener('click', async () => {
+                    if (typeof ShopifyCart !== 'undefined' && product.variantId) {
+                        const originalText = buyNowBtn.innerHTML;
+                        buyNowBtn.innerHTML = 'Redirecting...';
+                        buyNowBtn.disabled = true;
+                        
+                        try {
+                            const qty = qtyInput ? (parseInt(qtyInput.value) || 1) : 1;
+                            await ShopifyCart.addItem(product.variantId, qty);
+                            ShopifyCart.goToCheckout();
+                        } catch (err) {
+                            buyNowBtn.innerHTML = 'Error';
+                            setTimeout(() => {
+                                buyNowBtn.innerHTML = originalText;
+                                buyNowBtn.disabled = false;
+                            }, 2000);
+                        }
+                    }
+                });
             }
         }
 
@@ -680,7 +718,7 @@ document.addEventListener('DOMContentLoaded', initProductSort);
     document.addEventListener('click', (e) => {
         if (e.target.classList.contains('add-to-cart-btn') || e.target.classList.contains('btn--primary')) {
             const btn = e.target;
-            const card = btn.closest('.product-card') || btn.closest('.products-slider__card') || document.querySelector('.product-info');
+            const card = btn.closest('.product-card') || btn.closest('.products-slider__card') || document.querySelector('.product-details');
 
             if (card) {
                 e.preventDefault();
@@ -693,12 +731,18 @@ document.addEventListener('DOMContentLoaded', initProductSort);
                     const price = parsePrice(priceEl.textContent);
                     const img = imgEl.getAttribute('src');
                     const variantId = card.getAttribute('data-variant-id') || 'gid://shopify/ProductVariant/placeholder';
+                    
+                    let qty = 1;
+                    const qtyInput = document.getElementById('qty-input');
+                    if (qtyInput && card.classList.contains('product-details')) {
+                        qty = parseInt(qtyInput.value) || 1;
+                    }
 
                     const existing = cart.find(i => i.name === name);
                     if (existing) {
-                        existing.quantity += 1;
+                        existing.quantity += qty;
                     } else {
-                        cart.push({ name, price, img, quantity: 1, variantId });
+                        cart.push({ name, price, img, quantity: qty, variantId });
                     }
 
                     saveCart();
@@ -706,7 +750,7 @@ document.addEventListener('DOMContentLoaded', initProductSort);
                     openCart();
 
                     if (typeof ShopifyCart !== 'undefined' && variantId) {
-                        ShopifyCart.addItem(variantId, 1);
+                        ShopifyCart.addItem(variantId, qty);
                     }
 
                     // Show green "Added" feedback then restore original brown styling
