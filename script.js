@@ -11,8 +11,76 @@ document.addEventListener('DOMContentLoaded', () => {
     initProductsSlider();
     initSearchModal();
     initProductPage();
+    initReviewsSlider();
 });
 
+
+/* ==============================================
+   REVIEWS AUTO-SLIDER (2.8s per card)
+   ============================================== */
+function initReviewsSlider() {
+    const track = document.querySelector('.reviews__track');
+    if (!track) return;
+
+    const cards = track.querySelectorAll('.review-card');
+    if (!cards.length) return;
+
+    function getCardWidth() {
+        const card = cards[0];
+        const style = getComputedStyle(track);
+        const gap = parseFloat(style.gap) || 0;
+        return card.offsetWidth + gap;
+    }
+
+    function slide() {
+        const maxScroll = track.scrollWidth - track.clientWidth;
+        
+        // If we've reached the end of the scrollable area, jump back to the start
+        if (track.scrollLeft >= maxScroll - 10) { 
+            track.scrollTo({ left: 0, behavior: 'smooth' });
+            return;
+        }
+
+        track.scrollBy({ left: getCardWidth(), behavior: 'smooth' });
+    }
+
+    let intervalId = setInterval(slide, 2800);
+
+    // Pause auto-scrolling when user interacts manually
+    track.addEventListener('mouseenter', () => clearInterval(intervalId));
+    track.addEventListener('mouseleave', () => {
+        intervalId = setInterval(slide, 2800);
+    });
+    track.addEventListener('touchstart', () => clearInterval(intervalId), {passive: true});
+    track.addEventListener('touchend', () => {
+        intervalId = setInterval(slide, 2800);
+    });
+
+    // Arrow navigation
+    const prevBtn = document.getElementById('reviews-prev');
+    const nextBtn = document.getElementById('reviews-next');
+
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            clearInterval(intervalId);
+            if (track.scrollLeft <= 5) {
+                const maxScroll = track.scrollWidth - track.clientWidth;
+                track.scrollTo({ left: maxScroll, behavior: 'smooth' });
+            } else {
+                track.scrollBy({ left: -getCardWidth(), behavior: 'smooth' });
+            }
+            intervalId = setInterval(slide, 2800);
+        });
+    }
+
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            clearInterval(intervalId);
+            slide();
+            intervalId = setInterval(slide, 2800);
+        });
+    }
+}
 
 /* ==============================================
    PRODUCTS AUTO-SLIDER (2.8s per card)

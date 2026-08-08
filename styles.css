@@ -1114,7 +1114,8 @@ button {
     justify-content: center;
     position: relative;
     padding: 0 2rem;
-    max-width: 100%;
+    max-width: 85rem;
+    margin: 0 auto;
 }
 .reviews__track {
     display: flex;
