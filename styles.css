@@ -3188,6 +3188,9 @@ button {
     margin-bottom: 0.75rem;
     white-space: normal;
     overflow: visible;
+    display: block;
+    -webkit-line-clamp: unset;
+    height: auto;
 }
 
 .products-grid .products-slider__sale {
