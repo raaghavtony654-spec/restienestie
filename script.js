@@ -15,7 +15,36 @@ document.addEventListener('DOMContentLoaded', () => {
     initSearchModal();
     initProductPage();
     initReviewsSlider();
+    initMobileMenu();
 });
+
+
+/* ==============================================
+   MOBILE HAMBURGER MENU
+   ============================================== */
+function initMobileMenu() {
+    const toggle = document.getElementById('mobile-menu-toggle');
+    const curtain = document.getElementById('mobile-nav-curtain');
+    if (!toggle || !curtain) return;
+
+    toggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = curtain.classList.toggle('open');
+        toggle.classList.toggle('active', isOpen);
+        toggle.setAttribute('aria-expanded', isOpen);
+        document.body.style.overflow = isOpen ? 'hidden' : '';
+    });
+
+    // Close menu when a curtain link is clicked
+    curtain.querySelectorAll('.mobile-nav-curtain__link').forEach(link => {
+        link.addEventListener('click', () => {
+            curtain.classList.remove('open');
+            toggle.classList.remove('active');
+            toggle.setAttribute('aria-expanded', 'false');
+            document.body.style.overflow = '';
+        });
+    });
+}
 
 
 /* ==============================================
