@@ -306,6 +306,28 @@ button {
     pointer-events: none;
 }
 
+.hero__fixed-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 1.25rem;
+    z-index: 5;
+    pointer-events: none;
+}
+
+.hero__fixed-logo {
+    height: 16rem;
+    width: auto;
+    object-fit: contain;
+    margin-bottom: 2.5rem;
+    mix-blend-mode: difference;
+    pointer-events: none;
+}
+
 .hero__content {
     position: absolute;
     inset: 0;
@@ -2781,7 +2803,7 @@ button {
         bottom: 1.5rem;
     }
 
-    .hero__fixed-overlay .hero__logo {
+    .hero__fixed-logo {
         height: 8rem !important;
     }
 
@@ -3142,7 +3164,7 @@ button {
         height: 6rem;
     }
 
-    .hero__fixed-overlay .hero__logo {
+    .hero__fixed-logo {
         height: 6rem !important;
     }
 
