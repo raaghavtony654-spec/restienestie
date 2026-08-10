@@ -644,3 +644,18 @@ const ShopifyCart = {
 document.addEventListener('DOMContentLoaded', () => {
   ShopifyCart.init();
 });
+
+document.addEventListener('click', function (event) {
+  const button = event.target.closest('button, a');
+
+  if (!button) return;
+
+  const text = button.textContent.trim().toLowerCase();
+
+  if (text.includes('checkout')) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    ShopifyCart.goToCheckout();
+  }
+});
