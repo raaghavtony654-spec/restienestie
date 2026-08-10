@@ -1263,12 +1263,17 @@ button {
     flex: 0 0 calc(25% - 1.125rem);
     min-width: 0;
     position: relative;
+    display: flex;
+    flex-direction: column;
 }
 
-.products-slider__card a {
+.products-slider__card > a,
+.products-slider__card > div {
     text-decoration: none;
     color: inherit;
-    display: block;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 }
 
 .products-slider__badge {
@@ -1312,7 +1317,12 @@ button {
     color: var(--color-text-dark);
     margin-bottom: 0.5rem;
     line-height: 1.4;
-    white-space: normal;
+    height: 2.8em !important; /* Exactly 2 lines */
+    white-space: normal !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
     text-align: left;
 }
 
@@ -1321,6 +1331,12 @@ button {
     align-items: center;
     justify-content: flex-start;
     gap: 0.625rem;
+    margin-top: auto;
+}
+
+.products-slider__card .add-to-cart-btn,
+.products-slider__card .btn--primary {
+    margin-top: auto !important;
 }
 
 .products-slider__sale {
@@ -2132,6 +2148,7 @@ button {
     width: 100%;
     max-width: 400px;
     height: 100vh;
+    height: 100dvh;
     background: #FAF9F6;
     border-left: 1px solid rgba(75, 54, 33, 0.1);
     z-index: 9999999;
@@ -2333,6 +2350,7 @@ button {
     width: 100%;
     max-width: 400px;
     height: 100vh;
+    height: 100dvh;
     background: #FAF9F6;
     border-left: 1px solid rgba(75, 54, 33, 0.1);
     z-index: 9999999;
@@ -2715,12 +2733,16 @@ button {
     /* Cart button text hide, keep icon */
     .pill-nav__utils .cart-btn {
         font-size: 0 !important;
+        position: relative !important;
     }
     .pill-nav__utils .cart-btn svg {
         width: 18px;
         height: 18px;
     }
     .pill-nav__utils .cart-btn .cart-badge {
+        position: absolute !important;
+        top: -6px !important;
+        right: -8px !important;
         font-size: 0.6rem !important;
         width: 1rem !important;
         height: 1rem !important;
@@ -3212,3 +3234,5 @@ button {
         font-size: 0.75rem;
     }
 }
+
+
