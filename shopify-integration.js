@@ -528,21 +528,49 @@ const ShopifyCart = {
    * Redirect the user to Shopify's hosted checkout page.
    */
   async goToCheckout() {
-    if (!this.isConfigured()) {
-      console.warn('[ShopifyCart] Not configured — cannot redirect to checkout.');
-      alert('Shopify is not configured yet. Please set your store credentials in shopify-integration.js');
-      return;
-    }
+    try {
+      // Make sure the cart exists
+      await this.init();
 
-    // Refresh cart to get latest checkoutUrl
-    await this.getCart();
-    const url = this.getCheckoutUrl();
+      if (!this._cartId) {
+        alert('Your cart is empty. Please add a product first.');
+        return;
+      }
 
-    if (url) {
-      window.location.href = url;
-    } else {
-      console.error('[ShopifyCart] No checkout URL available.');
-      alert('Could not get checkout URL. Please add items to your cart first.');
+      // Get the latest cart directly from Shopify
+      const data = await shopifyFetch(CART_QUERY, {
+        cartId: this._cartId
+      });
+
+      if (!data || !data.cart) {
+        // Old/expired cart — create a fresh one
+        localStorage.removeItem('shopify_cart_id');
+        this._cartId = null;
+        this._cart = null;
+        this._initialized = false;
+
+        alert('Your cart expired. Please add the product to your cart again.');
+        return;
+      }
+
+      this._cart = data.cart;
+
+      // Shopify's hosted checkout URL
+      const checkoutUrl = this._cart.checkoutUrl;
+
+      if (!checkoutUrl) {
+        console.error('Shopify did not return a checkout URL:', this._cart);
+        alert('Unable to open checkout. Please try again.');
+        return;
+      }
+
+      console.log('[ShopifyCart] Opening checkout:', checkoutUrl);
+
+      window.location.assign(checkoutUrl);
+
+    } catch (error) {
+      console.error('[ShopifyCart] Checkout failed:', error);
+      alert('Checkout could not be opened. Please try again.');
     }
   },
 
