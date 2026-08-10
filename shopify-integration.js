@@ -13,7 +13,7 @@
 
 const SHOPIFY_DOMAIN = '6770df-a2.myshopify.com';
 const STOREFRONT_ACCESS_TOKEN = '23d3e88ed88fd584ae6c33c2cbe768d0';
-const GRAPHQL_ENDPOINT = `https://${SHOPIFY_DOMAIN}/api/2025-04/graphql.json`;
+const GRAPHQL_ENDPOINT = `https://${SHOPIFY_DOMAIN}/api/2026-07/graphql.json`;
 
 // ============================================================
 // GraphQL Queries & Mutations
