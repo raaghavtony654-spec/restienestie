@@ -112,11 +112,9 @@ async function processCheckout(cart, totalAmount, customerInfo) {
         phone: customerInfo.phone,
         address: `${customerInfo.address}, ${customerInfo.city}, ${customerInfo.state} - ${customerInfo.pincode}`,
         total_amount: totalAmount,
-        items: cart.map(item => ({
-            name: item.name,
-            quantity: item.quantity,
-            price: item.price
-        }))
+        items: cart.map(i => `${i.name} (x${i.quantity})`).join(', '),
+        raw_items: JSON.stringify(cart),
+        status: 'Placed'
     };
 
     try {
