@@ -56,7 +56,8 @@ data class Order(
     val items: String,
     val rawItems: String,
     val status: String,
-    val date: String
+    val date: String,
+    val createdAt: Long
 )
 
 data class ProductSale(val name: String, val amount: Double, val color: Color)
@@ -153,7 +154,8 @@ fun AdminApp(isDarkTheme: Boolean, onThemeToggle: () -> Unit) {
                                 items = doc.getString("items") ?: "",
                                 rawItems = doc.getString("raw_items") ?: "[]",
                                 status = doc.getString("status") ?: "Placed",
-                                date = doc.getString("created_at") ?: ""
+                                date = doc.getTimestamp("createdAt")?.toDate()?.toString() ?: "",
+                                createdAt = doc.getTimestamp("createdAt")?.toDate()?.time ?: System.currentTimeMillis()
                             )
                         } catch (e: Exception) {
                             null
@@ -270,12 +272,29 @@ fun AdminApp(isDarkTheme: Boolean, onThemeToggle: () -> Unit) {
 // ──────────────────── DASHBOARD ────────────────────
 @Composable
 fun DashboardScreen(colors: AppColors, orders: List<Order>) {
-    val totalSales = orders.sumOf { it.amount }
-    val totalOrders = orders.size
+    var selectedTimeRange by remember { mutableStateOf("All Time") }
+    val timeRanges = listOf("This Week", "This Month", "All Time")
+    var isDropdownExpanded by remember { mutableStateOf(false) }
 
-    val productSales = remember(orders) {
+    val filteredOrders = remember(orders, selectedTimeRange) {
+        val now = System.currentTimeMillis()
+        val oneWeek = 7L * 24 * 60 * 60 * 1000
+        val oneMonth = 30L * 24 * 60 * 60 * 1000
+        orders.filter { order ->
+            when (selectedTimeRange) {
+                "This Week" -> (now - order.createdAt) <= oneWeek
+                "This Month" -> (now - order.createdAt) <= oneMonth
+                else -> true
+            }
+        }
+    }
+
+    val totalSales = filteredOrders.sumOf { it.amount }
+    val totalOrders = filteredOrders.size
+
+    val productSales = remember(filteredOrders) {
         val salesMap = mutableMapOf<String, Double>()
-        orders.forEach { order ->
+        filteredOrders.forEach { order ->
             try {
                 val itemsArr = JSONArray(order.rawItems)
                 for (i in 0 until itemsArr.length()) {
@@ -341,13 +360,46 @@ fun DashboardScreen(colors: AppColors, orders: List<Order>) {
         Spacer(modifier = Modifier.height(24.dp))
 
         // ── Sales by Product ──
-        Text(
-            text = "Sales by Product",
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Bold,
-            color = colors.textPrimary,
-            modifier = Modifier.padding(bottom = 12.dp)
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "Sales by Product",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                color = colors.textPrimary
+            )
+            
+            Box {
+                Row(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(colors.accent.copy(alpha = 0.1f))
+                        .clickable { isDropdownExpanded = true }
+                        .padding(horizontal = 12.dp, vertical = 6.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(selectedTimeRange, fontSize = 12.sp, color = colors.accent, fontWeight = FontWeight.Bold)
+                    Icon(Icons.Filled.ArrowDropDown, contentDescription = null, tint = colors.accent, modifier = Modifier.size(16.dp))
+                }
+                DropdownMenu(
+                    expanded = isDropdownExpanded,
+                    onDismissRequest = { isDropdownExpanded = false }
+                ) {
+                    timeRanges.forEach { range ->
+                        DropdownMenuItem(
+                            text = { Text(range, color = colors.textPrimary) },
+                            onClick = {
+                                selectedTimeRange = range
+                                isDropdownExpanded = false
+                            }
+                        )
+                    }
+                }
+            }
+        }
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -468,8 +520,9 @@ fun VerticalBarChart(data: List<PageVisit>, colors: AppColors) {
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.Bottom
         ) {
+            val safeMaxVisits = maxVisits.takeIf { it > 0 } ?: 1
             data.forEach { page ->
-                val fraction = page.visits.toFloat() / maxVisits.toFloat()
+                val fraction = page.visits.toFloat() / safeMaxVisits.toFloat()
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Bottom,
