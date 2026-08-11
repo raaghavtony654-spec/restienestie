@@ -128,8 +128,9 @@ fun AdminApp(isDarkTheme: Boolean, onThemeToggle: () -> Unit) {
     var selectedOrder by remember { mutableStateOf<Order?>(null) }
     val orders = remember { mutableStateListOf<Order>() }
     val scope = rememberCoroutineScope()
+    var refreshTrigger by remember { mutableIntStateOf(0) }
     
-    LaunchedEffect(Unit) {
+    LaunchedEffect(refreshTrigger) {
         try {
             val fetchedOrders = fetchOrders()
             orders.clear()
@@ -191,12 +192,12 @@ fun AdminApp(isDarkTheme: Boolean, onThemeToggle: () -> Unit) {
             .padding(innerPadding)
             .fillMaxSize()) {
             AnimatedContent(
-                targetState = selectedOrder != null,
+                targetState = selectedOrder,
                 label = "OrderTransition"
-            ) { isDetail ->
-                if (isDetail) {
+            ) { targetOrder ->
+                if (targetOrder != null) {
                     OrderDetailScreen(
-                        order = selectedOrder!!,
+                        order = targetOrder,
                         onBack = { selectedOrder = null },
                         onStatusChange = { order, newStatus ->
                             val idx = orders.indexOfFirst { it.id == order.id }
@@ -219,6 +220,7 @@ fun AdminApp(isDarkTheme: Boolean, onThemeToggle: () -> Unit) {
                         "Orders" -> OrdersTableScreen(
                             orders = orders,
                             onOrderClick = { selectedOrder = it },
+                            onRefresh = { refreshTrigger++ },
                             onStatusChange = { order, newStatus ->
                                 val idx = orders.indexOfFirst { it.id == order.id }
                                 if (idx >= 0) {
@@ -494,7 +496,7 @@ fun VerticalBarChart(data: List<PageVisit>, colors: AppColors) {
 
 // ──────────────────── ORDERS ────────────────────
 @Composable
-fun OrdersTableScreen(orders: List<Order>, onOrderClick: (Order) -> Unit, onStatusChange: (Order, String) -> Unit, colors: AppColors) {
+fun OrdersTableScreen(orders: List<Order>, onOrderClick: (Order) -> Unit, onRefresh: () -> Unit, onStatusChange: (Order, String) -> Unit, colors: AppColors) {
     var isLoading by remember { mutableStateOf(false) }
     var error by remember { mutableStateOf<String?>(null) }
     var refreshKey by remember { mutableIntStateOf(0) }
@@ -503,6 +505,7 @@ fun OrdersTableScreen(orders: List<Order>, onOrderClick: (Order) -> Unit, onStat
         if (refreshKey > 0) {
             isLoading = true
             error = null
+            onRefresh()
             kotlinx.coroutines.delay(500) // Brief refresh animation
             isLoading = false
         }

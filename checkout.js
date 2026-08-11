@@ -2,7 +2,7 @@
  * RestNest - Custom Checkout Integration (Razorpay + Shiprocket)
  */
 
-const BACKEND_URL = 'http://localhost:3000/api'; // Change for production
+
 
 // ----------------------------------------------------
 // UI Initialization
@@ -106,28 +106,24 @@ async function processCheckout(cart, totalAmount, customerInfo) {
     };
 
     try {
-        const res = await fetch(`${BACKEND_URL}/place-order-test`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ orderData })
-        });
-        
-        const data = await res.json();
-        
-        if (!data.success) throw new Error('Failed to place order');
+        // Save order to LocalStorage (client-side as requested)
+        const existingOrders = JSON.parse(localStorage.getItem('restnest_orders') || '[]');
+        existingOrders.push(orderData);
+        localStorage.setItem('restnest_orders', JSON.stringify(existingOrders));
 
-        // Clear cart
-        localStorage.removeItem('restnest_cart');
-        showStatus('Order placed successfully! Redirecting...', 'success');
-
+        // Simulate network delay
         setTimeout(() => {
-            alert('Order #' + orderData.id + ' placed successfully! Thank you for shopping with RestNest.');
-            window.location.href = 'index.html';
+            showStatus('Order placed successfully! Redirecting...', 'success');
+            localStorage.removeItem('restnest_cart');
+            
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 2000);
         }, 1500);
 
-    } catch (err) {
-        console.error(err);
-        showStatus('Error placing order. Please try again.', 'error');
+    } catch (error) {
+        console.error('Checkout error:', error);
+        showStatus('Error placing the order. Please try again.', 'error');
         payBtn.disabled = false;
         payBtn.textContent = 'Place Order';
     }
