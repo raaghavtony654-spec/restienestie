@@ -45,6 +45,19 @@ import java.io.OutputStreamWriter
 import java.util.Scanner
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.DocumentChange
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
+import android.os.Build
+import androidx.core.app.NotificationCompat
+import android.Manifest
+import android.content.pm.PackageManager
+import androidx.core.content.ContextCompat
+import androidx.activity.result.contract.ActivityResultContracts
+import kotlinx.coroutines.flow.MutableStateFlow
 
 // ──────────────────── Data Classes ────────────────────
 data class Order(
@@ -103,11 +116,38 @@ val LightAppColors = AppColors(
 
 // ──────────────────── Activity ────────────────────
 class MainActivity : ComponentActivity() {
+
+    private val orderIdToOpen = MutableStateFlow<String?>(null)
+    private var isFirstSnapshot = true
+
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) {}
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        
+        // Notifications Setup
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel("orders", "Orders", NotificationManager.IMPORTANCE_HIGH)
+            val manager = getSystemService(NotificationManager::class.java)
+            manager.createNotificationChannel(channel)
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
+
+        intent.getStringExtra("order_id")?.let {
+            orderIdToOpen.value = it
+        }
+
         setContent {
             var isDarkTheme by remember { mutableStateOf(true) }
+            val currentOrderId by orderIdToOpen.collectAsState()
+            
             RestNestAdminTheme(darkTheme = isDarkTheme, dynamicColor = false) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -115,17 +155,63 @@ class MainActivity : ComponentActivity() {
                 ) {
                     AdminApp(
                         isDarkTheme = isDarkTheme,
-                        onThemeToggle = { isDarkTheme = !isDarkTheme }
+                        onThemeToggle = { isDarkTheme = !isDarkTheme },
+                        orderIdToOpen = currentOrderId,
+                        onOrderOpened = { orderIdToOpen.value = null },
+                        context = this@MainActivity,
+                        isFirstSnapshotRef = { isFirst -> 
+                            if (isFirst != null) {
+                                isFirstSnapshot = isFirst
+                                isFirst
+                            } else {
+                                isFirstSnapshot
+                            }
+                        }
                     )
                 }
             }
         }
     }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        intent.getStringExtra("order_id")?.let {
+            orderIdToOpen.value = it
+        }
+    }
+
+    fun sendOrderNotification(orderId: String, customerName: String, amount: Double) {
+        val intent = Intent(this, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            putExtra("order_id", orderId)
+        }
+        val pendingIntent = PendingIntent.getActivity(this, orderId.hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+
+        val notification = NotificationCompat.Builder(this, "orders")
+            .setSmallIcon(android.R.drawable.ic_dialog_info)
+            .setContentTitle("Order Received!")
+            .setContentText("$customerName just placed an order for Rs. $amount")
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
+            .build()
+
+        val manager = getSystemService(NotificationManager::class.java)
+        manager.notify(orderId.hashCode(), notification)
+    }
 }
 
 // ──────────────────── Main App ────────────────────
 @Composable
-fun AdminApp(isDarkTheme: Boolean, onThemeToggle: () -> Unit) {
+fun AdminApp(
+    isDarkTheme: Boolean, 
+    onThemeToggle: () -> Unit,
+    orderIdToOpen: String?,
+    onOrderOpened: () -> Unit,
+    context: MainActivity,
+    isFirstSnapshotRef: (Boolean?) -> Boolean
+) {
     val colors = if (isDarkTheme) DarkAppColors else LightAppColors
     var currentTab by remember { mutableStateOf("Dashboard") }
     var selectedOrder by remember { mutableStateOf<Order?>(null) }
@@ -133,9 +219,19 @@ fun AdminApp(isDarkTheme: Boolean, onThemeToggle: () -> Unit) {
     val scope = rememberCoroutineScope()
     var refreshTrigger by remember { mutableIntStateOf(0) }
     
-    LaunchedEffect(refreshTrigger) {
+    LaunchedEffect(orderIdToOpen, orders.size) {
+        if (orderIdToOpen != null && selectedOrder == null) {
+            val found = orders.find { it.id == orderIdToOpen }
+            if (found != null) {
+                selectedOrder = found
+                onOrderOpened()
+            }
+        }
+    }
+
+    DisposableEffect(refreshTrigger) {
         val db = FirebaseFirestore.getInstance()
-        db.collection("orders")
+        val registration = db.collection("orders")
             .orderBy("createdAt", Query.Direction.DESCENDING)
             .addSnapshotListener { snapshot, e ->
                 if (e != null) {
@@ -143,6 +239,21 @@ fun AdminApp(isDarkTheme: Boolean, onThemeToggle: () -> Unit) {
                     return@addSnapshotListener
                 }
                 if (snapshot != null) {
+                    val isFirst = isFirstSnapshotRef(null)
+                    if (!isFirst) {
+                        for (dc in snapshot.documentChanges) {
+                            if (dc.type == DocumentChange.Type.ADDED) {
+                                val doc = dc.document
+                                context.sendOrderNotification(
+                                    doc.getString("id") ?: doc.id,
+                                    doc.getString("customer_name") ?: "Customer",
+                                    doc.getDouble("total_amount") ?: 0.0
+                                )
+                            }
+                        }
+                    }
+                    isFirstSnapshotRef(false)
+
                     val fetchedOrders = snapshot.documents.mapNotNull { doc ->
                         try {
                             Order(
@@ -165,6 +276,10 @@ fun AdminApp(isDarkTheme: Boolean, onThemeToggle: () -> Unit) {
                     orders.addAll(fetchedOrders)
                 }
             }
+            
+        onDispose {
+            registration.remove()
+        }
     }
 
     val tabs = listOf("Dashboard", "Orders", "Settings")
