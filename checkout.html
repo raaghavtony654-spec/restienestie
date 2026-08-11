@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Checkout – RestNest</title>
+    <!-- Same meta/links as index.html -->
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="new_styles.css">
+    <!-- Razorpay SDK -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <style>
+        .checkout-container {
+            max-width: 1000px;
+            margin: 100px auto 40px;
+            padding: 0 1rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .checkout-container {
+                grid-template-columns: 1fr;
+                margin-top: 80px;
+            }
+        }
+
+        .checkout-section {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .checkout-section h2 {
+            font-size: 1.5rem;
+            color: #4B3621;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+        .form-row {
+            display: flex;
+            gap: 1rem;
+        }
+        .form-row .form-group {
+            flex: 1;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #333;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #4B3621;
+        }
+
+        /* Order Summary */
+        #checkout-items {
+            margin-bottom: 1.5rem;
+        }
+        .checkout-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid #eee;
+        }
+        .checkout-item img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        .checkout-item-details {
+            flex: 1;
+        }
+        .checkout-item-title {
+            font-size: 0.95rem;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+        .checkout-item-price {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        .checkout-totals {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid #eee;
+        }
+        .totals-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        .totals-row.grand-total {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #4B3621;
+            margin-top: 1rem;
+        }
+
+        /* Pay Button */
+        .pay-btn {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            background: #4B3621;
+            color: #FAF9F6;
+            text-align: center;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 2rem;
+            transition: background 0.3s;
+        }
+        .pay-btn:hover {
+            background: #3a2a1a;
+        }
+        .pay-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* Status Messages */
+        #checkout-status {
+            display: none;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 500;
+        }
+        .status-success {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #c8e6c9;
+        }
+        .status-error {
+            background: #ffebee;
+            color: #c62828;
+            border: 1px solid #ffcdd2;
+        }
+        .status-loading {
+            background: #e3f2fd;
+            color: #1565c0;
+            border: 1px solid #bbdefb;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Simplified Header for Checkout -->
+    <header class="top-bar">
+        <a href="index.html" class="logo">RESTNEST</a>
+    </header>
+
+    <div class="checkout-container">
+        
+        <!-- Left: Shipping Form -->
+        <div class="checkout-section">
+            <h2>Shipping Details</h2>
+            
+            <div id="checkout-status"></div>
+
+            <form id="checkout-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="fname">First Name</label>
+                        <input type="text" id="fname" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lname">Last Name</label>
+                        <input type="text" id="lname" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" required pattern="[0-9]{10}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="address">Full Address</label>
+                    <input type="text" id="address" required placeholder="House No, Building, Street">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="city">City</label>
+                        <input type="text" id="city" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="state">State</label>
+                        <input type="text" id="state" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="pincode">Pincode</label>
+                        <input type="text" id="pincode" required pattern="[0-9]{6}">
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Right: Order Summary -->
+        <div class="checkout-section">
+            <h2>Order Summary</h2>
+            
+            <div id="checkout-items">
+                <!-- Populated by JS -->
+            </div>
+
+            <div class="checkout-totals">
+                <div class="totals-row">
+                    <span>Subtotal</span>
+                    <span id="summary-subtotal">Rs. 0.00</span>
+                </div>
+                <div class="totals-row">
+                    <span>Shipping</span>
+                    <span>Free</span>
+                </div>
+                <div class="totals-row grand-total">
+                    <span>Total</span>
+                    <span id="summary-total">Rs. 0.00</span>
+                </div>
+            </div>
+
+            <button type="submit" form="checkout-form" class="pay-btn" id="pay-btn">Place Order</button>
+        </div>
+    </div>
+
+    <!-- Minimal footer -->
+    <footer style="text-align: center; padding: 2rem; color: #666; font-size: 0.9rem; margin-top: 4rem;">
+        &copy; 2026 RestNest. Secure Checkout.
+    </footer>
+
+    <script src="checkout.js"></script>
+</body>
+</html>

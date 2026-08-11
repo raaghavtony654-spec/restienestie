@@ -591,8 +591,8 @@ async function initProductPage() {
                         
                         try {
                             const qty = qtyInput ? (parseInt(qtyInput.value) || 1) : 1;
-                            await ShopifyCart.addItem(product.variantId, qty);
-                            ShopifyCart.goToCheckout();
+                            
+                            window.location.href = basePath + 'checkout.html';
                         } catch (err) {
                             buyNowBtn.innerHTML = 'Error';
                             setTimeout(() => {
@@ -733,13 +733,7 @@ document.addEventListener('DOMContentLoaded', initProductSort);
                     cart[idx].quantity -= 1;
                     saveCart();
                     updateCartUI();
-                    // Sync with Shopify
-                    if (typeof ShopifyCart !== 'undefined' && cart[idx] && cart[idx].variantId) {
-                        const lineId = ShopifyCart.findLineIdByVariantId(cart[idx].variantId);
-                        if (lineId) {
-                            ShopifyCart.updateItem(lineId, cart[idx].quantity);
-                        }
-                    }
+                    
                 } else {
                     // Remove item if quantity reaches 0
                     const removedItem = cart[idx];
@@ -763,13 +757,7 @@ document.addEventListener('DOMContentLoaded', initProductSort);
                 cart[idx].quantity += 1;
                 saveCart();
                 updateCartUI();
-                // Sync with Shopify
-                if (typeof ShopifyCart !== 'undefined' && cart[idx] && cart[idx].variantId) {
-                    const lineId = ShopifyCart.findLineIdByVariantId(cart[idx].variantId);
-                    if (lineId) {
-                        ShopifyCart.updateItem(lineId, cart[idx].quantity);
-                    }
-                }
+                
             });
         });
 
@@ -813,11 +801,7 @@ document.addEventListener('DOMContentLoaded', initProductSort);
             e.preventDefault();
             if (cart.length === 0) return;
 
-            if (typeof ShopifyCart !== 'undefined' && ShopifyCart.isConfigured()) {
-                ShopifyCart.goToCheckout();
-            } else {
-                alert('Shopify checkout is not configured yet. Please set your store credentials in shopify-integration.js');
-            }
+            window.location.href = basePath + 'checkout.html';
         });
     }
 
@@ -838,7 +822,7 @@ document.addEventListener('DOMContentLoaded', initProductSort);
                     const name = titleEl.textContent.trim();
                     const price = parsePrice(priceEl.textContent);
                     const img = imgEl.getAttribute('src');
-                    const variantId = card.getAttribute('data-variant-id') || 'gid://shopify/ProductVariant/placeholder';
+                    
                     
                     let qty = 1;
                     const qtyInput = document.getElementById('qty-input');
@@ -850,16 +834,14 @@ document.addEventListener('DOMContentLoaded', initProductSort);
                     if (existing) {
                         existing.quantity += qty;
                     } else {
-                        cart.push({ name, price, img, quantity: qty, variantId });
+                        cart.push({ name, price, img, quantity: qty });
                     }
 
                     saveCart();
                     updateCartUI();
                     openCart();
 
-                    if (typeof ShopifyCart !== 'undefined' && variantId) {
-                        ShopifyCart.addItem(variantId, qty);
-                    }
+                    
 
                     // Show green "Added" feedback then restore original brown styling
                     const origText = btn.textContent;

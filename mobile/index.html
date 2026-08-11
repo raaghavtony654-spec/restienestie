@@ -1572,7 +1572,7 @@ button {
     <div class="products-slider" id="products-slider">
         <div class="products-slider__track" id="products-track">
             <!-- Product Card 1 -->
-            <div class="products-slider__card" data-variant-id="gid://shopify/ProductVariant/42544421371965">
+            <div class="products-slider__card">
                 <a href="../product/?id=rest-nest-premium-white-sleeping-pillow-glace-cotton-fabric-lightweight-comfortable-pack-of-2">
                     <div class="products-slider__img-wrap">
                         <span class="products-slider__badge">-44%</span>
@@ -1587,7 +1587,7 @@ button {
                 <button class="add-to-cart-btn btn--primary" style="margin-top: 1rem; width: 100%; padding: 0.75rem; background: #4B3621; color: #FAF9F6; border: none; font-weight: bold; cursor: pointer;">Add to Cart</button>
             </div>
             <!-- Product Card 2 -->
-            <div class="products-slider__card" data-variant-id="gid://shopify/ProductVariant/42544414785597">
+            <div class="products-slider__card">
                 <div style="text-decoration: none; color: inherit; cursor: default;">
                     <span class="products-slider__badge">-47%</span>
                     <div class="products-slider__img-wrap">
@@ -1602,7 +1602,7 @@ button {
                 <button class="btn--primary" disabled style="margin-top: 1rem; width: 100%; padding: 0.75rem; background: #4B3621; color: #FAF9F6; border: none; font-weight: bold; cursor: not-allowed; opacity: 0.5;">Out of Stock</button>
             </div>
             <!-- Product Card 3 -->
-            <div class="products-slider__card" data-variant-id="gid://shopify/ProductVariant/42544433791037">
+            <div class="products-slider__card">
                 <div style="text-decoration: none; color: inherit; cursor: default;">
                     <span class="products-slider__badge">-41%</span>
                     <div class="products-slider__img-wrap">
@@ -1617,7 +1617,7 @@ button {
                 <button class="btn--primary" disabled style="margin-top: 1rem; width: 100%; padding: 0.75rem; background: #4B3621; color: #FAF9F6; border: none; font-weight: bold; cursor: not-allowed; opacity: 0.5;">Out of Stock</button>
             </div>
             <!-- Product Card 4 -->
-            <div class="products-slider__card" data-variant-id="gid://shopify/ProductVariant/42544516202557">
+            <div class="products-slider__card">
                 <div style="text-decoration: none; color: inherit; cursor: default;">
                     <span class="products-slider__badge">-47%</span>
                     <div class="products-slider__img-wrap">
@@ -1804,7 +1804,6 @@ button {
 </div>
 </div>
 
-<script src="../shopify-integration.js"></script>
 <script>
 /* ============================================
    RESTNEST — Mobile Scripts
@@ -2220,13 +2219,7 @@ function initScrollReveal() {
                     cart[idx].quantity -= 1;
                     saveCart();
                     updateCartUI();
-                    // Sync with Shopify
-                    if (typeof ShopifyCart !== 'undefined' && cart[idx] && cart[idx].variantId) {
-                        const lineId = ShopifyCart.findLineIdByVariantId(cart[idx].variantId);
-                        if (lineId) {
-                            ShopifyCart.updateItem(lineId, cart[idx].quantity);
-                        }
-                    }
+                    
                 } else {
                     // Remove item if quantity reaches 0
                     const removedItem = cart[idx];
@@ -2250,13 +2243,7 @@ function initScrollReveal() {
                 cart[idx].quantity += 1;
                 saveCart();
                 updateCartUI();
-                // Sync with Shopify
-                if (typeof ShopifyCart !== 'undefined' && cart[idx] && cart[idx].variantId) {
-                    const lineId = ShopifyCart.findLineIdByVariantId(cart[idx].variantId);
-                    if (lineId) {
-                        ShopifyCart.updateItem(lineId, cart[idx].quantity);
-                    }
-                }
+                
             });
         });
 
@@ -2300,11 +2287,7 @@ function initScrollReveal() {
             e.preventDefault();
             if (cart.length === 0) return;
 
-            if (typeof ShopifyCart !== 'undefined' && ShopifyCart.isConfigured()) {
-                ShopifyCart.goToCheckout();
-            } else {
-                alert('Shopify checkout is not configured yet. Please set your store credentials in shopify-integration.js');
-            }
+            window.location.href = 'checkout.html';
         });
     }
 
@@ -2325,7 +2308,7 @@ function initScrollReveal() {
                     const name = titleEl.textContent.trim();
                     const price = parsePrice(priceEl.textContent);
                     const img = imgEl.getAttribute('src');
-                    const variantId = card.getAttribute('data-variant-id') || 'gid://shopify/ProductVariant/placeholder';
+                    
                     
                     let qty = 1;
                     const qtyInput = document.getElementById('qty-input');
@@ -2337,16 +2320,14 @@ function initScrollReveal() {
                     if (existing) {
                         existing.quantity += qty;
                     } else {
-                        cart.push({ name, price, img, quantity: qty, variantId });
+                        cart.push({ name, price, img, quantity: qty });
                     }
 
                     saveCart();
                     updateCartUI();
                     openCart();
 
-                    if (typeof ShopifyCart !== 'undefined' && variantId) {
-                        ShopifyCart.addItem(variantId, qty);
-                    }
+                    
 
                     // Show green "Added" feedback then restore original brown styling
                     const origText = btn.textContent;
