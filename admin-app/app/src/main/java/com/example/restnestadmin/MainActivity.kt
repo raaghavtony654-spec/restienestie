@@ -43,6 +43,8 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.io.OutputStreamWriter
 import java.util.Scanner
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 
 // ──────────────────── Data Classes ────────────────────
 data class Order(
@@ -131,13 +133,36 @@ fun AdminApp(isDarkTheme: Boolean, onThemeToggle: () -> Unit) {
     var refreshTrigger by remember { mutableIntStateOf(0) }
     
     LaunchedEffect(refreshTrigger) {
-        try {
-            val fetchedOrders = fetchOrders()
-            orders.clear()
-            orders.addAll(fetchedOrders)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        val db = FirebaseFirestore.getInstance()
+        db.collection("orders")
+            .orderBy("createdAt", Query.Direction.DESCENDING)
+            .addSnapshotListener { snapshot, e ->
+                if (e != null) {
+                    e.printStackTrace()
+                    return@addSnapshotListener
+                }
+                if (snapshot != null) {
+                    val fetchedOrders = snapshot.documents.mapNotNull { doc ->
+                        try {
+                            Order(
+                                id = doc.getString("id") ?: doc.id,
+                                customerName = doc.getString("customer_name") ?: "",
+                                address = doc.getString("address") ?: "",
+                                phone = doc.getString("phone") ?: "",
+                                amount = doc.getDouble("total_amount") ?: 0.0,
+                                items = doc.getString("items") ?: "",
+                                rawItems = doc.getString("raw_items") ?: "[]",
+                                status = doc.getString("status") ?: "Placed",
+                                date = doc.getString("created_at") ?: ""
+                            )
+                        } catch (e: Exception) {
+                            null
+                        }
+                    }
+                    orders.clear()
+                    orders.addAll(fetchedOrders)
+                }
+            }
     }
 
     val tabs = listOf("Dashboard", "Orders", "Settings")
@@ -953,69 +978,17 @@ fun SettingsScreen(isDarkTheme: Boolean, onThemeToggle: () -> Unit, colors: AppC
 }
 
 // ──────────────────── Data ────────────────────
-const val BASE_URL = "http://192.168.31.135:3000/api"
 
-suspend fun fetchOrders(): List<Order> = withContext(Dispatchers.IO) {
-    val result = mutableListOf<Order>()
-    try {
-        val url = URL("$BASE_URL/orders")
-        val conn = url.openConnection() as HttpURLConnection
-        conn.requestMethod = "GET"
-        if (conn.responseCode == HttpURLConnection.HTTP_OK) {
-            val scanner = Scanner(conn.inputStream).useDelimiter("\\A")
-            val response = if (scanner.hasNext()) scanner.next() else ""
-            val jsonObject = JSONObject(response)
-            if (jsonObject.getBoolean("success")) {
-                val ordersArray = jsonObject.getJSONArray("orders")
-                for (i in 0 until ordersArray.length()) {
-                    val obj = ordersArray.getJSONObject(i)
-                    result.add(
-                        Order(
-                            id = obj.getString("id"),
-                            customerName = obj.optString("customer_name", "Unknown"),
-                            address = obj.optString("address", "Unknown"),
-                            phone = obj.optString("phone", "Unknown"),
-                            amount = obj.optDouble("total_amount", 0.0),
-                            items = run {
-                                val raw = obj.optString("items", "[]")
-                                try {
-                                    val arr = JSONArray(raw)
-                                    val sb = StringBuilder()
-                                    for (j in 0 until arr.length()) {
-                                        val item = arr.getJSONObject(j)
-                                        sb.append(item.getString("name")).append(" (x").append(item.getInt("quantity")).append(")\n")
-                                    }
-                                    sb.toString().trim()
-                                } catch (e: Exception) {
-                                    raw
-                                }
-                            },
-                            rawItems = obj.optString("items", "[]"),
-                            status = obj.optString("status", "Placed"),
-                            date = obj.optString("created_at", "").take(10)
-                        )
-                    )
-                }
-            }
-        }
-    } catch (e: Exception) {
-        e.printStackTrace()
-    }
-    result
-}
 
 suspend fun updateOrderStatus(id: String, status: String) = withContext(Dispatchers.IO) {
     try {
-        val url = URL("$BASE_URL/update-order-status")
-        val conn = url.openConnection() as HttpURLConnection
-        conn.requestMethod = "POST"
-        conn.setRequestProperty("Content-Type", "application/json")
-        conn.doOutput = true
-        val output = OutputStreamWriter(conn.outputStream)
-        output.write("{\"id\":\"$id\", \"status\":\"$status\"}")
-        output.flush()
-        output.close()
-        conn.responseCode
+        val db = FirebaseFirestore.getInstance()
+        db.collection("orders").whereEqualTo("id", id).get().addOnSuccessListener { querySnapshot ->
+            if (!querySnapshot.isEmpty) {
+                val docId = querySnapshot.documents[0].id
+                db.collection("orders").document(docId).update("status", status)
+            }
+        }
     } catch (e: Exception) {
         e.printStackTrace()
     }
@@ -1023,10 +996,13 @@ suspend fun updateOrderStatus(id: String, status: String) = withContext(Dispatch
 
 suspend fun deleteOrderBackend(id: String) = withContext(Dispatchers.IO) {
     try {
-        val url = URL("$BASE_URL/delete-order/$id")
-        val conn = url.openConnection() as HttpURLConnection
-        conn.requestMethod = "DELETE"
-        conn.responseCode
+        val db = FirebaseFirestore.getInstance()
+        db.collection("orders").whereEqualTo("id", id).get().addOnSuccessListener { querySnapshot ->
+            if (!querySnapshot.isEmpty) {
+                val docId = querySnapshot.documents[0].id
+                db.collection("orders").document(docId).delete()
+            }
+        }
     } catch (e: Exception) {
         e.printStackTrace()
     }

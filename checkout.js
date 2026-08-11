@@ -2,7 +2,21 @@
  * RestNest - Custom Checkout Integration (Razorpay + Shiprocket)
  */
 
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
+const firebaseConfig = {
+  apiKey: "[HIDDEN_FIREBASE_KEY]",
+  authDomain: "restnest-355b3.firebaseapp.com",
+  projectId: "restnest-355b3",
+  storageBucket: "restnest-355b3.firebasestorage.app",
+  messagingSenderId: "418459690953",
+  appId: "1:418459690953:web:61db69e9b41a0e54a3aa18",
+  measurementId: "G-Q1EJ31CTXC"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 // ----------------------------------------------------
 // UI Initialization
@@ -106,7 +120,13 @@ async function processCheckout(cart, totalAmount, customerInfo) {
     };
 
     try {
-        // Save order to LocalStorage (client-side as requested)
+        // Save order to Firestore
+        await addDoc(collection(db, "orders"), {
+            ...orderData,
+            createdAt: serverTimestamp()
+        });
+
+        // Also save to localStorage for fallback if needed
         const existingOrders = JSON.parse(localStorage.getItem('restnest_orders') || '[]');
         existingOrders.push(orderData);
         localStorage.setItem('restnest_orders', JSON.stringify(existingOrders));
