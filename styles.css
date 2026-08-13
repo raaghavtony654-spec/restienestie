@@ -3284,52 +3284,130 @@ button {
 .site-footer {
     background: #4B3621;
     color: #fff;
-    padding: 3rem 1.5rem;
+    padding: 4rem 2rem 2rem;
     font-family: 'Inter', sans-serif;
-    text-align: center;
 }
-.site-footer__inner {
+.footer-grid {
     max-width: 1200px;
     margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+    gap: 2rem;
+}
+.footer-col--brand {
     display: flex;
     flex-direction: column;
-    align-items: center;
     gap: 1.5rem;
 }
-.site-footer__links {
-    display: flex;
-    gap: 2rem;
-    flex-wrap: wrap;
-    justify-content: center;
+.footer-brand {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin: 0;
 }
-.site-footer__links a {
+.footer-subscribe {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 300px;
+}
+.footer-subscribe input {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+    padding: 0.8rem 1rem;
     color: #fff;
+    font-family: 'Inter', sans-serif;
+}
+.footer-subscribe input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+.footer-subscribe button {
+    background: #FAF9F6;
+    color: #4B3621;
+    border: none;
+    border-radius: 4px;
+    padding: 0.8rem 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    width: fit-content;
+    font-family: 'Inter', sans-serif;
+}
+.footer-subscribe button:hover {
+    background: #e8e6e1;
+}
+.footer-heading {
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 1.5rem;
+    color: rgba(255, 255, 255, 0.9);
+}
+.footer-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.footer-list a {
+    color: rgba(255, 255, 255, 0.7);
     text-decoration: none;
-    font-size: 1rem;
-    font-weight: 500;
+    font-size: 0.9rem;
+    transition: color 0.2s;
+}
+.footer-list a:hover {
+    color: #fff;
+}
+.footer-social {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+.footer-social a {
+    color: #fff;
+    opacity: 0.8;
     transition: opacity 0.2s;
 }
-.site-footer__links a:hover {
-    opacity: 0.8;
+.footer-social a:hover {
+    opacity: 1;
 }
-.site-footer__social {
-    margin-top: 0.5rem;
+.footer-bottom {
+    max-width: 1200px;
+    margin: 3rem auto 0;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
-.site-footer__social a {
-    color: #fff;
-    display: inline-block;
-    transition: transform 0.2s;
+.footer-copyright {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.7);
 }
-.site-footer__social a:hover {
-    transform: scale(1.1);
+@media (max-width: 768px) {
+    .footer-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    .footer-col--brand {
+        grid-column: 1 / -1;
+        margin-bottom: 2rem;
+    }
+    .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
 }
-.site-footer__copyright {
-    margin-top: 2rem;
-    font-size: 0.8rem;
-    opacity: 0.6;
+@media (max-width: 480px) {
+    .footer-grid {
+        grid-template-columns: 1fr;
+    }
 }
-
-
 
 /* Make logo black when not scrolled on pages other than home */
 body:not(.page-home) .pill-nav:not(.scrolled) .pill-nav__logo img {
