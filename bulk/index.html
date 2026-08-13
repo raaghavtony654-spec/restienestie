@@ -1,0 +1,831 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Bulk Orders – RestNest</title>
+    <meta name="description" content="Complete your RestNest order. Secure checkout with fast shipping on handcrafted luxury pillows and cushions.">
+    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css?v=16">
+    <link rel="stylesheet" href="../new_styles.css">
+    <!-- Razorpay SDK -->
+    
+    <style>
+        /* ============================================
+           CHECKOUT — 3D Reactive Premium Design
+           ============================================ */
+
+        /* ----- Body Override (main styles.css uses dark theme) ----- */
+        body {
+            background: #FAF9F6 !important;
+            color: #333 !important;
+        }
+        .bg-texture { display: none !important; }
+
+        /* ----- Checkout Header ----- */
+        .checkout-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            padding: 0 2rem;
+            background: rgba(250, 249, 246, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(75, 54, 33, 0.06);
+            transition: box-shadow 0.3s ease;
+        }
+        .checkout-header.scrolled {
+            box-shadow: 0 2px 20px rgba(75, 54, 33, 0.06);
+        }
+        .checkout-header__logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+        .checkout-header__logo:hover {
+            opacity: 0.7;
+        }
+        .checkout-header__logo img {
+            height: 40px;
+            width: auto;
+            object-fit: contain;
+        }
+        .checkout-header__back {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-left: auto;
+            font-size: 0.85rem;
+            color: #8B7355;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .checkout-header__back:hover {
+            color: #4B3621;
+        }
+
+        /* ----- Page Setup ----- */
+        .checkout-page-wrapper {
+            min-height: 100vh;
+            background: #FAF9F6;
+            padding-top: 90px;
+            padding-bottom: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Subtle animated background orbs */
+        .checkout-page-wrapper::before,
+        .checkout-page-wrapper::after {
+            content: '';
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .checkout-page-wrapper::before {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, #c4a173, transparent 70%);
+            top: -100px;
+            right: -100px;
+            animation: float-orb 12s ease-in-out infinite alternate;
+        }
+        .checkout-page-wrapper::after {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, #8B7355, transparent 70%);
+            bottom: -80px;
+            left: -80px;
+            animation: float-orb 15s ease-in-out infinite alternate-reverse;
+        }
+
+        @keyframes float-orb {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(40px, -30px) scale(1.1); }
+        }
+
+        /* ----- Breadcrumb ----- */
+        .checkout-breadcrumb {
+            max-width: 1080px;
+            margin: 0 auto 2rem;
+            padding: 0 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: #8B7355;
+            position: relative;
+            z-index: 1;
+        }
+        .checkout-breadcrumb a {
+            color: #4B3621;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .checkout-breadcrumb a:hover {
+            color: #c4a173;
+        }
+        .checkout-breadcrumb .separator {
+            font-size: 0.7rem;
+            opacity: 0.5;
+        }
+        .checkout-breadcrumb .current {
+            color: #4B3621;
+            font-weight: 500;
+        }
+
+        /* ----- Main Grid ----- */
+        .checkout-container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2.5rem;
+            align-items: start;
+            position: relative;
+            z-index: 1;
+        }
+
+        @media (max-width: 768px) {
+            .checkout-page-wrapper {
+                padding-top: 80px;
+            }
+            .checkout-container {
+                grid-template-columns: minmax(0, 1fr);
+                gap: 1.5rem;
+            }
+        }
+
+        /* ----- 3D Card Base ----- */
+        .checkout-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(75, 54, 33, 0.06);
+            border-radius: 20px;
+            padding: 2.25rem;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1),
+                        box-shadow 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            box-shadow:
+                0 4px 24px rgba(75, 54, 33, 0.06),
+                0 1px 3px rgba(75, 54, 33, 0.04);
+            will-change: transform;
+        }
+
+        .checkout-card:hover {
+            box-shadow:
+                0 20px 60px rgba(75, 54, 33, 0.10),
+                0 8px 24px rgba(75, 54, 33, 0.06);
+        }
+
+        /* Inner shimmer/glow that follows the cursor */
+        .checkout-card .card-glow {
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.4s;
+            z-index: 0;
+        }
+        .checkout-card:hover .card-glow {
+            opacity: 1;
+        }
+
+        .checkout-card > *:not(.card-glow) {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ----- Section Headings ----- */
+        .checkout-card h2 {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: 1.6rem;
+            font-weight: 500;
+            color: #4B3621;
+            margin-bottom: 1.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .checkout-card h2 .icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #4B3621 0%, #8B7355 100%);
+            border-radius: 10px;
+            color: #FAF9F6;
+            font-size: 1rem;
+        }
+
+        /* ----- Form Styles ----- */
+        .form-group {
+            margin-bottom: 1.25rem;
+            position: relative;
+        }
+        .form-row {
+            display: flex;
+            gap: 1rem;
+        }
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.4rem;
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: #6B5B4F;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            transition: color 0.25s;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1.5px solid #E8E2DA;
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            color: #333;
+            background: rgba(255, 255, 255, 0.6);
+            transition: border-color 0.3s ease,
+                        box-shadow 0.3s ease,
+                        background 0.3s ease,
+                        transform 0.2s ease;
+        }
+
+        .form-group input::placeholder {
+            color: #b5a99a;
+        }
+
+        .form-group input:hover {
+            border-color: #c4a173;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #4B3621;
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(75, 54, 33, 0.08),
+                        0 4px 12px rgba(75, 54, 33, 0.06);
+            transform: translateY(-1px);
+        }
+
+        .form-group input:focus + .input-highlight,
+        .form-group input:valid:not(:placeholder-shown) + .input-highlight {
+            transform: scaleX(1);
+        }
+
+        /* Animated underline accent */
+        .input-highlight {
+            position: absolute;
+            bottom: 0;
+            left: 12px;
+            right: 12px;
+            height: 2px;
+            background: linear-gradient(90deg, #4B3621, #c4a173);
+            border-radius: 2px;
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        /* Focus label color */
+        .form-group:focus-within label {
+            color: #4B3621;
+        }
+
+        /* ----- Checkout Items ----- */
+        #checkout-items {
+            margin-bottom: 1.25rem;
+        }
+
+        .checkout-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.9rem 0;
+            border-bottom: 1px solid rgba(75, 54, 33, 0.06);
+            transition: transform 0.25s ease, background 0.25s ease;
+            border-radius: 10px;
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+        }
+        .checkout-item:hover {
+            transform: translateX(4px);
+            background: rgba(196, 161, 115, 0.04);
+        }
+        .checkout-item:last-child {
+            border-bottom: none;
+        }
+
+        .checkout-item img {
+            width: 56px;
+            height: 56px;
+            object-fit: cover;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(75, 54, 33, 0.08);
+            transition: transform 0.25s ease;
+        }
+        .checkout-item:hover img {
+            transform: scale(1.05);
+        }
+
+        .checkout-item-details {
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+        }
+        .checkout-item-title {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 0.2rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+        .checkout-item-price {
+            font-size: 0.8rem;
+            color: #8B7355;
+        }
+        .checkout-item-total {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #4B3621;
+            white-space: nowrap;
+        }
+
+        /* ----- Totals ----- */
+        .checkout-totals {
+            margin-top: 1.25rem;
+            padding-top: 1.25rem;
+            border-top: 1.5px dashed rgba(75, 54, 33, 0.12);
+        }
+
+        .totals-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.6rem;
+            font-size: 0.95rem;
+            color: #6B5B4F;
+        }
+
+        .totals-row.shipping {
+            color: #7BA05B;
+        }
+        .totals-row.shipping span:last-child {
+            font-weight: 500;
+            font-size: 0.85rem;
+            background: linear-gradient(135deg, #7BA05B 0%, #5d8a3c 100%);
+            color: #fff;
+            padding: 0.15rem 0.6rem;
+            border-radius: 20px;
+        }
+
+        .totals-row.grand-total {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #4B3621;
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1.5px solid rgba(75, 54, 33, 0.1);
+        }
+
+        /* ----- Pay Button ----- */
+        .pay-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            width: 100%;
+            padding: 1rem 1.5rem;
+            background: linear-gradient(135deg, #4B3621 0%, #6B5240 50%, #4B3621 100%);
+            background-size: 200% 200%;
+            color: #FAF9F6;
+            text-align: center;
+            border: none;
+            border-radius: 14px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            cursor: pointer;
+            margin-top: 1.75rem;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1),
+                        box-shadow 0.3s cubic-bezier(0.23, 1, 0.32, 1),
+                        background-position 0.6s ease;
+            box-shadow: 0 4px 16px rgba(75, 54, 33, 0.2);
+            transform-style: preserve-3d;
+        }
+
+        .pay-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .pay-btn:hover {
+            transform: translateY(-2px) scale(1.01);
+            box-shadow: 0 8px 30px rgba(75, 54, 33, 0.28);
+            background-position: 100% 100%;
+        }
+        .pay-btn:hover::before {
+            left: 100%;
+        }
+
+        .pay-btn:active {
+            transform: translateY(0) scale(0.99);
+            box-shadow: 0 2px 10px rgba(75, 54, 33, 0.2);
+        }
+
+        .pay-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        .pay-btn:disabled::before {
+            display: none;
+        }
+
+        .pay-btn .btn-icon {
+            font-size: 1.15rem;
+            transition: transform 0.3s ease;
+        }
+        .pay-btn:hover .btn-icon {
+            transform: translateX(3px);
+        }
+
+        /* ----- Payment Methods ----- */
+        .payment-methods {
+            margin-top: 1rem;
+            text-align: center;
+        }
+        .payment-icons {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .payment-icon {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #6B5B4F;
+            background: rgba(196, 161, 115, 0.15);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            border: 1px solid rgba(196, 161, 115, 0.3);
+        }
+
+        /* ----- Secure badge ----- */
+        .secure-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            margin-top: 1rem;
+            font-size: 0.78rem;
+            color: #8B7355;
+            opacity: 0.7;
+        }
+        .secure-badge svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        /* ----- Status Messages ----- */
+        #checkout-status {
+            display: none;
+            padding: 0.85rem 1rem;
+            margin-bottom: 1.25rem;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 500;
+            font-size: 0.9rem;
+            animation: status-in 0.35s ease;
+        }
+        @keyframes status-in {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .status-success {
+            background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
+            color: #2e7d32;
+            border: 1px solid #c8e6c9;
+        }
+        .status-error {
+            background: linear-gradient(135deg, #ffebee, #fce4ec);
+            color: #c62828;
+            border: 1px solid #ffcdd2;
+        }
+        .status-loading {
+            background: linear-gradient(135deg, #e3f2fd, #e8eaf6);
+            color: #1565c0;
+            border: 1px solid #bbdefb;
+        }
+
+        /* ----- Sticky summary on desktop ----- */
+        .checkout-summary-col {
+            position: sticky;
+            top: 110px;
+        }
+
+        /* ----- Footer ----- */
+        .checkout-footer {
+            text-align: center;
+            padding: 2.5rem 1rem 1.5rem;
+            color: #8B7355;
+            font-size: 0.85rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ----- Entrance Animations ----- */
+        .checkout-card {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: card-enter 0.7s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+        }
+        .checkout-card:nth-child(2) {
+            animation-delay: 0.15s;
+        }
+        @keyframes card-enter {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .checkout-breadcrumb {
+            opacity: 0;
+            animation: fade-in 0.5s ease 0.05s forwards;
+        }
+        @keyframes fade-in {
+            to { opacity: 1; }
+        }
+
+        /* ----- Mobile Tweaks ----- */
+        @media (max-width: 768px) {
+            .checkout-card {
+                padding: 1.5rem;
+                border-radius: 16px;
+            }
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            .checkout-summary-col {
+                position: static;
+            }
+            .checkout-card h2 {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Checkout Header -->
+    <header class="checkout-header" id="checkout-header">
+        <a href="../index.html" class="checkout-header__logo">
+            <img src="../assets/logo-dark.png" alt="RestNest" />
+        </a>
+        <a href="../index.html" class="checkout-header__back">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            Continue Shopping
+        </a>
+    </header>
+
+    <div class="checkout-page-wrapper">
+
+        <!-- Breadcrumb -->
+        <nav class="checkout-breadcrumb" aria-label="Breadcrumb">
+            <a href="../index.html">Home</a>
+            <span class="separator">›</span>
+            <span class="current">Bulk Orders</span>
+        </nav>
+
+        <div class="checkout-container">
+            
+            <!-- Left: Shipping Form -->
+            <div class="checkout-card" id="shipping-card">
+                <div class="card-glow"></div>
+                <h2>
+                    <span class="icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                            <circle cx="12" cy="10" r="3"/>
+                        </svg>
+                    </span>
+                    Order Information
+                </h2>
+                
+                <div id="checkout-status"></div>
+
+                <form id="checkout-form" autocomplete="on">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="fname">First Name</label>
+                            <input type="text" id="fname" required placeholder="John" autocomplete="given-name">
+                            <span class="input-highlight"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="lname">Last Name</label>
+                            <input type="text" id="lname" required placeholder="Doe" autocomplete="family-name">
+                            <span class="input-highlight"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" required placeholder="john@email.com" autocomplete="email">
+                            <span class="input-highlight"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" required pattern="[0-9]{10}" placeholder="9876543210" autocomplete="tel">
+                            <span class="input-highlight"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="address">Full Address</label>
+                        <input type="text" id="address" required placeholder="House No, Building, Street" autocomplete="street-address">
+                        <span class="input-highlight"></span>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="city">City</label>
+                            <input type="text" id="city" required placeholder="Mumbai" autocomplete="address-level2">
+                            <span class="input-highlight"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="state">State</label>
+                            <input type="text" id="state" required placeholder="Maharashtra" autocomplete="address-level1">
+                            <span class="input-highlight"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="pincode">Pincode</label>
+                            <input type="text" id="pincode" required pattern="[0-9]{6}" placeholder="400001" autocomplete="postal-code">
+                            <span class="input-highlight"></span>
+                        </div>
+                    </div>
+                
+                    <button type="submit" class="pay-btn" style="margin-top: 2rem;">
+                        Submit Bulk Request
+                        <span class="btn-icon">→</span>
+                    </button>
+
+                </form>
+            </div>
+
+            
+
+                    <button type="submit" form="checkout-form" class="pay-btn" id="pay-btn">
+                        Place Order
+                        <span class="btn-icon">→</span>
+                    </button>
+
+                    <div class="payment-methods">
+                        <div class="payment-icons">
+                            <span class="payment-icon">UPI</span>
+                            <span class="payment-icon">Cards</span>
+                            <span class="payment-icon">NetBanking</span>
+                            <span class="payment-icon">Wallets</span>
+                        </div>
+                    </div>
+
+                    <div class="secure-badge">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                        </svg>
+                        Secure checkout · SSL encrypted
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="checkout-footer">
+            &copy; 2021 RestNest. Secure Checkout.
+        </footer>
+    </div>
+
+    <!-- 3D Tilt + Glow Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.checkout-card');
+
+            cards.forEach(card => {
+                const glow = card.querySelector('.card-glow');
+
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+
+                    // Subtle 3D tilt (max ±3deg)
+                    const rotateX = ((y - centerY) / centerY) * -3;
+                    const rotateY = ((x - centerX) / centerX) * 3;
+
+                    card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+
+                    // Glow follows cursor
+                    if (glow) {
+                        glow.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(196, 161, 115, 0.08) 0%, transparent 60%)`;
+                    }
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'perspective(800px) rotateX(0) rotateY(0)';
+                    if (glow) {
+                        glow.style.opacity = '0';
+                    }
+                });
+
+                card.addEventListener('mouseenter', () => {
+                    if (glow) {
+                        glow.style.opacity = '1';
+                    }
+                });
+            });
+
+            // Header scroll shadow
+            const header = document.getElementById('checkout-header');
+            if (header) {
+                window.addEventListener('scroll', () => {
+                    header.classList.toggle('scrolled', window.scrollY > 10);
+                }, { passive: true });
+            }
+        });
+    </script>
+
+    <!-- Razorpay SDK -->
+    
+    <script type="module" src="checkout.js?v=6"></script>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="site-footer">
+        <div class="site-footer__inner">
+            <div class="site-footer__links">
+                <a href="pillows/">Pillows collection</a>
+                <a href="cushions/">Cushion collection</a>
+            </div>
+            <div class="site-footer__social">
+                <a href="https://www.instagram.com/restnest.in/" target="_blank" aria-label="Instagram">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                    </svg>
+                </a>
+                <a href="https://m.facebook.com/profile.php?id=61577983328975&name=xhp_nt__fb__action__open_user" target="_blank" aria-label="Facebook" style="margin-left: 1.5rem;">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                    </svg>
+                </a>
+            </div>
+        </div>
+        <div class="site-footer__copyright">
+            &copy; 2021 RestNest. All rights reserved.
+        </div>
+    </footer>
+
+</body>
+</html>
