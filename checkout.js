@@ -108,7 +108,7 @@ async function processCheckout(cart, totalAmount, customerInfo) {
     // Use localhost for local testing, otherwise use the live Render backend
     const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
         ? 'http://localhost:3000/api' 
-        : 'https://restnest-backend.onrender.com/api'; // CHANGE THIS TO YOUR ACTUAL RENDER URL LATER
+        : 'https://restienestie.onrender.com/api';
 
     try {
         // 1. Get Config (Razorpay Key)
