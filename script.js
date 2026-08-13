@@ -16,7 +16,38 @@ document.addEventListener('DOMContentLoaded', () => {
     initProductPage();
     initReviewsSlider();
     initMobileMenu();
+    trackPageView();
 });
+
+/* ==============================================
+   PAGE TRAFFIC TRACKING
+   ============================================== */
+function trackPageView() {
+    let page = window.location.pathname.replace(/\/$/, '').split('/').pop() || 'home';
+    
+    // Better page names for tracking
+    if (page === 'home' || page === 'index.html' || page === '') page = 'Home';
+    else if (page.includes('pillows')) page = 'Pillows';
+    else if (page.includes('cushions')) page = 'Cushions';
+    else if (page.includes('bulk')) page = 'Bulk Requests';
+    else if (page.includes('checkout')) page = 'Checkout';
+    else if (page.includes('about')) page = 'About';
+    else if (page.includes('terms')) page = 'Terms';
+    else if (page.includes('product')) page = 'Product Detail';
+    
+    // Prevent duplicated hits in rapid succession or dev mode
+    const lastTracked = sessionStorage.getItem('last_tracked_page');
+    if (lastTracked === page) return;
+    
+    fetch('https://restienestie.onrender.com/api/track-page', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ page: page })
+    })
+    .then(res => res.json())
+    .then(() => sessionStorage.setItem('last_tracked_page', page))
+    .catch(err => console.warn('Failed to track page view', err));
+}
 
 
 /* ==============================================
