@@ -102,47 +102,153 @@ function showStatus(message, type) {
 async function processCheckout(cart, totalAmount, customerInfo) {
     const payBtn = document.getElementById('pay-btn');
     payBtn.disabled = true;
-    payBtn.textContent = 'Placing Order...';
-    showStatus('Processing your order...', 'loading');
+    payBtn.textContent = 'Preparing Payment...';
+    showStatus('Connecting to payment gateway...', 'loading');
 
-    const orderData = {
-        id: 'ORD' + Date.now().toString().slice(-6),
-        customer_name: customerInfo.name,
-        email: customerInfo.email,
-        phone: customerInfo.phone,
-        address: `${customerInfo.address}, ${customerInfo.city}, ${customerInfo.state} - ${customerInfo.pincode}`,
-        total_amount: totalAmount,
-        items: cart.map(i => `${i.name} (x${i.quantity})`).join(', '),
-        raw_items: JSON.stringify(cart),
-        status: 'Placed'
-    };
+    const API_BASE = 'http://localhost:3000/api';
 
     try {
-        // Save order to Firestore
-        await addDoc(collection(db, "orders"), {
-            ...orderData,
-            createdAt: serverTimestamp()
+        // 1. Get Config (Razorpay Key)
+        const configRes = await fetch(`${API_BASE}/config`);
+        const { razorpayKeyId } = await configRes.json();
+
+        // 2. Create Order on Backend
+        const orderRes = await fetch(`${API_BASE}/create-order`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ amount: totalAmount, currency: 'INR' })
         });
+        const orderDataRes = await orderRes.json();
+        
+        if (!orderDataRes.success) throw new Error('Failed to create order');
 
-        // Also save to localStorage for fallback if needed
-        const existingOrders = JSON.parse(localStorage.getItem('restnest_orders') || '[]');
-        existingOrders.push(orderData);
-        localStorage.setItem('restnest_orders', JSON.stringify(existingOrders));
+        const order = orderDataRes.order;
 
-        // Simulate network delay
-        setTimeout(() => {
-            showStatus('Order placed successfully! Redirecting...', 'success');
-            localStorage.removeItem('restnest_cart');
-            
-            setTimeout(() => {
-                window.location.href = 'index.html';
-            }, 2000);
-        }, 1500);
+        // 3. Handle Mock vs Real Payment
+        if (order.id.startsWith('order_mock_')) {
+            showStatus('Mock Mode: Simulating Payment Success...', 'loading');
+            setTimeout(() => handlePaymentSuccess({
+                razorpay_payment_id: 'pay_mock_' + Date.now(),
+                razorpay_order_id: order.id,
+                razorpay_signature: 'mock_sig'
+            }, true), 1500);
+            return;
+        }
+
+        // 4. Open Razorpay Widget for real/test credentials
+        const options = {
+            key: razorpayKeyId,
+            amount: order.amount,
+            currency: order.currency,
+            name: "RestNest",
+            description: "Luxurious Pillows & Cushions",
+            image: "assets/logo-nav.png",
+            order_id: order.id,
+            handler: function (response) {
+                handlePaymentSuccess(response, false);
+            },
+            prefill: {
+                name: customerInfo.name,
+                email: customerInfo.email,
+                contact: customerInfo.phone
+            },
+            theme: { color: "#4B3621" },
+            modal: {
+                ondismiss: function() {
+                    showStatus('Payment cancelled.', 'error');
+                    payBtn.disabled = false;
+                    payBtn.textContent = 'Place Order';
+                }
+            }
+        };
+
+        const rzp = new window.Razorpay(options);
+        rzp.open();
 
     } catch (error) {
         console.error('Checkout error:', error);
-        showStatus('Error placing the order. Please try again.', 'error');
+        showStatus('Error preparing payment. Ensure backend is running.', 'error');
         payBtn.disabled = false;
         payBtn.textContent = 'Place Order';
+    }
+
+    async function handlePaymentSuccess(paymentResponse, isMock = false) {
+        showStatus('Payment successful! Verifying...', 'loading');
+        payBtn.textContent = 'Finalizing Order...';
+
+        try {
+            // A. Verify Payment
+            const verifyRes = await fetch(`${API_BASE}/verify-payment`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ...paymentResponse, is_mock: isMock })
+            });
+            const verifyData = await verifyRes.json();
+
+            if (!verifyData.success) throw new Error('Payment verification failed');
+
+            showStatus('Payment verified. Creating shipping label...', 'loading');
+
+            // B. Create Shiprocket Shipment
+            const baseOrderData = {
+                order_id: 'ORD' + Date.now().toString().slice(-6),
+                name: customerInfo.name,
+                email: customerInfo.email,
+                phone: customerInfo.phone,
+                address: customerInfo.address,
+                city: customerInfo.city,
+                state: customerInfo.state,
+                pincode: customerInfo.pincode,
+                total_amount: totalAmount,
+                items: cart
+            };
+
+            const shipRes = await fetch(`${API_BASE}/create-shipment`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ orderData: baseOrderData })
+            });
+            const shipData = await shipRes.json();
+
+            if (!shipData.success) {
+                console.warn('Shiprocket failed, but payment succeeded.');
+            }
+
+            // C. Save Final Complete Order to Firebase (For Admin App)
+            const finalOrder = {
+                id: baseOrderData.order_id,
+                customer_name: customerInfo.name,
+                email: customerInfo.email,
+                phone: customerInfo.phone,
+                address: `${customerInfo.address}, ${customerInfo.city}, ${customerInfo.state} - ${customerInfo.pincode}`,
+                total_amount: totalAmount,
+                items: cart.map(i => `${i.name} (x${i.quantity})`).join(', '),
+                raw_items: JSON.stringify(cart),
+                status: 'Processing',
+                paymentMethod: 'Pre-paid (Razorpay)',
+                paymentId: paymentResponse.razorpay_payment_id,
+                shiprocketAwb: shipData.data?.awb_code || 'Pending',
+                shiprocketShipmentId: shipData.data?.shipment_id || 'Pending'
+            };
+
+            await addDoc(collection(db, "orders"), {
+                ...finalOrder,
+                createdAt: serverTimestamp()
+            });
+
+            // Save to localStorage for fallback UI if needed
+            const existingOrders = JSON.parse(localStorage.getItem('restnest_orders') || '[]');
+            existingOrders.push(finalOrder);
+            localStorage.setItem('restnest_orders', JSON.stringify(existingOrders));
+
+            showStatus('Order placed successfully! Redirecting...', 'success');
+            localStorage.removeItem('restnest_cart');
+            
+            setTimeout(() => window.location.href = 'index.html', 2000);
+
+        } catch (error) {
+            console.error('Post-payment error:', error);
+            showStatus('Payment succeeded, but error finalizing order. Please contact support.', 'error');
+        }
     }
 }

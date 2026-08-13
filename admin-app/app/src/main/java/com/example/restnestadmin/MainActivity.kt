@@ -70,7 +70,10 @@ data class Order(
     val rawItems: String,
     val status: String,
     val date: String,
-    val createdAt: Long
+    val createdAt: Long,
+    val paymentMethod: String = "Unknown",
+    val paymentId: String = "N/A",
+    val shiprocketAwb: String = "N/A"
 )
 
 data class ProductSale(val name: String, val amount: Double, val color: Color)
@@ -266,7 +269,10 @@ fun AdminApp(
                                 rawItems = doc.getString("raw_items") ?: "[]",
                                 status = doc.getString("status") ?: "Placed",
                                 date = doc.getTimestamp("createdAt")?.toDate()?.toString() ?: "",
-                                createdAt = doc.getTimestamp("createdAt")?.toDate()?.time ?: System.currentTimeMillis()
+                                createdAt = doc.getTimestamp("createdAt")?.toDate()?.time ?: System.currentTimeMillis(),
+                                paymentMethod = doc.getString("paymentMethod") ?: "Unknown",
+                                paymentId = doc.getString("paymentId") ?: "N/A",
+                                shiprocketAwb = doc.getString("shiprocketAwb") ?: "N/A"
                             )
                         } catch (e: Exception) {
                             null
@@ -1024,6 +1030,28 @@ fun OrderDetailScreen(
                     Column {
                         Text("Shipping Address", color = colors.textSecondary, fontSize = 12.sp)
                         Text(order.address, color = colors.textPrimary, fontSize = 16.sp)
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(Icons.Filled.Info, contentDescription = null, tint = colors.accent, modifier = Modifier.size(20.dp))
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Column {
+                        Text("Payment", color = colors.textSecondary, fontSize = 12.sp)
+                        Text("${order.paymentMethod} • ID: ${order.paymentId}", color = colors.textPrimary, fontSize = 16.sp)
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(Icons.Filled.Send, contentDescription = null, tint = colors.accent, modifier = Modifier.size(20.dp))
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Column {
+                        Text("Shiprocket AWB", color = colors.textSecondary, fontSize = 12.sp)
+                        Text(order.shiprocketAwb, color = colors.textPrimary, fontSize = 16.sp, fontWeight = FontWeight.Bold)
                     }
                 }
             }
