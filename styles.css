@@ -3329,3 +3329,10 @@ button {
     opacity: 0.6;
 }
 
+
+
+/* Make logo black when not scrolled on pages other than home */
+body:not(.page-home) .pill-nav:not(.scrolled) .pill-nav__logo img {
+    filter: brightness(0);
+}
+
