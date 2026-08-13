@@ -3386,3 +3386,10 @@ body:not(.page-home) .pill-nav:not(.scrolled) .pill-nav__logo img {
         padding-right: 1.5rem;
     }
 }
+
+
+@media (max-width: 900px) {
+    .pill-nav__logo img {
+        height: 26px !important;
+    }
+}
