@@ -126,7 +126,7 @@ function initProductsSlider() {
 
     let currentIndex = 0;
     const totalCards = cards.length;
-    const visibleCards = 4; // show 4 at a time
+    let visibleCards = 4; // show 4 at a time
 
     function getCardWidth() {
         const card = cards[0];
@@ -135,24 +135,68 @@ function initProductsSlider() {
         return card.offsetWidth + gap;
     }
 
-    function slide() {
-        currentIndex++;
-        // When we've scrolled past the last visible set, snap back
-        if (currentIndex > totalCards - visibleCards) {
-            currentIndex = 0;
-            // Instant reset (no transition)
+    function updateTransform(instant = false) {
+        if (window.innerWidth <= 900) visibleCards = 2;
+        
+        if (instant) {
             track.style.transition = 'none';
-            track.style.transform = `translateX(0)`;
-            // Force reflow then re-enable transition
-            track.offsetHeight;
+        } else {
             track.style.transition = 'transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-            return;
         }
+        
         const offset = currentIndex * getCardWidth();
         track.style.transform = `translateX(-${offset}px)`;
+        
+        if (instant) {
+            track.offsetHeight;
+        }
     }
 
-    setInterval(slide, 2800);
+    function slide() {
+        currentIndex++;
+        if (currentIndex > totalCards - visibleCards) {
+            currentIndex = 0;
+            updateTransform(true);
+            return;
+        }
+        updateTransform();
+    }
+
+    let slideInterval = setInterval(slide, 2800);
+    
+    const prevBtn = document.getElementById('slider-prev');
+    const nextBtn = document.getElementById('slider-next');
+    let pauseTimeout;
+
+    function pauseAutoScroll() {
+        clearInterval(slideInterval);
+        clearTimeout(pauseTimeout);
+        pauseTimeout = setTimeout(() => {
+            slideInterval = setInterval(slide, 2800);
+        }, 3000);
+    }
+
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            pauseAutoScroll();
+            currentIndex--;
+            if (currentIndex < 0) {
+                currentIndex = Math.max(0, totalCards - visibleCards);
+            }
+            updateTransform(false);
+        });
+    }
+
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            pauseAutoScroll();
+            currentIndex++;
+            if (currentIndex > totalCards - visibleCards) {
+                currentIndex = 0;
+            }
+            updateTransform(false);
+        });
+    }
 }
 
 
