@@ -105,7 +105,10 @@ async function processCheckout(cart, totalAmount, customerInfo) {
     payBtn.textContent = 'Preparing Payment...';
     showStatus('Connecting to payment gateway...', 'loading');
 
-    const API_BASE = 'http://localhost:3000/api';
+    // Use localhost for local testing, otherwise use the live Render backend
+    const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+        ? 'http://localhost:3000/api' 
+        : 'https://restnest-backend.onrender.com/api'; // CHANGE THIS TO YOUR ACTUAL RENDER URL LATER
 
     try {
         // 1. Get Config (Razorpay Key)

@@ -4,33 +4,37 @@ const cors = require('cors');
 const crypto = require('crypto');
 const Razorpay = require('razorpay');
 const axios = require('axios');
-const sqlite3 = require('sqlite3').verbose();
-const { open } = require('sqlite');
+const mongoose = require('mongoose');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-let db;
-(async () => {
-    db = await open({
-        filename: './orders.db',
-        driver: sqlite3.Database
-    });
-    await db.exec(`
-        CREATE TABLE IF NOT EXISTS orders (
-            id TEXT PRIMARY KEY,
-            customer_name TEXT,
-            email TEXT,
-            phone TEXT,
-            address TEXT,
-            total_amount REAL,
-            items TEXT,
-            status TEXT,
-            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-        )
-    `);
-})();
+// MongoDB Connection
+const MONGODB_URI = process.env.MONGODB_URI;
+
+if (!MONGODB_URI) {
+    console.warn('WARNING: MONGODB_URI is not set. Using local database for testing.');
+}
+
+mongoose.connect(MONGODB_URI || 'mongodb://localhost:27017/restnest')
+    .then(() => console.log('Connected to MongoDB'))
+    .catch(err => console.error('MongoDB connection error:', err));
+
+// Mongoose Schema
+const orderSchema = new mongoose.Schema({
+    id: { type: String, required: true, unique: true },
+    customer_name: String,
+    email: String,
+    phone: String,
+    address: String,
+    total_amount: Number,
+    items: mongoose.Schema.Types.Mixed,
+    status: String,
+    created_at: { type: Date, default: Date.now }
+});
+
+const Order = mongoose.model('Order', orderSchema);
 
 // ----------------------------------------------------
 // Configuration
@@ -93,7 +97,7 @@ app.post('/api/create-order', async (req, res) => {
         }
 
         const options = {
-            amount: amount * 100, // amount in the smallest currency unit (paise)
+            amount: amount * 100,
             currency,
             receipt: receipt || `receipt_${Date.now()}`
         };
@@ -141,13 +145,11 @@ app.post('/api/verify-payment', (req, res) => {
 app.post('/api/create-shipment', async (req, res) => {
     try {
         const { orderData } = req.body;
-        // orderData should contain billing_customer_name, billing_address, order_items, etc.
 
-        // Default order format for Shiprocket
         const shiprocketOrderPayload = {
             order_id: orderData.order_id || `ORDER_${Date.now()}`,
             order_date: new Date().toISOString(),
-            pickup_location: "Primary", // Must match your Shiprocket pickup location name
+            pickup_location: "Primary",
             billing_customer_name: orderData.name,
             billing_last_name: "",
             billing_address: orderData.address,
@@ -169,10 +171,10 @@ app.post('/api/create-shipment', async (req, res) => {
             })),
             payment_method: "Prepaid",
             sub_total: orderData.total_amount,
-            length: 10, // Default package dimensions (cm) - should ideally come from products
+            length: 10,
             breadth: 10,
             height: 10,
-            weight: 1 // Default package weight (kg)
+            weight: 1
         };
 
         const token = await getShiprocketToken();
@@ -196,21 +198,18 @@ app.post('/api/create-shipment', async (req, res) => {
             responseData = response.data;
         }
 
-        // Save order to SQLite database for the Admin app
-        await db.run(
-            `INSERT INTO orders (id, customer_name, email, phone, address, total_amount, items, status) 
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-            [
-                orderData.order_id, 
-                orderData.name, 
-                orderData.email, 
-                orderData.phone, 
-                `${orderData.address}, ${orderData.city}, ${orderData.state} - ${orderData.pincode}`,
-                orderData.total_amount,
-                JSON.stringify(orderData.items),
-                'Placed'
-            ]
-        );
+        // Save order to MongoDB
+        const newOrder = new Order({
+            id: orderData.order_id,
+            customer_name: orderData.name,
+            email: orderData.email,
+            phone: orderData.phone,
+            address: `${orderData.address}, ${orderData.city}, ${orderData.state} - ${orderData.pincode}`,
+            total_amount: orderData.total_amount,
+            items: orderData.items,
+            status: 'Placed'
+        });
+        await newOrder.save();
 
         res.json({ success: true, data: responseData });
     } catch (error) {
@@ -226,15 +225,7 @@ const PORT = process.env.PORT || 3000;
 // ----------------------------------------------------
 app.get('/api/orders', async (req, res) => {
     try {
-        const orders = await db.all('SELECT * FROM orders ORDER BY created_at DESC');
-        // Parse items JSON back into objects for the frontend
-        orders.forEach(order => {
-            if (order.items) {
-                try {
-                    order.items = JSON.parse(order.items);
-                } catch(e) {}
-            }
-        });
+        const orders = await Order.find().sort({ created_at: -1 });
         res.json({ success: true, orders });
     } catch (error) {
         console.error('Error fetching orders:', error);
@@ -249,20 +240,18 @@ app.post('/api/place-order-test', async (req, res) => {
     try {
         const { orderData } = req.body;
         
-        await db.run(
-            `INSERT INTO orders (id, customer_name, email, phone, address, total_amount, items, status) 
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-            [
-                orderData.id, 
-                orderData.customer_name, 
-                orderData.email, 
-                orderData.phone, 
-                orderData.address,
-                orderData.total_amount,
-                JSON.stringify(orderData.items),
-                'Placed'
-            ]
-        );
+        const newOrder = new Order({
+            id: orderData.id,
+            customer_name: orderData.customer_name,
+            email: orderData.email,
+            phone: orderData.phone,
+            address: orderData.address,
+            total_amount: orderData.total_amount,
+            items: orderData.items,
+            status: 'Placed'
+        });
+        await newOrder.save();
+
         res.json({ success: true, message: 'Order placed successfully' });
     } catch (error) {
         console.error('Error placing order:', error);
@@ -276,7 +265,7 @@ app.post('/api/place-order-test', async (req, res) => {
 app.post('/api/update-order-status', async (req, res) => {
     try {
         const { id, status } = req.body;
-        await db.run(`UPDATE orders SET status = ? WHERE id = ?`, [status, id]);
+        await Order.updateOne({ id }, { status });
         res.json({ success: true });
     } catch (error) {
         res.status(500).json({ success: false, error: 'Internal Server Error' });
@@ -288,7 +277,7 @@ app.post('/api/update-order-status', async (req, res) => {
 // ----------------------------------------------------
 app.delete('/api/delete-order/:id', async (req, res) => {
     try {
-        await db.run(`DELETE FROM orders WHERE id = ?`, [req.params.id]);
+        await Order.deleteOne({ id: req.params.id });
         res.json({ success: true });
     } catch (error) {
         res.status(500).json({ success: false, error: 'Internal Server Error' });
@@ -300,7 +289,7 @@ app.delete('/api/delete-order/:id', async (req, res) => {
 // ----------------------------------------------------
 app.delete('/api/reset-orders', async (req, res) => {
     try {
-        await db.run(`DELETE FROM orders`);
+        await Order.deleteMany({});
         res.json({ success: true, message: 'All orders deleted' });
     } catch (error) {
         res.status(500).json({ success: false, error: 'Internal Server Error' });
