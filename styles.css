@@ -3341,7 +3341,7 @@ body:not(.page-home) .pill-nav:not(.scrolled) .pill-nav__logo img {
 /* ===== SLIDER ARROWS ===== */
 .slider-arrow {
     position: absolute;
-    top: 40%;
+    top: 55%;
     transform: translateY(-50%);
     z-index: 10;
     background: rgba(255, 255, 255, 0.95);
@@ -3364,12 +3364,8 @@ body:not(.page-home) .pill-nav:not(.scrolled) .pill-nav__logo img {
     color: #fff;
     transform: translateY(-50%) scale(1.1);
 }
-.slider-arrow--prev {
-    left: -22px;
-}
-.slider-arrow--next {
-    right: -22px;
-}
+.slider-arrow--prev { left: -10px; }
+.slider-arrow--next { right: -10px; }
 @media (max-width: 1024px) {
     .slider-arrow--prev { left: 10px; }
     .slider-arrow--next { right: 10px; }
