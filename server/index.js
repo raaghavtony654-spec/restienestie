@@ -36,6 +36,23 @@ const orderSchema = new mongoose.Schema({
 
 const Order = mongoose.model('Order', orderSchema);
 
+const bulkOrderSchema = new mongoose.Schema({
+    id: { type: String, required: true, unique: true },
+    first_name: String,
+    last_name: String,
+    email: String,
+    phone: String,
+    address: String,
+    city: String,
+    state: String,
+    pincode: String,
+    status: { type: String, default: 'Pending' },
+    created_at: { type: Date, default: Date.now }
+});
+
+const BulkOrder = mongoose.model('BulkOrder', bulkOrderSchema);
+
+
 // ----------------------------------------------------
 // Configuration
 // ----------------------------------------------------
