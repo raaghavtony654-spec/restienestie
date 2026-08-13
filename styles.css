@@ -3364,15 +3364,25 @@ body:not(.page-home) .pill-nav:not(.scrolled) .pill-nav__logo img {
     color: #fff;
     transform: translateY(-50%) scale(1.1);
 }
-.slider-arrow--prev { left: -10px; }
-.slider-arrow--next { right: -10px; }
-@media (max-width: 1024px) {
-    .slider-arrow--prev { left: 10px; }
-    .slider-arrow--next { right: 10px; }
-}
+.slider-arrow--prev { left: 5px; }
+.slider-arrow--next { right: 5px; }
+
 @media (max-width: 900px) {
     .slider-arrow {
         display: none;
     }
 }
 
+
+
+/* Make room for arrows on desktop */
+#century-collection .collection__container {
+    padding-left: 60px;
+    padding-right: 60px;
+}
+@media (max-width: 900px) {
+    #century-collection .collection__container {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
+}
