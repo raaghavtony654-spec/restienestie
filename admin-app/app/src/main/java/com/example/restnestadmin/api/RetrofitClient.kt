@@ -15,10 +15,8 @@ data class BulkOrder(
     val last_name: String,
     val email: String,
     val phone: String,
-    val address: String,
-    val city: String,
-    val state: String,
-    val pincode: String,
+    val business_name: String,
+    val quantity: Int,
     val status: String,
     val created_at: String
 )

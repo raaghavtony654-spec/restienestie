@@ -313,6 +313,40 @@ app.delete('/api/reset-orders', async (req, res) => {
     }
 });
 
+
+// ----------------------------------------------------
+// Bulk Orders Endpoints
+// ----------------------------------------------------
+app.post('/api/bulk-orders', async (req, res) => {
+    try {
+        const { first_name, last_name, email, phone, business_name, quantity } = req.body;
+        const newBulkOrder = new BulkOrder({
+            id: `bulk_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+            first_name,
+            last_name,
+            email,
+            phone,
+            business_name,
+            quantity: Number(quantity)
+        });
+        await newBulkOrder.save();
+        res.json({ success: true, bulkOrder: newBulkOrder });
+    } catch (error) {
+        console.error('Error creating bulk order:', error);
+        res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+});
+
+app.get('/api/bulk-orders', async (req, res) => {
+    try {
+        const bulkOrders = await BulkOrder.find().sort({ created_at: -1 });
+        res.json({ success: true, bulkOrders });
+    } catch (error) {
+        console.error('Error fetching bulk orders:', error);
+        res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+});
+
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });

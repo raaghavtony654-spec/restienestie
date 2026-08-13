@@ -280,7 +280,6 @@ fun AdminApp(
             delay(10000) // Poll every 10 seconds
         }
     }
-    }
 
     val tabs = listOf("Dashboard", "Orders", "Bulk", "Settings")
     val icons = listOf(Icons.Filled.Home, Icons.Filled.List, Icons.Filled.ShoppingCart, Icons.Filled.Settings)
@@ -372,13 +371,7 @@ fun AdminApp(
                             },
                             colors = colors
                         )
-                        "Bulk" -> BulkOrdersScreen(colors = colors) {
-                                    orders[idx] = orders[idx].copy(status = newStatus)
-                                    scope.launch { updateOrderStatus(order.id, newStatus) }
-                                }
-                            },
-                            colors = colors
-                        )
+                        "Bulk" -> BulkOrdersScreen(colors = colors)
                         "Settings" -> SettingsScreen(
                             isDarkTheme = isDarkTheme,
                             onThemeToggle = onThemeToggle,
@@ -1240,6 +1233,9 @@ fun BulkOrdersScreen(colors: AppColors) {
                     Box(modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp).clip(RoundedCornerShape(12.dp)).background(colors.cardBg).padding(16.dp)) {
                         Column {
                             Text("ID: ${order.id}", color = colors.accent, fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Text("Business: ${order.business_name}", color = colors.textPrimary, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                            Text("Qty: ${order.quantity}", color = colors.accent, fontWeight = FontWeight.Bold)
                             Spacer(modifier = Modifier.height(4.dp))
                             Text("Name: ${order.first_name} ${order.last_name}", color = colors.textPrimary)
                             Text("Email: ${order.email}", color = colors.textSecondary)
