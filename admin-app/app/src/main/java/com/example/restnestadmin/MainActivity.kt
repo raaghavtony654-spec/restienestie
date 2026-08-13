@@ -59,6 +59,11 @@ import androidx.core.content.ContextCompat
 import androidx.activity.result.contract.ActivityResultContracts
 import kotlinx.coroutines.flow.MutableStateFlow
 
+import com.example.restnestadmin.api.RetrofitClient
+import com.example.restnestadmin.api.BulkOrder
+import kotlinx.coroutines.delay
+
+
 // ──────────────────── Data Classes ────────────────────
 data class Order(
     val id: String,
@@ -232,64 +237,53 @@ fun AdminApp(
         }
     }
 
-    DisposableEffect(refreshTrigger) {
-        val db = FirebaseFirestore.getInstance()
-        val registration = db.collection("orders")
-            .orderBy("createdAt", Query.Direction.DESCENDING)
-            .addSnapshotListener { snapshot, e ->
-                if (e != null) {
-                    e.printStackTrace()
-                    return@addSnapshotListener
-                }
-                if (snapshot != null) {
+    LaunchedEffect(refreshTrigger) {
+        while(true) {
+            try {
+                val response = RetrofitClient.instance.getOrders()
+                if (response.success) {
+                    val newOrders = response.orders.map { apiOrder -> 
+                        Order(
+                            id = apiOrder.id,
+                            customerName = apiOrder.customerName ?: "",
+                            address = apiOrder.address ?: "",
+                            phone = apiOrder.phone ?: "",
+                            amount = apiOrder.amount ?: 0.0,
+                            items = apiOrder.items ?: "",
+                            rawItems = apiOrder.rawItems ?: "[]",
+                            status = apiOrder.status ?: "Placed",
+                            date = apiOrder.date ?: "",
+                            createdAt = apiOrder.createdAt ?: System.currentTimeMillis(),
+                            paymentMethod = apiOrder.paymentMethod ?: "Unknown",
+                            paymentId = apiOrder.paymentId ?: "N/A",
+                            shiprocketAwb = apiOrder.shiprocketAwb ?: "N/A"
+                        )
+                    }
+                    
                     val isFirst = isFirstSnapshotRef(null)
-                    if (!isFirst) {
-                        for (dc in snapshot.documentChanges) {
-                            if (dc.type == DocumentChange.Type.ADDED) {
-                                val doc = dc.document
-                                context.sendOrderNotification(
-                                    doc.getString("id") ?: doc.id,
-                                    doc.getString("customer_name") ?: "Customer",
-                                    doc.getDouble("total_amount") ?: 0.0
-                                )
+                    if (!isFirst && orders.isNotEmpty()) {
+                        val oldIds = orders.map { it.id }.toSet()
+                        newOrders.forEach { no ->
+                            if (!oldIds.contains(no.id)) {
+                                context.sendOrderNotification(no.id, no.customerName, no.amount)
                             }
                         }
                     }
                     isFirstSnapshotRef(false)
-
-                    val fetchedOrders = snapshot.documents.mapNotNull { doc ->
-                        try {
-                            Order(
-                                id = doc.getString("id") ?: doc.id,
-                                customerName = doc.getString("customer_name") ?: "",
-                                address = doc.getString("address") ?: "",
-                                phone = doc.getString("phone") ?: "",
-                                amount = doc.getDouble("total_amount") ?: 0.0,
-                                items = doc.getString("items") ?: "",
-                                rawItems = doc.getString("raw_items") ?: "[]",
-                                status = doc.getString("status") ?: "Placed",
-                                date = doc.getTimestamp("createdAt")?.toDate()?.toString() ?: "",
-                                createdAt = doc.getTimestamp("createdAt")?.toDate()?.time ?: System.currentTimeMillis(),
-                                paymentMethod = doc.getString("paymentMethod") ?: "Unknown",
-                                paymentId = doc.getString("paymentId") ?: "N/A",
-                                shiprocketAwb = doc.getString("shiprocketAwb") ?: "N/A"
-                            )
-                        } catch (e: Exception) {
-                            null
-                        }
-                    }
+                    
                     orders.clear()
-                    orders.addAll(fetchedOrders)
+                    orders.addAll(newOrders)
                 }
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
-            
-        onDispose {
-            registration.remove()
+            delay(10000) // Poll every 10 seconds
         }
     }
+    }
 
-    val tabs = listOf("Dashboard", "Orders", "Settings")
-    val icons = listOf(Icons.Filled.Home, Icons.Filled.List, Icons.Filled.Settings)
+    val tabs = listOf("Dashboard", "Orders", "Bulk", "Settings")
+    val icons = listOf(Icons.Filled.Home, Icons.Filled.List, Icons.Filled.ShoppingCart, Icons.Filled.Settings)
 
     Scaffold(
         containerColor = Color.Transparent,
@@ -372,6 +366,13 @@ fun AdminApp(
                             onStatusChange = { order, newStatus ->
                                 val idx = orders.indexOfFirst { it.id == order.id }
                                 if (idx >= 0) {
+                                    orders[idx] = orders[idx].copy(status = newStatus)
+                                    scope.launch { updateOrderStatus(order.id, newStatus) }
+                                }
+                            },
+                            colors = colors
+                        )
+                        "Bulk" -> BulkOrdersScreen(colors = colors) {
                                     orders[idx] = orders[idx].copy(status = newStatus)
                                     scope.launch { updateOrderStatus(order.id, newStatus) }
                                 }
@@ -1201,5 +1202,53 @@ suspend fun deleteOrderBackend(id: String) = withContext(Dispatchers.IO) {
         }
     } catch (e: Exception) {
         e.printStackTrace()
+    }
+}
+
+
+// ──────────────────── BULK ORDERS ────────────────────
+@Composable
+fun BulkOrdersScreen(colors: AppColors) {
+    var bulkOrders by remember { mutableStateOf<List<BulkOrder>>(emptyList()) }
+    var isLoading by remember { mutableStateOf(true) }
+
+    LaunchedEffect(Unit) {
+        while(true) {
+            try {
+                val response = RetrofitClient.instance.getBulkOrders()
+                if (response.success) {
+                    bulkOrders = response.bulkOrders
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            isLoading = false
+            delay(10000)
+        }
+    }
+
+    Column(modifier = Modifier.fillMaxSize().padding(top = 48.dp, start = 16.dp, end = 16.dp)) {
+        Text(text = "Bulk Requests", fontSize = 32.sp, fontWeight = FontWeight.ExtraBold, color = colors.textPrimary, modifier = Modifier.padding(bottom = 24.dp))
+        
+        if (isLoading && bulkOrders.isEmpty()) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator(color = colors.accent)
+            }
+        } else {
+            LazyColumn {
+                items(bulkOrders) { order ->
+                    Box(modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp).clip(RoundedCornerShape(12.dp)).background(colors.cardBg).padding(16.dp)) {
+                        Column {
+                            Text("ID: ${order.id}", color = colors.accent, fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Text("Name: ${order.first_name} ${order.last_name}", color = colors.textPrimary)
+                            Text("Email: ${order.email}", color = colors.textSecondary)
+                            Text("Phone: ${order.phone}", color = colors.textSecondary)
+                            Text("Status: ${order.status}", color = if(order.status == "Pending") Color(0xFFFFC107) else Color(0xFF4CAF50), fontWeight = FontWeight.Bold)
+                        }
+                    }
+                }
+            }
+        }
     }
 }
