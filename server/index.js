@@ -52,6 +52,13 @@ const bulkOrderSchema = new mongoose.Schema({
 
 const BulkOrder = mongoose.model('BulkOrder', bulkOrderSchema);
 
+const pageTrafficSchema = new mongoose.Schema({
+    page: { type: String, required: true, unique: true },
+    visits: { type: Number, default: 0 }
+});
+
+const PageTraffic = mongoose.model('PageTraffic', pageTrafficSchema);
+
 
 // ----------------------------------------------------
 // Configuration
@@ -343,6 +350,46 @@ app.get('/api/bulk-orders', async (req, res) => {
         res.json({ success: true, bulkOrders });
     } catch (error) {
         console.error('Error fetching bulk orders:', error);
+        res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+});
+
+// ----------------------------------------------------
+// Page Traffic Endpoints
+// ----------------------------------------------------
+app.post('/api/track-page', async (req, res) => {
+    try {
+        const { page } = req.body;
+        if (!page) return res.status(400).json({ success: false, error: 'Page name required' });
+        
+        await PageTraffic.findOneAndUpdate(
+            { page },
+            { $inc: { visits: 1 } },
+            { upsert: true, new: true }
+        );
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Error tracking page:', error);
+        res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+});
+
+app.get('/api/page-traffic', async (req, res) => {
+    try {
+        const traffic = await PageTraffic.find();
+        res.json({ success: true, traffic });
+    } catch (error) {
+        console.error('Error fetching traffic:', error);
+        res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+});
+
+app.post('/api/reset-traffic', async (req, res) => {
+    try {
+        await PageTraffic.deleteMany({});
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Error resetting traffic:', error);
         res.status(500).json({ success: false, error: 'Internal Server Error' });
     }
 });
