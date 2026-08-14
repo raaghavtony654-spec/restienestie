@@ -71,7 +71,7 @@ if os.path.exists(mobile_path):
         mobile = f.read()
         
     mobile = re.sub(r'// Sync with Shopify\s+if \(typeof ShopifyCart !== \'undefined\'.*?}\s+}', '', mobile, flags=re.DOTALL)
-    mobile = mobile.replace('ShopifyCart.goToCheckout();', "window.location.href = 'checkout.html';")
+    mobile = mobile.replace('ShopifyCart.goToCheckout();', "window.location.href = '../checkout.html';")
     mobile = mobile.replace('await ShopifyCart.addItem(product.variantId, qty);', '')
     
     checkout_logic_mobile = """if (typeof ShopifyCart !== 'undefined' && ShopifyCart.isConfigured()) {
@@ -79,7 +79,7 @@ if os.path.exists(mobile_path):
             } else {
                 alert('Shopify checkout is not configured yet. Please set your store credentials in shopify-integration.js');
             }"""
-    mobile = mobile.replace(checkout_logic_mobile, "window.location.href = 'checkout.html';")
+    mobile = mobile.replace(checkout_logic_mobile, "window.location.href = '../checkout.html';")
 
     mobile = re.sub(r'const variantId = card\.getAttribute\(\'data-variant-id\'\) \|\| .*?;', '', mobile)
     mobile = re.sub(r', variantId\s*}', ' }', mobile)
