@@ -1,0 +1,582 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>My Account | RestNest</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Great+Vibes&family=Inter:wght@300;400;500;600&family=Pinyon+Script&display=swap" rel="stylesheet"/>
+<link href="styles.css?v=16" rel="stylesheet"/>
+<style>
+    .account-container {
+        padding: 150px 5% 50px 5%;
+        max-width: 1200px;
+        margin: 0 auto;
+        min-height: 80vh;
+    }
+    .auth-section, .dashboard-section {
+        display: none;
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(10px);
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    }
+    .active-section {
+        display: block;
+    }
+    .auth-box {
+        max-width: 400px;
+        margin: 0 auto;
+        text-align: center;
+    }
+    .auth-box h2 {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 2.5rem;
+        margin-bottom: 1.5rem;
+        color: #333;
+    }
+    .input-group {
+        margin-bottom: 1rem;
+        text-align: left;
+    }
+    .input-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.9rem;
+    }
+    .input-group input {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-family: 'Inter', sans-serif;
+    }
+    .btn-primary {
+        width: 100%;
+        padding: 0.8rem;
+        background-color: #A67C52;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-family: 'Inter', sans-serif;
+        font-weight: 500;
+        transition: background 0.3s ease;
+    }
+    .btn-primary:hover {
+        background-color: #8c6844;
+    }
+    .btn-secondary {
+        width: 100%;
+        padding: 0.8rem;
+        background-color: #fff;
+        color: #333;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        cursor: pointer;
+        font-family: 'Inter', sans-serif;
+        font-weight: 500;
+        margin-top: 10px;
+    }
+    .toggle-auth {
+        margin-top: 1rem;
+        font-size: 0.9rem;
+        cursor: pointer;
+        color: #A67C52;
+        text-decoration: underline;
+    }
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 2rem;
+    }
+    .profile-card, .orders-card {
+        background: #fff;
+        padding: 1.5rem;
+        border-radius: 8px;
+        border: 1px solid #eee;
+    }
+    .profile-card h3, .orders-card h3 {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 0.5rem;
+    }
+    .order-item {
+        padding: 1rem 0;
+        border-bottom: 1px solid #eee;
+    }
+    .order-item:last-child {
+        border-bottom: none;
+    }
+    .order-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+    }
+    .order-status {
+        background: #eee;
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+    .btn-logout {
+        background: transparent;
+        border: 1px solid #A67C52;
+        color: #A67C52;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+        font-family: 'Inter', sans-serif;
+        margin-top: 1rem;
+    }
+    #error-msg {
+        color: red;
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+        display: none;
+    }
+    @media (max-width: 768px) {
+        .dashboard-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="page-account">
+
+    
+    
+    
+    
+    <!-- Simple Page Loader -->
+    <style>
+        .page-loader-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #FAF9F6; z-index: 99999;
+            display: flex; justify-content: center; align-items: center;
+            opacity: 0; visibility: hidden; pointer-events: none;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+            overflow: hidden;
+        }
+        .page-loader-overlay.active {
+            opacity: 1; visibility: visible; pointer-events: all;
+        }
+        
+        .loader-scene {
+            position: relative;
+            width: 200px;
+            height: 200px;
+        }
+
+        /* 3D Hole setup */
+        .loader-hole-back {
+            position: absolute;
+            width: 70px;
+            height: 18px;
+            background: #2A1D11;
+            border-radius: 50%;
+            top: 155px;
+            left: 120px;
+            z-index: 5;
+            clip-path: polygon(0 0, 100% 0, 100% 50%, 0 50%);
+        }
+        .loader-hole-front {
+            position: absolute;
+            width: 70px;
+            height: 18px;
+            background: #2A1D11;
+            border-radius: 50%;
+            top: 155px;
+            left: 120px;
+            z-index: 15;
+            clip-path: polygon(0 50%, 100% 50%, 100% 100%, 0 100%);
+        }
+        .loader-floor-mask {
+            position: absolute;
+            width: 100%;
+            height: 400px;
+            background: #FAF9F6;
+            top: 164px; /* exact vertical center of the hole */
+            left: 0;
+            z-index: 14;
+        }
+
+        /* Bed */
+        .loader-bed {
+            position: absolute;
+            width: 100px;
+            height: 22px;
+            background: #4B3621;
+            border-radius: 4px;
+            top: 120px;
+            left: 20px;
+            z-index: 8;
+            box-shadow: 0 4px 10px rgba(75, 54, 33, 0.2);
+        }
+        /* Bed Legs */
+        .loader-bed::before, .loader-bed::after {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 16px;
+            background: #3a2818;
+            top: 22px;
+            border-radius: 2px;
+        }
+        .loader-bed::before { left: 10px; }
+        .loader-bed::after { right: 10px; }
+        
+        /* Headboard */
+        .loader-bed-headboard {
+            position: absolute;
+            width: 12px;
+            height: 40px;
+            background: #4B3621;
+            top: 102px;
+            left: 14px;
+            z-index: 7;
+            border-radius: 4px 4px 0 0;
+        }
+
+        /* Mattress */
+        .loader-mattress {
+            position: absolute;
+            width: 90px;
+            height: 18px;
+            background: #E8E2DA;
+            border: 2px solid #c4a173;
+            border-radius: 6px;
+            top: 100px;
+            left: 25px;
+            z-index: 10;
+            box-sizing: border-box;
+            box-shadow: inset 0 -3px 0 rgba(139, 115, 85, 0.2);
+        }
+
+        .mattress-1 {
+            animation: mattress-cycle 2.4s infinite cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .mattress-2 {
+            animation: mattress-cycle 2.4s infinite cubic-bezier(0.4, 0, 0.2, 1) -1.2s;
+        }
+
+        @keyframes mattress-cycle {
+            0%, 10% {
+                transform: translate(0, 0) rotate(0deg);
+                opacity: 1;
+            }
+            20% {
+                transform: translate(30px, -40px) rotate(50deg);
+                opacity: 1;
+            }
+            30% {
+                /* Hover perfectly vertical over the hole */
+                transform: translate(85px, -10px) rotate(90deg);
+                opacity: 1;
+            }
+            40% {
+                /* Drop straight down into the hole */
+                transform: translate(85px, 150px) rotate(90deg);
+                opacity: 1;
+            }
+            41%, 50% {
+                transform: translate(0, -200px) rotate(0deg);
+                opacity: 0;
+            }
+            51%, 65% {
+                transform: translate(0, -200px) rotate(0deg);
+                opacity: 1;
+            }
+            85% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            90% {
+                transform: translate(0, 4px) scaleY(0.8) scaleX(1.05);
+            }
+            95%, 100% {
+                transform: translate(0, 0) scaleY(1) scaleX(1);
+            }
+        }
+    </style>
+    <div id="page-loader" class="page-loader-overlay">
+        <div class="loader-scene">
+            <div class="loader-hole-back"></div>
+            <div class="loader-floor-mask"></div>
+            <div class="loader-hole-front"></div>
+            <div class="loader-bed-headboard"></div>
+            <div class="loader-bed"></div>
+            <div class="loader-mattress mattress-1"></div>
+            <div class="loader-mattress mattress-2"></div>
+        </div>
+    </div>
+    <script>
+        (function() {
+            var loaderTimeout = setTimeout(function() {
+                var loader = document.getElementById('page-loader');
+                if (loader) loader.classList.add('active');
+            }, 500); // 500ms threshold for fast connections
+
+            window.addEventListener('load', function() {
+                clearTimeout(loaderTimeout);
+                var loader = document.getElementById('page-loader');
+                if (loader) loader.classList.remove('active');
+            });
+        })();
+    </script>
+
+<div aria-hidden="true" class="bg-texture"></div>
+
+<!-- Navigation (Same as index) -->
+<nav class="pill-nav" id="pill-nav">
+    <div class="pill-nav__inner">
+        <ul class="pill-nav__list">
+            <li><a class="main-nav__link" href="./" id="nav-home">Home</a></li>
+            <li><a class="main-nav__link" href="pillows/" id="nav-pillow">Pillow</a></li>
+            <li><a class="main-nav__link" href="cushions/" id="nav-cushion">Cushion</a></li>
+            <li><a class="main-nav__link" href="bulk/" id="nav-bulk">Bulk</a></li>
+        </ul>
+        <div class="pill-nav__logo">
+            <a href="./" style="display: flex; align-items: center;">
+                <img src="assets/logo-nav.png" alt="RestNest">
+            </a>
+        </div>
+        <div class="pill-nav__utils">
+            <a class="top-bar__link" href="/account.html" id="account-link">
+                <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="14">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                ACCOUNT
+            </a>
+            <button aria-label="Cart" class="top-bar__link cart-btn" id="cart-link" style="background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; color: inherit; font-family: inherit; font-size: inherit; text-transform: uppercase;">
+                <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="14">
+                    <circle cx="9" cy="21" r="1"></circle>
+                    <circle cx="20" cy="21" r="1"></circle>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg>
+                CART
+            </button>
+        </div>
+    </div>
+</nav>
+
+<div class="account-container">
+    <!-- Auth Section -->
+    <div id="auth-section" class="auth-section active-section">
+        <div class="auth-box">
+            <h2 id="auth-title">Sign In</h2>
+            <div id="error-msg"></div>
+            <form id="auth-form">
+                <div class="input-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="input-group" id="password-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" required>
+                </div>
+                <button type="submit" class="btn-primary" id="auth-btn">Sign In</button>
+                <button type="button" class="btn-secondary" id="google-login">Sign in with Google</button>
+            </form>
+            <div class="toggle-auth" id="toggle-auth">Need an account? Sign Up</div>
+        </div>
+    </div>
+
+    <!-- Dashboard Section -->
+    <div id="dashboard-section" class="dashboard-section">
+        <div class="dashboard-grid">
+            <div class="profile-card">
+                <h3>My Profile</h3>
+                <p><strong>Email:</strong> <span id="user-email"></span></p>
+                <form id="profile-form" style="margin-top: 1rem;">
+                    <div class="input-group">
+                        <label>First Name</label>
+                        <input type="text" id="prof-fname">
+                    </div>
+                    <div class="input-group">
+                        <label>Phone Number</label>
+                        <input type="text" id="prof-phone">
+                    </div>
+                    <button type="submit" class="btn-primary" style="padding: 0.5rem;">Update Profile</button>
+                </form>
+                <button class="btn-logout" id="logout-btn">Log Out</button>
+            </div>
+            <div class="orders-card">
+                <h3>Order History</h3>
+                <div id="orders-list">
+                    <p>Loading orders...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const SUPABASE_URL = 'https://julktcdhbnvxsjuqsimp.supabase.co';
+    const SUPABASE_ANON_KEY = '[HIDDEN_SUPABASE_KEY]';
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    let isLogin = true;
+    let currentUser = null;
+    let currentSession = null;
+
+    const authSection = document.getElementById('auth-section');
+    const dashboardSection = document.getElementById('dashboard-section');
+    const authForm = document.getElementById('auth-form');
+    const toggleAuth = document.getElementById('toggle-auth');
+    const authTitle = document.getElementById('auth-title');
+    const authBtn = document.getElementById('auth-btn');
+    const errorMsg = document.getElementById('error-msg');
+
+    // Check Auth State
+    supabaseClient.auth.getSession().then(({ data: { session } }) => {
+        if (session) {
+            handleSession(session);
+        }
+    });
+
+    supabaseClient.auth.onAuthStateChange((event, session) => {
+        if (event === 'SIGNED_IN') {
+            handleSession(session);
+        } else if (event === 'SIGNED_OUT') {
+            handleSession(null);
+        }
+    });
+
+    function handleSession(session) {
+        currentSession = session;
+        if (session) {
+            currentUser = session.user;
+            authSection.classList.remove('active-section');
+            dashboardSection.classList.add('active-section');
+            document.getElementById('user-email').textContent = currentUser.email;
+            fetchProfile();
+            fetchOrders();
+        } else {
+            currentUser = null;
+            authSection.classList.add('active-section');
+            dashboardSection.classList.remove('active-section');
+        }
+    }
+
+    // Toggle Login/Signup
+    toggleAuth.addEventListener('click', () => {
+        isLogin = !isLogin;
+        authTitle.textContent = isLogin ? 'Sign In' : 'Sign Up';
+        authBtn.textContent = isLogin ? 'Sign In' : 'Sign Up';
+        toggleAuth.textContent = isLogin ? 'Need an account? Sign Up' : 'Already have an account? Sign In';
+    });
+
+    // Handle Auth Submit
+    authForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        errorMsg.style.display = 'none';
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        let error;
+        if (isLogin) {
+            const res = await supabaseClient.auth.signInWithPassword({ email, password });
+            error = res.error;
+        } else {
+            const res = await supabaseClient.auth.signUp({ email, password });
+            error = res.error;
+            if(!error && res.data.user && !res.data.session) {
+                errorMsg.textContent = 'Please check your email for a confirmation link.';
+                errorMsg.style.display = 'block';
+                errorMsg.style.color = 'green';
+                return;
+            }
+        }
+
+        if (error) {
+            errorMsg.textContent = error.message;
+            errorMsg.style.display = 'block';
+            errorMsg.style.color = 'red';
+        }
+    });
+
+    // Handle Google Login
+    document.getElementById('google-login').addEventListener('click', async () => {
+        await supabaseClient.auth.signInWithOAuth({
+            provider: 'google',
+            options: { redirectTo: window.location.origin + '/account.html' }
+        });
+    });
+
+    // Handle Logout
+    document.getElementById('logout-btn').addEventListener('click', async () => {
+        await supabaseClient.auth.signOut();
+    });
+
+    // Fetch Backend Data
+    async function fetchProfile() {
+        if(!currentSession) return;
+        try {
+            const res = await fetch('http://localhost:3000/api/my-profile', {
+                headers: { 'Authorization': `Bearer ${currentSession.access_token}` }
+            });
+            const data = await res.json();
+            if(data.success && data.profile) {
+                document.getElementById('prof-fname').value = data.profile.first_name || '';
+                document.getElementById('prof-phone').value = data.profile.phone || '';
+            }
+        } catch(e) { console.error(e); }
+    }
+
+    async function fetchOrders() {
+        if(!currentSession) return;
+        try {
+            const res = await fetch('http://localhost:3000/api/my-orders', {
+                headers: { 'Authorization': `Bearer ${currentSession.access_token}` }
+            });
+            const data = await res.json();
+            const list = document.getElementById('orders-list');
+            if(data.success && data.orders.length > 0) {
+                list.innerHTML = data.orders.map(o => `
+                    <div class="order-item">
+                        <div class="order-header">
+                            <strong>Order #${o.id.substring(0, 8)}...</strong>
+                            <span class="order-status">${o.status || 'Placed'}</span>
+                        </div>
+                        <div style="font-size: 0.9rem; color: #666;">
+                            Date: ${new Date(o.created_at).toLocaleDateString()}<br>
+                            Total: â‚¹${o.total_amount}
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                list.innerHTML = '<p>No orders found.</p>';
+            }
+        } catch(e) { console.error(e); }
+    }
+
+    // Update Profile
+    document.getElementById('profile-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const first_name = document.getElementById('prof-fname').value;
+        const phone = document.getElementById('prof-phone').value;
+        
+        try {
+            await fetch('http://localhost:3000/api/my-profile', {
+                method: 'POST',
+                headers: { 
+                    'Authorization': `Bearer ${currentSession.access_token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ first_name, phone })
+            });
+            alert('Profile updated successfully!');
+        } catch(e) { console.error(e); }
+    });
+</script>
+</body>
+</html>
+

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -295,6 +295,16 @@
         .form-group input:focus + .input-highlight,
         .form-group input:valid:not(:placeholder-shown) + .input-highlight {
             transform: scaleX(1);
+        }
+
+        /* Form State Validation Styles */
+        .form-group input:invalid:not(:placeholder-shown) {
+            border-color: #ffcccc !important;
+            background: rgba(255, 235, 238, 0.6) !important;
+        }
+        .form-group input:valid:not(:placeholder-shown) {
+            border-color: #c8e6c9 !important;
+            background: rgba(232, 245, 233, 0.6) !important;
         }
 
         /* Animated underline accent */
@@ -626,6 +636,187 @@
 </head>
 <body>
 
+    
+    
+    
+    
+    <!-- Simple Page Loader -->
+    <style>
+        .page-loader-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #FAF9F6; z-index: 99999;
+            display: flex; justify-content: center; align-items: center;
+            opacity: 0; visibility: hidden; pointer-events: none;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+            overflow: hidden;
+        }
+        .page-loader-overlay.active {
+            opacity: 1; visibility: visible; pointer-events: all;
+        }
+        
+        .loader-scene {
+            position: relative;
+            width: 200px;
+            height: 200px;
+        }
+
+        /* 3D Hole setup */
+        .loader-hole-back {
+            position: absolute;
+            width: 70px;
+            height: 18px;
+            background: #2A1D11;
+            border-radius: 50%;
+            top: 155px;
+            left: 120px;
+            z-index: 5;
+            clip-path: polygon(0 0, 100% 0, 100% 50%, 0 50%);
+        }
+        .loader-hole-front {
+            position: absolute;
+            width: 70px;
+            height: 18px;
+            background: #2A1D11;
+            border-radius: 50%;
+            top: 155px;
+            left: 120px;
+            z-index: 15;
+            clip-path: polygon(0 50%, 100% 50%, 100% 100%, 0 100%);
+        }
+        .loader-floor-mask {
+            position: absolute;
+            width: 100%;
+            height: 400px;
+            background: #FAF9F6;
+            top: 164px; /* exact vertical center of the hole */
+            left: 0;
+            z-index: 14;
+        }
+
+        /* Bed */
+        .loader-bed {
+            position: absolute;
+            width: 100px;
+            height: 22px;
+            background: #4B3621;
+            border-radius: 4px;
+            top: 120px;
+            left: 20px;
+            z-index: 8;
+            box-shadow: 0 4px 10px rgba(75, 54, 33, 0.2);
+        }
+        /* Bed Legs */
+        .loader-bed::before, .loader-bed::after {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 16px;
+            background: #3a2818;
+            top: 22px;
+            border-radius: 2px;
+        }
+        .loader-bed::before { left: 10px; }
+        .loader-bed::after { right: 10px; }
+        
+        /* Headboard */
+        .loader-bed-headboard {
+            position: absolute;
+            width: 12px;
+            height: 40px;
+            background: #4B3621;
+            top: 102px;
+            left: 14px;
+            z-index: 7;
+            border-radius: 4px 4px 0 0;
+        }
+
+        /* Mattress */
+        .loader-mattress {
+            position: absolute;
+            width: 90px;
+            height: 18px;
+            background: #E8E2DA;
+            border: 2px solid #c4a173;
+            border-radius: 6px;
+            top: 100px;
+            left: 25px;
+            z-index: 10;
+            box-sizing: border-box;
+            box-shadow: inset 0 -3px 0 rgba(139, 115, 85, 0.2);
+        }
+
+        .mattress-1 {
+            animation: mattress-cycle 2.4s infinite cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .mattress-2 {
+            animation: mattress-cycle 2.4s infinite cubic-bezier(0.4, 0, 0.2, 1) -1.2s;
+        }
+
+        @keyframes mattress-cycle {
+            0%, 10% {
+                transform: translate(0, 0) rotate(0deg);
+                opacity: 1;
+            }
+            20% {
+                transform: translate(30px, -40px) rotate(50deg);
+                opacity: 1;
+            }
+            30% {
+                /* Hover perfectly vertical over the hole */
+                transform: translate(85px, -10px) rotate(90deg);
+                opacity: 1;
+            }
+            40% {
+                /* Drop straight down into the hole */
+                transform: translate(85px, 150px) rotate(90deg);
+                opacity: 1;
+            }
+            41%, 50% {
+                transform: translate(0, -200px) rotate(0deg);
+                opacity: 0;
+            }
+            51%, 65% {
+                transform: translate(0, -200px) rotate(0deg);
+                opacity: 1;
+            }
+            85% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            90% {
+                transform: translate(0, 4px) scaleY(0.8) scaleX(1.05);
+            }
+            95%, 100% {
+                transform: translate(0, 0) scaleY(1) scaleX(1);
+            }
+        }
+    </style>
+    <div id="page-loader" class="page-loader-overlay">
+        <div class="loader-scene">
+            <div class="loader-hole-back"></div>
+            <div class="loader-floor-mask"></div>
+            <div class="loader-hole-front"></div>
+            <div class="loader-bed-headboard"></div>
+            <div class="loader-bed"></div>
+            <div class="loader-mattress mattress-1"></div>
+            <div class="loader-mattress mattress-2"></div>
+        </div>
+    </div>
+    <script>
+        (function() {
+            var loaderTimeout = setTimeout(function() {
+                var loader = document.getElementById('page-loader');
+                if (loader) loader.classList.add('active');
+            }, 500); // 500ms threshold for fast connections
+
+            window.addEventListener('load', function() {
+                clearTimeout(loaderTimeout);
+                var loader = document.getElementById('page-loader');
+                if (loader) loader.classList.remove('active');
+            });
+        })();
+    </script>
+
+
     <!-- Checkout Header -->
     <header class="checkout-header" id="checkout-header">
         <a href="../index.html" class="checkout-header__logo">
@@ -778,6 +969,15 @@
     
     
     <script>
+        function showStatus(message, type) {
+            const statusEl = document.getElementById('checkout-status');
+            if (!statusEl) return;
+            
+            statusEl.textContent = message;
+            statusEl.className = `status-${type}`;
+            statusEl.style.display = 'block';
+        }
+
         document.querySelector('form').addEventListener('submit', async (e) => {
             // Check if it's the footer form or checkout form
             if (e.target.classList.contains('footer-subscribe')) return;
@@ -786,6 +986,7 @@
             const btn = e.target.querySelector('button[type="submit"]');
             btn.disabled = true;
             btn.innerHTML = 'Submitting...';
+            showStatus('Submitting your request...', 'loading');
 
             const payload = {
                 first_name: document.getElementById('fname').value,
@@ -805,17 +1006,17 @@
                 const data = await res.json();
                 
                 if (data.success) {
-                    alert('Thank you! Your bulk order request has been submitted successfully.');
+                    showStatus('Thank you! Your bulk order request has been submitted successfully.', 'success');
                     e.target.reset();
                 } else {
-                    alert('Error: ' + (data.error || 'Failed to submit request.'));
+                    showStatus('Error: ' + (data.error || 'Failed to submit request.'), 'error');
                 }
             } catch (err) {
                 console.error(err);
-                alert('Network error. Please try again.');
+                showStatus('Network error. Please try again.', 'error');
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = 'Submit Bulk Request <span class="btn-icon"> </span>';
+                btn.innerHTML = 'Submit Bulk Request <span class="btn-icon">→</span>';
             }
         });
     </script>

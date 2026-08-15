@@ -17,6 +17,15 @@ document.addEventListener('DOMContentLoaded', () => {
     initReviewsSlider();
     initMobileMenu();
     trackPageView();
+    
+    // Auth Check
+    const token = localStorage.getItem('sb-julktcdhbnvxsjuqsimp-auth-token');
+    if (token) {
+        const accountLink = document.getElementById('account-link');
+        if (accountLink) {
+            accountLink.innerHTML = accountLink.innerHTML.replace('ACCOUNT', 'YOU');
+        }
+    }
 });
 
 /* ==============================================

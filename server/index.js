@@ -5,10 +5,34 @@ const crypto = require('crypto');
 const Razorpay = require('razorpay');
 const axios = require('axios');
 const mongoose = require('mongoose');
+const { createClient } = require('@supabase/supabase-js');
+
+const supabaseUrl = process.env.SUPABASE_URL || '';
+const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || '';
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+// Auth Middleware
+const authenticateUser = async (req, res, next) => {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return res.status(401).json({ success: false, error: 'Unauthorized' });
+    }
+    const token = authHeader.split(' ')[1];
+    
+    // Verify token using supabase
+    const { data, error } = await supabase.auth.getUser(token);
+    
+    if (error || !data.user) {
+        return res.status(401).json({ success: false, error: 'Invalid token' });
+    }
+    
+    req.user = data.user;
+    next();
+};
 
 // MongoDB Connection
 const MONGODB_URI = process.env.MONGODB_URI;
@@ -24,6 +48,7 @@ mongoose.connect(MONGODB_URI || 'mongodb://localhost:27017/restnest')
 // Mongoose Schema
 const orderSchema = new mongoose.Schema({
     id: { type: String, required: true, unique: true },
+    user_id: { type: String, required: false },
     customer_name: String,
     email: String,
     phone: String,
@@ -35,6 +60,24 @@ const orderSchema = new mongoose.Schema({
 });
 
 const Order = mongoose.model('Order', orderSchema);
+
+const userProfileSchema = new mongoose.Schema({
+    user_id: { type: String, required: true, unique: true },
+    first_name: String,
+    last_name: String,
+    phone: String,
+    addresses: [{
+        address: String,
+        city: String,
+        state: String,
+        pincode: String,
+        is_default: Boolean
+    }],
+    created_at: { type: Date, default: Date.now },
+    updated_at: { type: Date, default: Date.now }
+});
+
+const UserProfile = mongoose.model('UserProfile', userProfileSchema);
 
 const bulkOrderSchema = new mongoose.Schema({
     id: { type: String, required: true, unique: true },
@@ -225,6 +268,7 @@ app.post('/api/create-shipment', async (req, res) => {
         // Save order to MongoDB
         const newOrder = new Order({
             id: orderData.order_id,
+            user_id: orderData.user_id || null,
             customer_name: orderData.name,
             email: orderData.email,
             phone: orderData.phone,
@@ -258,6 +302,70 @@ app.get('/api/orders', async (req, res) => {
 });
 
 // ----------------------------------------------------
+// Endpoint: Get All Customers (For Admin App)
+// ----------------------------------------------------
+app.get('/api/customers', async (req, res) => {
+    try {
+        const customers = await UserProfile.find().sort({ created_at: -1 });
+        res.json({ success: true, customers });
+    } catch (error) {
+        console.error('Error fetching customers:', error);
+        res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+});
+
+// ----------------------------------------------------
+// Endpoint: Get User Orders
+// ----------------------------------------------------
+app.get('/api/my-orders', authenticateUser, async (req, res) => {
+    try {
+        const orders = await Order.find({ user_id: req.user.id }).sort({ created_at: -1 });
+        res.json({ success: true, orders });
+    } catch (error) {
+        console.error('Error fetching user orders:', error);
+        res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+});
+
+// ----------------------------------------------------
+// Endpoint: User Profile (Get & Update)
+// ----------------------------------------------------
+app.get('/api/my-profile', authenticateUser, async (req, res) => {
+    try {
+        let profile = await UserProfile.findOne({ user_id: req.user.id });
+        if (!profile) {
+            profile = new UserProfile({ user_id: req.user.id });
+            await profile.save();
+        }
+        res.json({ success: true, profile });
+    } catch (error) {
+        console.error('Error fetching profile:', error);
+        res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+});
+
+app.post('/api/my-profile', authenticateUser, async (req, res) => {
+    try {
+        const { first_name, last_name, phone, addresses } = req.body;
+        const profile = await UserProfile.findOneAndUpdate(
+            { user_id: req.user.id },
+            { 
+                first_name, 
+                last_name, 
+                phone, 
+                addresses,
+                updated_at: Date.now()
+            },
+            { upsert: true, new: true }
+        );
+        res.json({ success: true, profile });
+    } catch (error) {
+        console.error('Error updating profile:', error);
+        res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+});
+
+// ----------------------------------------------------
 // Endpoint 5: Place Order Directly (Bypass Razorpay)
 // ----------------------------------------------------
 app.post('/api/place-order-test', async (req, res) => {
@@ -266,6 +374,7 @@ app.post('/api/place-order-test', async (req, res) => {
         
         const newOrder = new Order({
             id: orderData.id,
+            user_id: orderData.user_id || null,
             customer_name: orderData.customer_name,
             email: orderData.email,
             phone: orderData.phone,

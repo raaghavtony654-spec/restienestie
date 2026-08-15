@@ -4,6 +4,11 @@
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
 import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+const SUPABASE_URL = 'https://julktcdhbnvxsjuqsimp.supabase.co';
+const SUPABASE_ANON_KEY = '[HIDDEN_SUPABASE_KEY]';
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const firebaseConfig = {
   apiKey: "[HIDDEN_FIREBASE_KEY]",
@@ -40,6 +45,27 @@ function initCheckoutPage() {
         window.location.href = 'index.html';
         return;
     }
+
+    // Attempt to fetch user profile and auto-fill
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
+        if (session) {
+            document.getElementById('email').value = session.user.email || '';
+            try {
+                const res = await fetch('http://localhost:3000/api/my-profile', {
+                    headers: { 'Authorization': `Bearer ${session.access_token}` }
+                });
+                const data = await res.json();
+                if (data.success && data.profile) {
+                    if(data.profile.first_name) {
+                        const parts = data.profile.first_name.split(' ');
+                        document.getElementById('fname').value = parts[0] || '';
+                        document.getElementById('lname').value = parts.slice(1).join(' ') || '';
+                    }
+                    if(data.profile.phone) document.getElementById('phone').value = data.profile.phone;
+                }
+            } catch(e) { console.error('Error fetching profile for checkout:', e); }
+        }
+    });
 
     const itemsContainer = document.getElementById('checkout-items');
     const subtotalEl = document.getElementById('summary-subtotal');
@@ -83,7 +109,10 @@ function initCheckoutPage() {
             pincode: document.getElementById('pincode').value
         };
 
-        await processCheckout(cart, totalAmount, customerInfo);
+        const { data: { session } } = await supabase.auth.getSession();
+        const userId = session ? session.user.id : null;
+
+        await processCheckout(cart, totalAmount, customerInfo, userId);
     });
 }
 
@@ -99,7 +128,7 @@ function showStatus(message, type) {
 // ----------------------------------------------------
 // Checkout Flow (Razorpay -> Shiprocket)
 // ----------------------------------------------------
-async function processCheckout(cart, totalAmount, customerInfo) {
+async function processCheckout(cart, totalAmount, customerInfo, userId = null) {
     const payBtn = document.getElementById('pay-btn');
     payBtn.disabled = true;
     payBtn.textContent = 'Preparing Payment...';
@@ -195,6 +224,7 @@ async function processCheckout(cart, totalAmount, customerInfo) {
             // B. Create Shiprocket Shipment
             const baseOrderData = {
                 order_id: 'ORD' + Date.now().toString().slice(-6),
+                user_id: userId,
                 name: customerInfo.name,
                 email: customerInfo.email,
                 phone: customerInfo.phone,
@@ -220,6 +250,7 @@ async function processCheckout(cart, totalAmount, customerInfo) {
             // C. Save Final Complete Order to Firebase (For Admin App)
             const finalOrder = {
                 id: baseOrderData.order_id,
+                user_id: userId,
                 customer_name: customerInfo.name,
                 email: customerInfo.email,
                 phone: customerInfo.phone,
