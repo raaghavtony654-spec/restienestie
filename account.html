@@ -419,6 +419,16 @@
             <h2 id="auth-title">Sign In</h2>
             <div id="auth-status" class="status-msg"></div>
             <form id="auth-form">
+                <div class="input-group" id="name-group" style="display: none; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div>
+                        <label for="signup-fname">First Name</label>
+                        <input type="text" id="signup-fname" placeholder="First name">
+                    </div>
+                    <div>
+                        <label for="signup-lname">Last Name</label>
+                        <input type="text" id="signup-lname" placeholder="Last name">
+                    </div>
+                </div>
                 <div class="input-group">
                     <label for="email">Email</label>
                     <input type="email" id="email" required placeholder="your@email.com">
@@ -560,6 +570,11 @@
         authTitle.textContent = isLogin ? 'Sign In' : 'Sign Up';
         authBtn.textContent = isLogin ? 'Sign In' : 'Sign Up';
         toggleAuth.textContent = isLogin ? 'Need an account? Sign Up' : 'Already have an account? Sign In';
+        document.getElementById('name-group').style.display = isLogin ? 'none' : 'grid';
+        
+        // Hide google/apple login on signup to keep it simple, or leave them. Let's leave them.
+        const statusEl = document.getElementById('auth-status');
+        statusEl.style.display = 'none';
     });
 
     // Handle Auth Submit
@@ -579,7 +594,19 @@
             error = res.error;
             if (!error) showAuthStatus('Signed in successfully!', 'success');
         } else {
-            const res = await supabaseClient.auth.signUp({ email, password });
+            const fname = document.getElementById('signup-fname').value.trim();
+            const lname = document.getElementById('signup-lname').value.trim();
+            const first_name = fname + (lname ? ' ' + lname : '');
+            
+            const res = await supabaseClient.auth.signUp({ 
+                email, 
+                password,
+                options: {
+                    data: {
+                        first_name: first_name
+                    }
+                }
+            });
             error = res.error;
             if(!error && res.data.user && !res.data.session) {
                 showAuthStatus('Please check your email for a confirmation link.', 'success');
