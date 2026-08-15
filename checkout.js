@@ -35,7 +35,7 @@ function formatPrice(num) {
     return 'Rs. ' + parseFloat(num).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
-function initCheckoutPage() {
+async function initCheckoutPage() {
     const cart = JSON.parse(localStorage.getItem('restnest_cart')) || [];
     
     if (cart.length === 0) {
