@@ -4,7 +4,12 @@ const cors = require('cors');
 const crypto = require('crypto');
 const Razorpay = require('razorpay');
 const axios = require('axios');
-const mongoose = require('mongoose');
+let mongoose = null;
+try {
+    mongoose = require('mongoose');
+} catch (e) {
+    console.warn('Mongoose failed to load (likely Node 24 incompatibility). MongoDB features will be disabled.');
+}
 const { createClient } = require('@supabase/supabase-js');
 
 const supabaseUrl = process.env.SUPABASE_URL || '';
@@ -65,66 +70,72 @@ if (!MONGODB_URI) {
     console.warn('WARNING: MONGODB_URI is not set. Using local database for testing.');
 }
 
-mongoose.connect(MONGODB_URI || 'mongodb://localhost:27017/restnest')
-    .then(() => console.log('Connected to MongoDB'))
-    .catch(err => console.error('MongoDB connection error:', err));
+if (mongoose) {
+    mongoose.connect(MONGODB_URI || 'mongodb://localhost:27017/restnest')
+        .then(() => console.log('Connected to MongoDB'))
+        .catch(err => console.error('MongoDB connection error:', err));
+}
 
-// Mongoose Schema
-const orderSchema = new mongoose.Schema({
-    id: { type: String, required: true, unique: true },
-    user_id: { type: String, required: false },
-    customer_name: String,
-    email: String,
-    phone: String,
-    address: String,
-    total_amount: Number,
-    items: mongoose.Schema.Types.Mixed,
-    status: String,
-    created_at: { type: Date, default: Date.now }
-});
+let Order, UserProfile, BulkOrder, PageTraffic;
 
-const Order = mongoose.model('Order', orderSchema);
+if (mongoose) {
+    // Mongoose Schema
+    const orderSchema = new mongoose.Schema({
+        id: { type: String, required: true, unique: true },
+        user_id: { type: String, required: false },
+        customer_name: String,
+        email: String,
+        phone: String,
+        address: String,
+        total_amount: Number,
+        items: mongoose.Schema.Types.Mixed,
+        status: String,
+        created_at: { type: Date, default: Date.now }
+    });
 
-const userProfileSchema = new mongoose.Schema({
-    user_id: { type: String, required: true, unique: true },
-    first_name: String,
-    last_name: String,
-    phone: String,
-    addresses: [{
+    Order = mongoose.model('Order', orderSchema);
+
+    const userProfileSchema = new mongoose.Schema({
+        user_id: { type: String, required: true, unique: true },
+        first_name: String,
+        last_name: String,
+        phone: String,
+        addresses: [{
+            address: String,
+            city: String,
+            state: String,
+            pincode: String,
+            is_default: Boolean
+        }],
+        created_at: { type: Date, default: Date.now },
+        updated_at: { type: Date, default: Date.now }
+    });
+
+    UserProfile = mongoose.model('UserProfile', userProfileSchema);
+
+    const bulkOrderSchema = new mongoose.Schema({
+        id: { type: String, required: true, unique: true },
+        first_name: String,
+        last_name: String,
+        email: String,
+        phone: String,
         address: String,
         city: String,
         state: String,
         pincode: String,
-        is_default: Boolean
-    }],
-    created_at: { type: Date, default: Date.now },
-    updated_at: { type: Date, default: Date.now }
-});
+        status: { type: String, default: 'Pending' },
+        created_at: { type: Date, default: Date.now }
+    });
 
-const UserProfile = mongoose.model('UserProfile', userProfileSchema);
+    BulkOrder = mongoose.model('BulkOrder', bulkOrderSchema);
 
-const bulkOrderSchema = new mongoose.Schema({
-    id: { type: String, required: true, unique: true },
-    first_name: String,
-    last_name: String,
-    email: String,
-    phone: String,
-    address: String,
-    city: String,
-    state: String,
-    pincode: String,
-    status: { type: String, default: 'Pending' },
-    created_at: { type: Date, default: Date.now }
-});
+    const pageTrafficSchema = new mongoose.Schema({
+        page: { type: String, required: true, unique: true },
+        visits: { type: Number, default: 0 }
+    });
 
-const BulkOrder = mongoose.model('BulkOrder', bulkOrderSchema);
-
-const pageTrafficSchema = new mongoose.Schema({
-    page: { type: String, required: true, unique: true },
-    visits: { type: Number, default: 0 }
-});
-
-const PageTraffic = mongoose.model('PageTraffic', pageTrafficSchema);
+    PageTraffic = mongoose.model('PageTraffic', pageTrafficSchema);
+}
 
 
 // ----------------------------------------------------
