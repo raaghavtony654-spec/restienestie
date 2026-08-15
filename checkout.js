@@ -6,9 +6,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebas
 import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-const SUPABASE_URL = 'https://julktcdhbnvxsjuqsimp.supabase.co';
-const SUPABASE_ANON_KEY = '[HIDDEN_SUPABASE_KEY]';
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+let supabase = null;
 
 const firebaseConfig = {
   apiKey: "[HIDDEN_FIREBASE_KEY]",
@@ -46,10 +44,23 @@ function initCheckoutPage() {
         return;
     }
 
+    const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+        ? 'http://localhost:3000/api' 
+        : 'https://restienestie.onrender.com/api';
+
+    try {
+        const configRes = await fetch(`${API_BASE}/public-config`);
+        const config = await configRes.json();
+        supabase = createClient(config.SUPABASE_URL, config.SUPABASE_ANON_KEY);
+    } catch (e) {
+        console.error("Failed to load config", e);
+    }
+
     // Attempt to fetch user profile and auto-fill
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
-        if (session) {
-            document.getElementById('email').value = session.user.email || '';
+    if (supabase) {
+        supabase.auth.getSession().then(async ({ data: { session } }) => {
+            if (session) {
+                document.getElementById('email').value = session.user.email || '';
             try {
                 const res = await fetch('http://localhost:3000/api/my-profile', {
                     headers: { 'Authorization': `Bearer ${session.access_token}` }
@@ -66,6 +77,7 @@ function initCheckoutPage() {
             } catch(e) { console.error('Error fetching profile for checkout:', e); }
         }
     });
+    }
 
     const itemsContainer = document.getElementById('checkout-items');
     const subtotalEl = document.getElementById('summary-subtotal');
@@ -109,8 +121,11 @@ function initCheckoutPage() {
             pincode: document.getElementById('pincode').value
         };
 
-        const { data: { session } } = await supabase.auth.getSession();
-        const userId = session ? session.user.id : null;
+        let userId = null;
+        if (supabase) {
+            const { data: { session } } = await supabase.auth.getSession();
+            userId = session ? session.user.id : null;
+        }
 
         await processCheckout(cart, totalAmount, customerInfo, userId);
     });
@@ -148,7 +163,7 @@ async function processCheckout(cart, totalAmount, customerInfo, userId = null) {
         const orderRes = await fetch(`${API_BASE}/create-order`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ amount: totalAmount, currency: 'INR' })
+            body: JSON.stringify({ cart: cart, currency: 'INR' })
         });
         const orderDataRes = await orderRes.json();
         

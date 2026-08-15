@@ -15,6 +15,30 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Force HTTPS in production
+app.use((req, res, next) => {
+    if (req.header('x-forwarded-proto') !== 'https' && process.env.NODE_ENV === 'production') {
+        res.redirect(`https://${req.header('host')}${req.url}`);
+    } else {
+        next();
+    }
+});
+
+// Rate Limiting
+const rateLimit = require('express-rate-limit');
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // limit each IP to 100 requests per windowMs
+    message: { success: false, error: 'Too many requests, please try again later.' }
+});
+app.use('/api/', limiter);
+
+const authLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 20, // Stricter limit for auth/orders
+    message: { success: false, error: 'Too many requests, please try again later.' }
+});
+
 // Auth Middleware
 const authenticateUser = async (req, res, next) => {
     const authHeader = req.headers.authorization;
@@ -143,13 +167,58 @@ async function getShiprocketToken() {
 // ----------------------------------------------------
 // Endpoint 1: Create Razorpay Order
 // ----------------------------------------------------
+// ----------------------------------------------------
+// Endpoint: Public Config (Securely send Anon Keys)
+// ----------------------------------------------------
+app.get('/api/public-config', (req, res) => {
+    res.json({
+        success: true,
+        SUPABASE_URL: supabaseUrl,
+        SUPABASE_ANON_KEY: supabaseAnonKey,
+        RAZORPAY_KEY_ID: RAZORPAY_KEY_ID
+    });
+});
+
 app.get('/api/config', (req, res) => {
     res.json({ razorpayKeyId: RAZORPAY_KEY_ID });
 });
 
-app.post('/api/create-order', async (req, res) => {
+// ----------------------------------------------------
+// Secure Product Registry (Anti-Tampering)
+// ----------------------------------------------------
+const PRODUCT_REGISTRY = {
+    'Luxury Firm Pillow': 1499,
+    'Plush Cloud Pillow': 1299,
+    'Ergonomic Support Pillow': 1899,
+    'Velvet Throw Cushion': 899,
+    'Silk Accent Cushion': 1099,
+    'Boho Embroidered Cushion': 1199
+};
+
+function calculateCartTotal(cart) {
+    let total = 0;
+    if (!Array.isArray(cart)) return total;
+    
+    for (const item of cart) {
+        // Find real price from registry, fallback to 0 if unknown product
+        const realPrice = PRODUCT_REGISTRY[item.name] || 0; 
+        total += (realPrice * (item.quantity || 1));
+    }
+    return total;
+}
+
+// ----------------------------------------------------
+// Endpoint 1: Create Razorpay Order
+// ----------------------------------------------------
+app.post('/api/create-order', authLimiter, async (req, res) => {
     try {
-        const { amount, currency = 'INR', receipt } = req.body;
+        const { cart, currency = 'INR', receipt } = req.body;
+        
+        // Anti-tampering: Calculate total securely on server
+        const realAmount = calculateCartTotal(cart);
+        if (realAmount <= 0) {
+            return res.status(400).json({ success: false, error: 'Invalid cart or empty total.' });
+        }
 
         if (RAZORPAY_KEY_ID === 'dummy_key_id') {
             console.warn('Using dummy Razorpay keys. Returning mock order.');
@@ -157,14 +226,14 @@ app.post('/api/create-order', async (req, res) => {
                 success: true, 
                 order: {
                     id: `order_mock_${Date.now()}`,
-                    amount: amount * 100,
+                    amount: realAmount * 100,
                     currency
                 } 
             });
         }
 
         const options = {
-            amount: amount * 100,
+            amount: realAmount * 100,
             currency,
             receipt: receipt || `receipt_${Date.now()}`
         };
