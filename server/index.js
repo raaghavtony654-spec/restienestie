@@ -12,8 +12,8 @@ try {
 }
 const { createClient } = require('@supabase/supabase-js');
 
-const supabaseUrl = process.env.SUPABASE_URL || '';
-const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || '';
+const supabaseUrl = process.env.SUPABASE_URL || 'https://dummy.supabase.co';
+const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || 'dummy';
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 const app = express();
