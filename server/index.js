@@ -187,12 +187,34 @@ app.get('/api/config', (req, res) => {
 // Secure Product Registry (Anti-Tampering)
 // ----------------------------------------------------
 const PRODUCT_REGISTRY = {
-    'Luxury Firm Pillow': 1499,
-    'Plush Cloud Pillow': 1299,
-    'Ergonomic Support Pillow': 1899,
-    'Velvet Throw Cushion': 899,
-    'Silk Accent Cushion': 1099,
-    'Boho Embroidered Cushion': 1199
+    "Rest Nest Premium White Sleeping Pillow | Glace Cotton Fabric | Lightweight & Comfortable | Pack Of 2": 1063.0,
+    "Rest Nest Orthopedic Cervical Memory Foam Pillow": 1175.0,
+    "Rest Nest Slim Microfiber Pillow – 17x27 Inch": 1014.0,
+    "Rest Nest Premium White Glace Cotton Pillows – Pack of 2": 1140.0,
+    "Rest Nest 16x16 White Stripe Soft Cushions – Pack of 5": 1270.0,
+    "Rest Nest 5 Premium White Cushions – 16x16 Inch": 1270.0,
+    "Rest Nest 16x16 White Premium Cushions – Pack of 5": 1386.0,
+    "Rest Nest ContourCare Memory Foam Pillow": 1175.0,
+    "Rest Nest Soft Cushion Set of 5 – Glace Cotton": 1386.0,
+    "Rest Nest White & Gold Glace Cotton Pillows – Pack of 2": 1110.0,
+    "Rest Nest Soft Pillow Pack Of 2 – Premium Recron Fiber (17x27 Inch)": 1065.0,
+    "Rest Nest Orthopedic Cervical Memory Foam Pillow – White (1 Pc)": 1175.0,
+    "Rest Nest Slim Microfiber Pillow – 17x27 Inch, White 1 Pcs": 1014.0,
+    "Rest Nest Premium White Glace Cotton Pillows – Pack Of 2 (800g Each)": 1140.0,
+    "Rest Nest ContourCare™ Memory Foam Pillow – Orthopedic Support For Perfect Sleep": 1175.0,
+    "Rest Nest White & Gold Glace Cotton Sleeping Pillows – Pack Of 2 (Lightweight, 750g Each)": 1110.0,
+    "Rest Nest Blue & White Polycotton Pillow – Pack Of 2 (16x26 Inch, Light Weight, Soft & Supportive, Filled With Reliance Recron Fiber)": 1110.0,
+    "Rest Nest Premium Polycotton Pillow With Recron Fiber Filling – Black & White, 16x26 Inch (Pack Of 2)": 964.0,
+    "Rest Nest Soft Cushion Pack Of 2 – Premium Recron Fiber (17x27 Inch)": 1065.0,
+    "Rest Nest Orthopedic Cervical Memory Foam Cushion – White (1 Pc)": 1175.0,
+    "Rest Nest Slim Microfiber Cushion – 17x27 Inch, White 1 Pcs": 1014.0,
+    "Rest Nest Premium White Glace Cotton Cushions – Pack Of 2 (800g Each)": 1140.0,
+    "Rest Nest ContourCare™ Memory Foam Cushion – Orthopedic Support For Perfect Sleep": 1175.0,
+    "Rest Nest White & Gold Glace Cotton Sleeping Cushions – Pack Of 2 (Lightweight, 750g Each)": 1110.0,
+    "Rest Nest Premium White Sleeping Cushion | Glace Cotton Fabric | Lightweight & Comfortable | Pack Of 2": 1063.0,
+    "Rest Nest Blue & White Polycotton Cushion – Pack Of 2 (16x26 Inch, Light Weight, Soft & Supportive, Filled With Reliance Recron Fiber)": 1110.0,
+    "Rest Nest Premium Polycotton Cushion With Recron Fiber Filling – Black & White, 16x26 Inch (Pack Of 2)": 964.0,
+    "Rest Nest Premium White Sleeping Pillow | Pack Of 2": 1063.0
 };
 
 function calculateCartTotal(cart) {
