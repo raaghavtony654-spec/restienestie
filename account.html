@@ -1428,30 +1428,40 @@
         showAuthStatus(isLogin ? 'Signing in...' : 'Creating your account...', 'loading');
 
         let error;
-        if (isLogin) {
-            const res = await supabaseClient.auth.signInWithPassword({ email, password });
-            error = res.error;
-            if (!error) showAuthStatus('Signed in successfully!', 'success');
-        } else {
-            const fname = document.getElementById('signup-fname').value.trim();
-            const lname = document.getElementById('signup-lname').value.trim();
-            const first_name = fname + (lname ? ' ' + lname : '');
+        try {
+            if (isLogin) {
+                const res = await supabaseClient.auth.signInWithPassword({ email, password });
+                error = res.error;
+                if (!error) showAuthStatus('Signed in successfully!', 'success');
+            } else {
+                const fname = document.getElementById('signup-fname').value.trim();
+                const lname = document.getElementById('signup-lname').value.trim();
+                const first_name = fname + (lname ? ' ' + lname : '');
 
-            const res = await supabaseClient.auth.signUp({
-                email,
-                password,
-                options: { data: { first_name } }
-            });
-            error = res.error;
-            if (!error && res.data.user && !res.data.session) {
-                showAuthStatus('Please check your email for a confirmation link.', 'success');
-                return;
-            } else if (!error) {
-                showAuthStatus('Account created successfully!', 'success');
+                const res = await supabaseClient.auth.signUp({
+                    email,
+                    password,
+                    options: { data: { first_name } }
+                });
+                error = res.error;
+                if (!error && res.data.user && !res.data.session) {
+                    showAuthStatus('Please check your email for a confirmation link.', 'success');
+                    return;
+                } else if (!error) {
+                    showAuthStatus('Account created successfully!', 'success');
+                }
             }
+        } catch (err) {
+            error = err;
         }
 
-        if (error) showAuthStatus(error.message, 'error');
+        if (error) {
+            let msg = error.message || 'An unexpected error occurred';
+            if (msg === 'Failed to fetch') {
+                msg = 'Cannot connect to server. Please ensure Supabase is configured correctly in the backend.';
+            }
+            showAuthStatus(msg, 'error');
+        }
     });
 
     // ---- OAuth Login ----
