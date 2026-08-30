@@ -292,6 +292,19 @@
         overflow-x: auto;
         -ms-overflow-style: none;
         scrollbar-width: none;
+        position: relative;
+    }
+    .tab-indicator {
+        position: absolute;
+        top: 4px;
+        bottom: 4px;
+        left: 0;
+        background: rgba(166, 124, 82, 0.15);
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        z-index: 0;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        pointer-events: none;
     }
     .dash-tabs::-webkit-scrollbar { display: none; }
     .dash-tab {
@@ -312,15 +325,14 @@
         justify-content: center;
         gap: 6px;
         white-space: nowrap;
+        position: relative;
+        z-index: 1;
     }
     .dash-tab:hover {
         color: #222;
-        background: rgba(255, 255, 255, 0.8);
     }
     .dash-tab.active {
-        background: rgba(166, 124, 82, 0.15);
         color: #4B3621;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     }
     .dash-tab svg {
         width: 16px;
@@ -1164,6 +1176,7 @@
 
         <!-- Tabs -->
         <div class="dash-tabs" id="dash-tabs">
+            <div class="tab-indicator" id="tab-indicator"></div>
             <button class="dash-tab active" data-tab="overview">
                 <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
                 Overview
@@ -1487,8 +1500,21 @@
     });
 
     // ============================================
-    // TAB NAVIGATION
+    // TAB NAVIGATION & INDICATOR
     // ============================================
+    function updateTabIndicator(activeTabElement) {
+        const indicator = document.getElementById('tab-indicator');
+        const container = document.getElementById('dash-tabs');
+        if (!indicator || !activeTabElement || !container) return;
+        
+        // Use offsetLeft relative to the container for correct position
+        const left = activeTabElement.offsetLeft - container.offsetLeft;
+        const width = activeTabElement.offsetWidth;
+        
+        indicator.style.transform = `translateX(${left}px)`;
+        indicator.style.width = `${width}px`;
+    }
+
     document.getElementById('dash-tabs').addEventListener('click', (e) => {
         const tab = e.target.closest('.dash-tab');
         if (!tab) return;
@@ -1499,10 +1525,25 @@
         document.querySelectorAll('.dash-tab').forEach(t => t.classList.remove('active'));
         tab.classList.add('active');
 
+        // Move Indicator
+        updateTabIndicator(tab);
+
         // Update active panel
         document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
         document.getElementById(`panel-${tabName}`).classList.add('active');
     });
+
+    // Handle window resize to re-align indicator
+    window.addEventListener('resize', () => {
+        const activeTab = document.querySelector('.dash-tab.active');
+        if (activeTab) updateTabIndicator(activeTab);
+    });
+
+    // Init indicator on load (delayed slightly to ensure styles are computed)
+    setTimeout(() => {
+        const activeTab = document.querySelector('.dash-tab.active');
+        if (activeTab) updateTabIndicator(activeTab);
+    }, 100);
 
     // ============================================
     // DATA FETCHING
