@@ -90,6 +90,8 @@ if (mongoose) {
         total_amount: Number,
         items: mongoose.Schema.Types.Mixed,
         status: String,
+        shiprocket_awb: String,
+        shiprocket_shipment_id: String,
         created_at: { type: Date, default: Date.now }
     });
 
@@ -377,7 +379,9 @@ app.post('/api/create-shipment', async (req, res) => {
             address: `${orderData.address}, ${orderData.city}, ${orderData.state} - ${orderData.pincode}`,
             total_amount: orderData.total_amount,
             items: orderData.items,
-            status: 'Placed'
+            status: 'Placed',
+            shiprocket_awb: responseData.awb_code || null,
+            shiprocket_shipment_id: responseData.shipment_id ? String(responseData.shipment_id) : null
         });
         await newOrder.save();
 
@@ -425,6 +429,65 @@ app.get('/api/my-orders', authenticateUser, async (req, res) => {
         res.json({ success: true, orders });
     } catch (error) {
         console.error('Error fetching user orders:', error);
+        res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+});
+
+// ----------------------------------------------------
+// Endpoint: Track Order (with Shiprocket real-time)
+// ----------------------------------------------------
+app.get('/api/track-order/:orderId', authenticateUser, async (req, res) => {
+    try {
+        const order = await Order.findOne({ 
+            $or: [
+                { id: req.params.orderId, user_id: req.user.id },
+                { shiprocket_awb: req.params.orderId, user_id: req.user.id }
+            ]
+        });
+        
+        if (!order) {
+            return res.status(404).json({ success: false, error: 'Order not found' });
+        }
+
+        let trackingData = null;
+        
+        // Attempt to get real-time tracking from Shiprocket
+        if (order.shiprocket_awb && order.shiprocket_awb !== 'Pending') {
+            try {
+                const token = await getShiprocketToken();
+                if (token !== 'MOCK_TOKEN') {
+                    const trackRes = await axios.get(
+                        `https://apiv2.shiprocket.in/v1/external/courier/track/awb/${order.shiprocket_awb}`,
+                        { headers: { Authorization: `Bearer ${token}` } }
+                    );
+                    trackingData = trackRes.data;
+                    
+                    // Update order status from Shiprocket if available
+                    const srStatus = trackingData?.tracking_data?.shipment_status_id;
+                    let newStatus = null;
+                    if (srStatus >= 7) newStatus = 'Delivered';
+                    else if (srStatus >= 6) newStatus = 'Out for Delivery';
+                    else if (srStatus >= 4) newStatus = 'Shipped';
+                    else if (srStatus >= 2) newStatus = 'Processing';
+                    
+                    if (newStatus && newStatus !== order.status) {
+                        await Order.updateOne({ id: order.id }, { status: newStatus });
+                        order.status = newStatus;
+                    }
+                }
+            } catch (trackErr) {
+                console.error('Shiprocket tracking error:', trackErr.message);
+                // Continue without real-time tracking
+            }
+        }
+
+        res.json({ 
+            success: true, 
+            order: order.toObject(),
+            tracking: trackingData
+        });
+    } catch (error) {
+        console.error('Error tracking order:', error);
         res.status(500).json({ success: false, error: 'Internal Server Error' });
     }
 });

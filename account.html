@@ -4,202 +4,872 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>My Account | RestNest</title>
+<meta name="description" content="Manage your RestNest account — view order history, track shipments, and update your profile."/>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Great+Vibes&family=Inter:wght@300;400;500;600&family=Pinyon+Script&display=swap" rel="stylesheet"/>
 <link href="styles.css?v=20" rel="stylesheet"/>
 <style>
+    /* ============================================
+       ACCOUNT PAGE — Premium Dashboard
+       ============================================ */
+
     .account-container {
-        padding: 150px 5% 50px 5%;
-        max-width: 1200px;
+        padding: 120px 5% 60px 5%;
+        max-width: 1100px;
         margin: 0 auto;
-        min-height: 80vh;
+        min-height: 85vh;
     }
+
+    /* ----- Auth & Dashboard Sections ----- */
     .auth-section, .dashboard-section {
         display: none;
-        background: rgba(255, 255, 255, 0.7);
-        backdrop-filter: blur(10px);
-        padding: 2rem;
-        border-radius: 12px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
     }
     .active-section {
         display: block;
+        animation: fadeUp 0.5s ease;
     }
-    .auth-box {
-        max-width: 400px;
+    @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(16px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ============================================
+       AUTH SECTION
+       ============================================ */
+    .auth-card {
+        max-width: 440px;
         margin: 0 auto;
-        text-align: center;
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(0, 0, 0, 0.06);
+        border-radius: 20px;
+        padding: 2.5rem 2rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
     }
-    .auth-box h2 {
+    .auth-card h2 {
         font-family: 'Cormorant Garamond', serif;
         font-size: 2.5rem;
+        font-weight: 400;
+        text-align: center;
+        margin-bottom: 0.3rem;
+        color: #4B3621;
+    }
+    .auth-subtitle {
+        text-align: center;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.85rem;
+        color: #7a5c40;
+        margin-bottom: 1.8rem;
+    }
+
+    /* OAuth Buttons */
+    .oauth-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
         margin-bottom: 1.5rem;
+    }
+    .oauth-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border-radius: 10px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: all 0.25s ease;
+        background: rgba(255, 255, 255, 0.6);
         color: #333;
     }
+    .oauth-btn:hover {
+        background: rgba(255, 255, 255, 0.85);
+        border-color: rgba(0, 0, 0, 0.15);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    }
+    .oauth-btn svg {
+        flex-shrink: 0;
+    }
+    .oauth-btn--google {
+        background: rgba(255, 255, 255, 0.95);
+        color: #3c4043;
+        border-color: rgba(0, 0, 0, 0.08);
+    }
+    .oauth-btn--google:hover {
+        background: #fff;
+        border-color: rgba(0, 0, 0, 0.15);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    }
+    .oauth-btn--apple {
+        background: #000;
+        color: #fff;
+        border-color: rgba(255, 255, 255, 0.15);
+    }
+    .oauth-btn--apple:hover {
+        background: #1a1a1a;
+        border-color: rgba(255, 255, 255, 0.25);
+    }
+
+    /* Divider */
+    .auth-divider {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 1.5rem;
+    }
+    .auth-divider::before, .auth-divider::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: rgba(0, 0, 0, 0.1);
+    }
+    .auth-divider span {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.75rem;
+        color: #999;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        white-space: nowrap;
+    }
+
+    /* Form Inputs */
     .input-group {
         margin-bottom: 1rem;
         text-align: left;
     }
     .input-group label {
         display: block;
-        margin-bottom: 0.5rem;
+        margin-bottom: 6px;
         font-family: 'Inter', sans-serif;
-        font-size: 0.9rem;
+        font-size: 0.8rem;
         color: #4B3621;
         font-weight: 600;
+        letter-spacing: 0.3px;
     }
     .input-group input {
         width: 100%;
-        padding: 0.75rem;
-        border: 1px solid #ddd;
-        border-radius: 6px;
+        padding: 0.75rem 0.9rem;
+        border: 1px solid rgba(0, 0, 0, 0.12);
+        border-radius: 8px;
         font-family: 'Inter', sans-serif;
-        transition: border-color 0.3s ease, background 0.3s ease;
+        font-size: 0.9rem;
+        background: rgba(255, 255, 255, 0.5);
+        color: #222;
+        transition: all 0.3s ease;
+        outline: none;
     }
-    .input-group input:invalid:not(:placeholder-shown) {
-        border-color: #ffcccc;
-        background: rgba(255, 235, 238, 0.6);
+    .input-group input::placeholder {
+        color: #aaa;
     }
-    .input-group input:valid:not(:placeholder-shown) {
-        border-color: #c8e6c9;
-        background: rgba(232, 245, 233, 0.6);
+    .input-group input:focus {
+        border-color: #A67C52;
+        background: #fff;
+        box-shadow: 0 0 0 3px rgba(166, 124, 82, 0.1);
     }
+
     .btn-primary {
         width: 100%;
         padding: 0.8rem;
-        background-color: #A67C52;
+        background: linear-gradient(135deg, #A67C52, #c4a173);
         color: white;
         border: none;
-        border-radius: 6px;
+        border-radius: 10px;
         cursor: pointer;
         font-family: 'Inter', sans-serif;
-        font-weight: 500;
-        transition: background 0.3s ease;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        letter-spacing: 0.3px;
     }
     .btn-primary:hover {
-        background-color: #8c6844;
+        background: linear-gradient(135deg, #8c6844, #A67C52);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 16px rgba(166, 124, 82, 0.3);
     }
-    .btn-secondary {
-        width: 100%;
-        padding: 0.8rem;
-        background-color: #fff;
-        color: #333;
-        border: 1px solid #ddd;
-        border-radius: 6px;
-        cursor: pointer;
-        font-family: 'Inter', sans-serif;
-        font-weight: 500;
-        margin-top: 10px;
+    .btn-primary:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
     }
+
     .toggle-auth {
-        margin-top: 1rem;
-        font-size: 0.9rem;
+        margin-top: 1.2rem;
+        font-size: 0.85rem;
         cursor: pointer;
         color: #A67C52;
-        text-decoration: underline;
-    }
-    .dashboard-grid {
-        display: grid;
-        grid-template-columns: 1fr 2fr;
-        gap: 2rem;
-    }
-    .profile-card, .orders-card {
-        background: #fff;
-        padding: 1.5rem;
-        border-radius: 8px;
-        border: 1px solid #eee;
-    }
-    .profile-card h3, .orders-card h3 {
-        font-family: 'Cormorant Garamond', serif;
-        font-size: 1.8rem;
-        margin-bottom: 1rem;
-        border-bottom: 1px solid #eee;
-        padding-bottom: 0.5rem;
-    }
-    .order-item {
-        padding: 1rem 0;
-        border-bottom: 1px solid #eee;
-    }
-    .order-item:last-child {
-        border-bottom: none;
-    }
-    .order-header {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 0.5rem;
-    }
-    .order-status {
-        background: #eee;
-        padding: 0.2rem 0.5rem;
-        border-radius: 4px;
-        font-size: 0.8rem;
-        font-weight: 500;
-    }
-    .btn-logout {
-        background: transparent;
-        border: 1px solid #A67C52;
-        color: #A67C52;
-        padding: 0.5rem 1rem;
-        border-radius: 4px;
-        cursor: pointer;
+        text-decoration: none;
+        text-align: center;
+        display: block;
         font-family: 'Inter', sans-serif;
-        margin-top: 1rem;
+        transition: color 0.2s;
     }
+    .toggle-auth:hover {
+        color: #4B3621;
+    }
+
     /* ----- Status Messages ----- */
     .status-msg {
         display: none;
-        padding: 0.85rem 1rem;
-        margin-bottom: 1.25rem;
-        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        margin-bottom: 1rem;
+        border-radius: 10px;
         text-align: center;
         font-weight: 500;
-        font-size: 0.9rem;
-        animation: status-in 0.35s ease;
+        font-size: 0.85rem;
+        animation: fadeUp 0.3s ease;
         font-family: 'Inter', sans-serif;
     }
-    @keyframes status-in {
-        from { opacity: 0; transform: translateY(-8px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
     .status-success {
-        background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
-        color: #2e7d32;
-        border: 1px solid #c8e6c9;
+        background: rgba(46, 125, 50, 0.12);
+        color: #66bb6a;
+        border: 1px solid rgba(46, 125, 50, 0.2);
     }
     .status-error {
-        background: linear-gradient(135deg, #ffebee, #fce4ec);
-        color: #c62828;
-        border: 1px solid #ffcdd2;
+        background: rgba(198, 40, 40, 0.12);
+        color: #ef5350;
+        border: 1px solid rgba(198, 40, 40, 0.2);
     }
     .status-loading {
-        background: linear-gradient(135deg, #e3f2fd, #e8eaf6);
-        color: #1565c0;
-        border: 1px solid #bbdefb;
+        background: rgba(21, 101, 192, 0.12);
+        color: #42a5f5;
+        border: 1px solid rgba(21, 101, 192, 0.2);
     }
-    
+
+    /* ============================================
+       DASHBOARD SECTION
+       ============================================ */
+
+    /* Welcome Header */
+    .dash-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+    .dash-header h1 {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 2.2rem;
+        font-weight: 300;
+        color: #e5c599;
+    }
+    .dash-header h1 span {
+        color: rgba(255, 255, 255, 0.85);
+    }
+    .btn-logout {
+        background: transparent;
+        border: 1px solid rgba(229, 197, 153, 0.3);
+        color: #e5c599;
+        padding: 0.5rem 1.2rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.8rem;
+        font-weight: 500;
+        transition: all 0.25s ease;
+        letter-spacing: 0.5px;
+    }
+    .btn-logout:hover {
+        background: rgba(229, 197, 153, 0.1);
+        border-color: #e5c599;
+    }
+
+    /* Tabs */
+    .dash-tabs {
+        display: flex;
+        gap: 4px;
+        margin-bottom: 2rem;
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: 14px;
+        padding: 4px;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        overflow-x: auto;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+    .dash-tabs::-webkit-scrollbar { display: none; }
+    .dash-tab {
+        flex: 1;
+        min-width: max-content;
+        padding: 0.7rem 1.2rem;
+        background: transparent;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.45);
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        white-space: nowrap;
+    }
+    .dash-tab:hover {
+        color: rgba(255, 255, 255, 0.7);
+        background: rgba(255, 255, 255, 0.04);
+    }
+    .dash-tab.active {
+        background: rgba(229, 197, 153, 0.12);
+        color: #e5c599;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+    .dash-tab svg {
+        width: 16px;
+        height: 16px;
+        stroke: currentColor;
+        fill: none;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+
+    /* Tab Panels */
+    .tab-panel {
+        display: none;
+        animation: fadeUp 0.35s ease;
+    }
+    .tab-panel.active {
+        display: block;
+    }
+
+    /* ---- Overview Tab ---- */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+    .stat-card {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 14px;
+        padding: 1.3rem;
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+    .stat-card:hover {
+        border-color: rgba(229, 197, 153, 0.15);
+        background: rgba(255, 255, 255, 0.06);
+        transform: translateY(-2px);
+    }
+    .stat-value {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 2rem;
+        font-weight: 600;
+        color: #e5c599;
+        display: block;
+    }
+    .stat-label {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.4);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-top: 4px;
+    }
+
+    .section-title {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 1.4rem;
+        font-weight: 400;
+        color: rgba(255, 255, 255, 0.8);
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    /* ---- Order Cards ---- */
+    .order-card {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 14px;
+        padding: 1.2rem 1.4rem;
+        margin-bottom: 0.8rem;
+        transition: all 0.25s ease;
+        cursor: default;
+    }
+    .order-card:hover {
+        border-color: rgba(229, 197, 153, 0.12);
+        background: rgba(255, 255, 255, 0.06);
+    }
+    .order-card__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.6rem;
+    }
+    .order-card__id {
+        font-family: 'Inter', sans-serif;
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.85);
+    }
+    .order-card__date {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.35);
+    }
+    .order-card__body {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .order-card__amount {
+        font-family: 'Inter', sans-serif;
+        font-weight: 600;
+        font-size: 1rem;
+        color: #e5c599;
+    }
+    .order-card__items {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.4);
+        margin-top: 0.4rem;
+        line-height: 1.5;
+    }
+
+    /* Status Badges */
+    .status-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.7rem;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+    }
+    .status-badge--placed {
+        background: rgba(255, 183, 77, 0.12);
+        color: #ffb74d;
+        border: 1px solid rgba(255, 183, 77, 0.2);
+    }
+    .status-badge--processing {
+        background: rgba(66, 165, 245, 0.12);
+        color: #42a5f5;
+        border: 1px solid rgba(66, 165, 245, 0.2);
+    }
+    .status-badge--shipped {
+        background: rgba(171, 71, 188, 0.12);
+        color: #ce93d8;
+        border: 1px solid rgba(171, 71, 188, 0.2);
+    }
+    .status-badge--delivered {
+        background: rgba(102, 187, 106, 0.12);
+        color: #66bb6a;
+        border: 1px solid rgba(102, 187, 106, 0.2);
+    }
+    .status-badge--cancelled {
+        background: rgba(239, 83, 80, 0.12);
+        color: #ef5350;
+        border: 1px solid rgba(239, 83, 80, 0.2);
+    }
+
+    /* ---- Orders Tab ---- */
+    .orders-toolbar {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 1.2rem;
+        align-items: center;
+    }
+    .orders-search {
+        flex: 1;
+        padding: 0.65rem 1rem;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 10px;
+        color: #fff;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.85rem;
+        outline: none;
+        transition: all 0.3s ease;
+    }
+    .orders-search::placeholder {
+        color: rgba(255, 255, 255, 0.25);
+    }
+    .orders-search:focus {
+        border-color: rgba(229, 197, 153, 0.3);
+        background: rgba(229, 197, 153, 0.04);
+    }
+    .orders-filter {
+        padding: 0.65rem 1rem;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 10px;
+        color: rgba(255, 255, 255, 0.7);
+        font-family: 'Inter', sans-serif;
+        font-size: 0.85rem;
+        cursor: pointer;
+        outline: none;
+        appearance: none;
+        -webkit-appearance: none;
+    }
+    .orders-filter option {
+        background: #1a2e25;
+        color: #fff;
+    }
+
+    .orders-empty {
+        text-align: center;
+        padding: 3rem 1rem;
+        color: rgba(255, 255, 255, 0.35);
+        font-family: 'Inter', sans-serif;
+    }
+    .orders-empty svg {
+        width: 48px;
+        height: 48px;
+        stroke: rgba(255, 255, 255, 0.15);
+        margin-bottom: 1rem;
+    }
+    .orders-empty p {
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+    }
+
+    /* ---- Track Tab ---- */
+    .track-lookup {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 14px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    .track-lookup label {
+        display: block;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.5);
+        margin-bottom: 8px;
+        font-weight: 500;
+    }
+    .track-lookup__row {
+        display: flex;
+        gap: 10px;
+    }
+    .track-lookup input {
+        flex: 1;
+        padding: 0.7rem 1rem;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        color: #fff;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.9rem;
+        outline: none;
+        transition: all 0.3s ease;
+    }
+    .track-lookup input::placeholder {
+        color: rgba(255, 255, 255, 0.25);
+    }
+    .track-lookup input:focus {
+        border-color: #e5c599;
+    }
+    .btn-track {
+        padding: 0.7rem 1.5rem;
+        background: linear-gradient(135deg, #A67C52, #c4a173);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-family: 'Inter', sans-serif;
+        font-weight: 600;
+        font-size: 0.85rem;
+        transition: all 0.25s ease;
+        white-space: nowrap;
+    }
+    .btn-track:hover {
+        background: linear-gradient(135deg, #8c6844, #A67C52);
+        transform: translateY(-1px);
+    }
+
+    /* Tracking Timeline */
+    .tracking-result {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 14px;
+        padding: 1.5rem;
+        display: none;
+        animation: fadeUp 0.4s ease;
+    }
+    .tracking-result.visible {
+        display: block;
+    }
+    .tracking-result__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .tracking-result__order-id {
+        font-family: 'Inter', sans-serif;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.85);
+    }
+    .tracking-result__awb {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.4);
+    }
+    .tracking-result__awb a {
+        color: #e5c599;
+        text-decoration: none;
+    }
+    .tracking-result__awb a:hover {
+        text-decoration: underline;
+    }
+
+    .timeline {
+        position: relative;
+        padding-left: 32px;
+    }
+    .timeline::before {
+        content: '';
+        position: absolute;
+        left: 11px;
+        top: 8px;
+        bottom: 8px;
+        width: 2px;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 2px;
+    }
+    .timeline-step {
+        position: relative;
+        padding-bottom: 1.5rem;
+    }
+    .timeline-step:last-child {
+        padding-bottom: 0;
+    }
+    .timeline-step__dot {
+        position: absolute;
+        left: -32px;
+        top: 2px;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.06);
+        border: 2px solid rgba(255, 255, 255, 0.12);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1;
+        transition: all 0.3s ease;
+    }
+    .timeline-step__dot svg {
+        width: 12px;
+        height: 12px;
+        stroke: rgba(255, 255, 255, 0.25);
+        fill: none;
+        stroke-width: 2.5;
+        display: none;
+    }
+    .timeline-step.completed .timeline-step__dot {
+        background: rgba(102, 187, 106, 0.15);
+        border-color: #66bb6a;
+    }
+    .timeline-step.completed .timeline-step__dot svg {
+        display: block;
+        stroke: #66bb6a;
+    }
+    .timeline-step.current .timeline-step__dot {
+        background: rgba(229, 197, 153, 0.15);
+        border-color: #e5c599;
+        box-shadow: 0 0 12px rgba(229, 197, 153, 0.2);
+        animation: pulse-dot 2s infinite;
+    }
+    @keyframes pulse-dot {
+        0%, 100% { box-shadow: 0 0 8px rgba(229, 197, 153, 0.15); }
+        50% { box-shadow: 0 0 16px rgba(229, 197, 153, 0.35); }
+    }
+    .timeline-step.current .timeline-step__dot svg {
+        display: block;
+        stroke: #e5c599;
+    }
+    .timeline-step__title {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.5);
+        margin-bottom: 2px;
+    }
+    .timeline-step.completed .timeline-step__title,
+    .timeline-step.current .timeline-step__title {
+        color: rgba(255, 255, 255, 0.85);
+    }
+    .timeline-step__time {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.3);
+    }
+
+    /* Active orders list in track tab */
+    .active-orders-title {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.4);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 0.8rem;
+        margin-top: 1.5rem;
+    }
+    .active-order-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 0.5rem 1rem;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 10px;
+        margin-right: 8px;
+        margin-bottom: 8px;
+        cursor: pointer;
+        transition: all 0.25s ease;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.7);
+    }
+    .active-order-chip:hover {
+        border-color: rgba(229, 197, 153, 0.2);
+        background: rgba(229, 197, 153, 0.06);
+        color: #e5c599;
+    }
+
+    /* ---- Profile Tab ---- */
+    .profile-card {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 14px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    .profile-card h3 {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 1.4rem;
+        font-weight: 400;
+        color: rgba(255, 255, 255, 0.8);
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
     .profile-form-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 1rem;
     }
+    .profile-email-display {
+        padding: 0.75rem 0.9rem;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 8px;
+        color: rgba(255, 255, 255, 0.5);
+        font-family: 'Inter', sans-serif;
+        font-size: 0.9rem;
+    }
+    .btn-save {
+        padding: 0.7rem 2rem;
+        background: linear-gradient(135deg, #A67C52, #c4a173);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-family: 'Inter', sans-serif;
+        font-weight: 600;
+        font-size: 0.85rem;
+        transition: all 0.25s ease;
+        margin-top: 0.5rem;
+    }
+    .btn-save:hover {
+        background: linear-gradient(135deg, #8c6844, #A67C52);
+        transform: translateY(-1px);
+    }
+
+    /* ----- Responsive ----- */
     @media (max-width: 768px) {
-        .dashboard-grid {
+        .account-container {
+            padding: 100px 4% 40px 4%;
+        }
+        .auth-card {
+            padding: 2rem 1.5rem;
+        }
+        .stats-grid {
             grid-template-columns: 1fr;
         }
         .profile-form-grid {
             grid-template-columns: 1fr;
         }
+        .dash-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.8rem;
+        }
+        .dash-header h1 {
+            font-size: 1.8rem;
+        }
+        .order-card__body {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+        .track-lookup__row {
+            flex-direction: column;
+        }
+        .tracking-result__header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+    }
+
+    /* Password toggle */
+    .password-wrapper {
+        position: relative;
+    }
+    .password-wrapper input {
+        width: 100%;
+        padding-right: 44px;
+    }
+    .password-toggle {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 1.1rem;
+        padding: 0;
+        line-height: 1;
+        opacity: 0.5;
+        transition: opacity 0.2s;
+    }
+    .password-toggle:hover {
+        opacity: 0.8;
+    }
+
+    /* Name group (signup) */
+    .name-row {
+        display: none;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+    .name-row.visible {
+        display: grid;
     }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body class="page-account">
 
-    
-    
-    
-    
     <!-- Simple Page Loader -->
     <style>
         .page-loader-overlay {
@@ -248,7 +918,7 @@
             width: 100%;
             height: 400px;
             background: #FAF9F6;
-            top: 164px; /* exact vertical center of the hole */
+            top: 164px;
             left: 0;
             z-index: 14;
         }
@@ -322,12 +992,10 @@
                 opacity: 1;
             }
             30% {
-                /* Hover perfectly vertical over the hole */
                 transform: translate(85px, -10px) rotate(90deg);
                 opacity: 1;
             }
             40% {
-                /* Drop straight down into the hole */
                 transform: translate(85px, 150px) rotate(90deg);
                 opacity: 1;
             }
@@ -366,7 +1034,7 @@
             var loaderTimeout = setTimeout(function() {
                 var loader = document.getElementById('page-loader');
                 if (loader) loader.classList.add('active');
-            }, 500); // 500ms threshold for fast connections
+            }, 500);
 
             window.addEventListener('load', function() {
                 clearTimeout(loaderTimeout);
@@ -378,7 +1046,7 @@
 
 <div aria-hidden="true" class="bg-texture"></div>
 
-<!-- Navigation (Same as index) -->
+<!-- Navigation -->
 <nav class="pill-nav" id="pill-nav">
     <div class="pill-nav__inner">
         <ul class="pill-nav__list">
@@ -413,13 +1081,42 @@
 </nav>
 
 <div class="account-container">
-    <!-- Auth Section -->
+
+    <!-- ============================
+         AUTH SECTION (Logged Out)
+         ============================ -->
     <div id="auth-section" class="auth-section active-section">
-        <div class="auth-box">
-            <h2 id="auth-title">Sign In</h2>
+        <div class="auth-card">
+            <h2 id="auth-title">Welcome Back</h2>
+            <p class="auth-subtitle" id="auth-subtitle">Sign in to your RestNest account</p>
+
             <div id="auth-status" class="status-msg"></div>
+
+            <!-- OAuth Buttons -->
+            <div class="oauth-buttons">
+                <button type="button" class="oauth-btn oauth-btn--google" id="google-login">
+                    <svg width="18" height="18" viewBox="0 0 48 48">
+                        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+                        <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+                        <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+                        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+                    </svg>
+                    Continue with Google
+                </button>
+                <button type="button" class="oauth-btn oauth-btn--apple" id="apple-login">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff">
+                        <path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
+                    </svg>
+                    Continue with Apple
+                </button>
+            </div>
+
+            <div class="auth-divider">
+                <span>or continue with email</span>
+            </div>
+
             <form id="auth-form">
-                <div class="input-group" id="name-group" style="display: none; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div class="input-group name-row" id="name-group">
                     <div>
                         <label for="signup-fname">First Name</label>
                         <input type="text" id="signup-fname" placeholder="First name">
@@ -430,107 +1127,203 @@
                     </div>
                 </div>
                 <div class="input-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" required placeholder="your@email.com">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" required placeholder="you@example.com">
                 </div>
                 <div class="input-group" id="password-group">
                     <label for="password">Password</label>
-                    <div style="position: relative;">
-                        <input type="password" id="password" required placeholder="••••••••" style="width: 100%; padding-right: 40px;">
-                        <button type="button" id="toggle-password" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 1.1rem; padding: 0;" aria-label="Toggle password visibility">👁️</button>
+                    <div class="password-wrapper">
+                        <input type="password" id="password" required placeholder="••••••••">
+                        <button type="button" id="toggle-password" class="password-toggle" aria-label="Toggle password visibility">👁️</button>
                     </div>
                 </div>
-                
+
                 <!-- Anti-Bot Honeypot -->
                 <div class="input-group" aria-hidden="true" style="opacity: 0; position: absolute; top: 0; left: -9999px; z-index: -1;">
                     <label for="honeypot">Leave this field empty</label>
                     <input type="text" id="honeypot" name="honeypot" autocomplete="off" tabindex="-1">
                 </div>
+
                 <button type="submit" class="btn-primary" id="auth-btn">Sign In</button>
-                <button type="button" class="btn-secondary" id="google-login">Sign in with Google</button>
-                <button type="button" class="btn-secondary" id="apple-login" style="margin-top: 10px; background-color: #000; color: #fff; border-color: #000;">Sign in with Apple</button>
             </form>
             <div class="toggle-auth" id="toggle-auth">Need an account? Sign Up</div>
         </div>
     </div>
 
-    <!-- Dashboard Section -->
+    <!-- ============================
+         DASHBOARD SECTION (Logged In)
+         ============================ -->
     <div id="dashboard-section" class="dashboard-section">
-        <div class="dashboard-grid">
+
+        <!-- Header -->
+        <div class="dash-header">
+            <h1>Welcome, <span id="user-display-name">there</span></h1>
+            <button class="btn-logout" id="logout-btn">SIGN OUT</button>
+        </div>
+
+        <!-- Tabs -->
+        <div class="dash-tabs" id="dash-tabs">
+            <button class="dash-tab active" data-tab="overview">
+                <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                Overview
+            </button>
+            <button class="dash-tab" data-tab="orders">
+                <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                My Orders
+            </button>
+            <button class="dash-tab" data-tab="track">
+                <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                Track Order
+            </button>
+            <button class="dash-tab" data-tab="profile">
+                <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                Profile
+            </button>
+        </div>
+
+        <!-- ===== OVERVIEW TAB ===== -->
+        <div class="tab-panel active" id="panel-overview">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-value" id="stat-total-orders">0</span>
+                    <span class="stat-label">Total Orders</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="stat-active-orders">0</span>
+                    <span class="stat-label">Active Orders</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="stat-total-spent">₹0</span>
+                    <span class="stat-label">Total Spent</span>
+                </div>
+            </div>
+            <h3 class="section-title">Recent Orders</h3>
+            <div id="recent-orders-list">
+                <div class="orders-empty">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                    <p>No orders yet</p>
+                    <p style="font-size: 0.8rem;">Your recent orders will appear here</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== ORDERS TAB ===== -->
+        <div class="tab-panel" id="panel-orders">
+            <div class="orders-toolbar">
+                <input type="text" class="orders-search" id="orders-search" placeholder="Search by order ID...">
+                <select class="orders-filter" id="orders-filter">
+                    <option value="all">All Status</option>
+                    <option value="Placed">Placed</option>
+                    <option value="Processing">Processing</option>
+                    <option value="Shipped">Shipped</option>
+                    <option value="Delivered">Delivered</option>
+                    <option value="Cancelled">Cancelled</option>
+                </select>
+            </div>
+            <div id="all-orders-list">
+                <div class="orders-empty">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                    <p>No orders found</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== TRACK TAB ===== -->
+        <div class="tab-panel" id="panel-track">
+            <div class="track-lookup">
+                <label for="track-order-input">Enter your Order ID or AWB number</label>
+                <div class="track-lookup__row">
+                    <input type="text" id="track-order-input" placeholder="e.g. ORD123456 or AWB number">
+                    <button class="btn-track" id="track-btn">Track</button>
+                </div>
+            </div>
+
+            <div class="tracking-result" id="tracking-result">
+                <div class="tracking-result__header">
+                    <div>
+                        <div class="tracking-result__order-id" id="track-display-id"></div>
+                        <div class="tracking-result__awb" id="track-display-awb"></div>
+                    </div>
+                    <div id="track-display-status"></div>
+                </div>
+                <div class="timeline" id="tracking-timeline"></div>
+            </div>
+
+            <div id="active-orders-section">
+                <div class="active-orders-title">Your Active Orders</div>
+                <div id="active-orders-chips"></div>
+            </div>
+        </div>
+
+        <!-- ===== PROFILE TAB ===== -->
+        <div class="tab-panel" id="panel-profile">
             <div class="profile-card">
-                <h3>My Profile</h3>
+                <h3>Personal Information</h3>
                 <div id="profile-status" class="status-msg"></div>
                 <form id="profile-form">
                     <div class="input-group">
                         <label>Email Address</label>
-                        <div id="user-email" style="padding: 0.75rem; background: #f9f9f9; border: 1px solid #ddd; border-radius: 6px; margin-bottom: 1rem; color: #666; font-family: 'Inter', sans-serif;"></div>
+                        <div class="profile-email-display" id="user-email"></div>
                     </div>
                     <div class="profile-form-grid">
                         <div class="input-group">
-                            <label>First Name</label>
+                            <label for="prof-fname">First Name</label>
                             <input type="text" id="prof-fname" placeholder="First name">
                         </div>
                         <div class="input-group">
-                            <label>Last Name</label>
+                            <label for="prof-lname">Last Name</label>
                             <input type="text" id="prof-lname" placeholder="Last name">
                         </div>
                     </div>
                     <div class="input-group">
-                        <label>Phone Number</label>
+                        <label for="prof-phone">Phone Number</label>
                         <input type="tel" id="prof-phone" placeholder="Enter your phone number">
                     </div>
-                    <button type="submit" class="btn-primary" style="margin-bottom: 10px;">Save Changes</button>
+                    <button type="submit" class="btn-save">Save Changes</button>
                 </form>
-                <button class="btn-secondary" id="logout-btn" style="border-color: #A67C52; color: #A67C52;">Sign Out</button>
-            </div>
-            <div class="orders-card">
-                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; margin-bottom: 1rem; padding-bottom: 0.5rem;">
-                    <h3 style="border: none; margin: 0; padding: 0;">Order History</h3>
-                    <button id="view-all-orders-btn" class="btn-secondary" style="width: auto; margin: 0; padding: 0.4rem 0.8rem; font-size: 0.8rem; display: none;">See All Orders</button>
-                </div>
-                <div id="orders-list">
-                    <p>Loading orders...</p>
-                </div>
             </div>
         </div>
     </div>
 </div>
 
 <script>
+    // ============================================
+    // RestNest Account — Dashboard Logic
+    // ============================================
+
+    const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+        ? 'http://localhost:3000/api'
+        : 'https://restienestie.onrender.com/api';
+
     let supabaseClient = null;
     let isLogin = true;
     let currentUser = null;
     let currentSession = null;
+    let allOrders = [];
 
     const authSection = document.getElementById('auth-section');
     const dashboardSection = document.getElementById('dashboard-section');
     const authForm = document.getElementById('auth-form');
     const toggleAuth = document.getElementById('toggle-auth');
     const authTitle = document.getElementById('auth-title');
+    const authSubtitle = document.getElementById('auth-subtitle');
     const authBtn = document.getElementById('auth-btn');
 
+    // ---- Init ----
     async function initApp() {
-        const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
-            ? 'http://localhost:3000/api' 
-            : 'https://restienestie.onrender.com/api';
         try {
             const res = await fetch(`${API_BASE}/public-config`);
             const config = await res.json();
             supabaseClient = window.supabase.createClient(config.SUPABASE_URL, config.SUPABASE_ANON_KEY);
-            
-            // Check Auth State
+
+            // Check existing session
             supabaseClient.auth.getSession().then(({ data: { session } }) => {
-                if (session) {
-                    handleSession(session);
-                }
+                if (session) handleSession(session);
             });
 
             supabaseClient.auth.onAuthStateChange((event, session) => {
-                if (event === 'SIGNED_IN') {
-                    handleSession(session);
-                } else if (event === 'SIGNED_OUT') {
-                    handleSession(null);
-                }
+                if (event === 'SIGNED_IN') handleSession(session);
+                else if (event === 'SIGNED_OUT') handleSession(null);
             });
         } catch(e) {
             console.error('Failed to load config', e);
@@ -538,6 +1331,7 @@
     }
     initApp();
 
+    // ---- Password Toggle ----
     document.getElementById('toggle-password').addEventListener('click', () => {
         const passInput = document.getElementById('password');
         const isPass = passInput.type === 'password';
@@ -545,76 +1339,82 @@
         document.getElementById('toggle-password').textContent = isPass ? '🙈' : '👁️';
     });
 
+    // ---- Status Messages ----
     function showAuthStatus(message, type) {
         const statusEl = document.getElementById('auth-status');
         statusEl.textContent = message;
         statusEl.className = `status-msg status-${type}`;
         statusEl.style.display = 'block';
     }
-
     function showProfileStatus(message, type) {
         const statusEl = document.getElementById('profile-status');
         if (!statusEl) return;
         statusEl.textContent = message;
         statusEl.className = `status-msg status-${type}`;
         statusEl.style.display = 'block';
-        setTimeout(() => {
-            statusEl.style.display = 'none';
-        }, 5000);
+        setTimeout(() => { statusEl.style.display = 'none'; }, 5000);
     }
 
-    // Auth State and Listeners are now inside initApp
-
+    // ---- Session Handler ----
     function handleSession(session) {
-        if(session) {
-            isLogin = false;
+        if (session) {
             currentUser = session.user;
             currentSession = session;
             authSection.classList.remove('active-section');
             dashboardSection.classList.add('active-section');
-            
-            const accountLink = document.getElementById('account-link');
-            if (accountLink) {
-                accountLink.innerHTML = accountLink.innerHTML.replace('ACCOUNT', 'YOU');
-            }
 
+            // Update nav link
+            const accountLink = document.getElementById('account-link');
+            if (accountLink) accountLink.innerHTML = accountLink.innerHTML.replace('ACCOUNT', 'YOU');
+
+            // Set user display name
+            const displayName = currentUser.user_metadata?.first_name
+                || currentUser.user_metadata?.full_name
+                || currentUser.email?.split('@')[0]
+                || 'there';
+            document.getElementById('user-display-name').textContent = displayName.split(' ')[0];
+
+            // Set email display
+            document.getElementById('user-email').textContent = currentUser.email || '';
+
+            // Load data
             fetchProfile();
             fetchOrders();
         } else {
             currentUser = null;
             currentSession = null;
+            allOrders = [];
             authSection.classList.add('active-section');
             dashboardSection.classList.remove('active-section');
-            
+
             const accountLink = document.getElementById('account-link');
-            if (accountLink) {
-                accountLink.innerHTML = accountLink.innerHTML.replace('YOU', 'ACCOUNT');
-            }
+            if (accountLink) accountLink.innerHTML = accountLink.innerHTML.replace('YOU', 'ACCOUNT');
         }
     }
 
-    // Toggle Login/Signup
+    // ---- Toggle Login/Signup ----
     toggleAuth.addEventListener('click', () => {
         isLogin = !isLogin;
-        authTitle.textContent = isLogin ? 'Sign In' : 'Sign Up';
-        authBtn.textContent = isLogin ? 'Sign In' : 'Sign Up';
+        authTitle.textContent = isLogin ? 'Welcome Back' : 'Create Account';
+        authSubtitle.textContent = isLogin ? 'Sign in to your RestNest account' : 'Join RestNest for a better experience';
+        authBtn.textContent = isLogin ? 'Sign In' : 'Create Account';
         toggleAuth.textContent = isLogin ? 'Need an account? Sign Up' : 'Already have an account? Sign In';
-        document.getElementById('name-group').style.display = isLogin ? 'none' : 'grid';
-        
-        // Hide google/apple login on signup to keep it simple, or leave them. Let's leave them.
-        const statusEl = document.getElementById('auth-status');
-        statusEl.style.display = 'none';
+
+        const nameGroup = document.getElementById('name-group');
+        if (isLogin) nameGroup.classList.remove('visible');
+        else nameGroup.classList.add('visible');
+
+        document.getElementById('auth-status').style.display = 'none';
     });
 
-    // Handle Auth Submit
+    // ---- Auth Form Submit ----
     authForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const statusEl = document.getElementById('auth-status');
-        statusEl.style.display = 'none';
-        
+        document.getElementById('auth-status').style.display = 'none';
+
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
-        
+
         if (!supabaseClient) {
             showAuthStatus('Initializing authentication... please wait', 'loading');
             return;
@@ -622,14 +1422,10 @@
 
         if (!isLogin) {
             const honeypot = document.getElementById('honeypot').value;
-            if (honeypot) {
-                // Bot detected
-                showAuthStatus('Bot detected. Sign up denied.', 'error');
-                return;
-            }
+            if (honeypot) { showAuthStatus('Sign up denied.', 'error'); return; }
         }
 
-        showAuthStatus(isLogin ? 'Signing in...' : 'Signing up...', 'loading');
+        showAuthStatus(isLogin ? 'Signing in...' : 'Creating your account...', 'loading');
 
         let error;
         if (isLogin) {
@@ -640,164 +1436,380 @@
             const fname = document.getElementById('signup-fname').value.trim();
             const lname = document.getElementById('signup-lname').value.trim();
             const first_name = fname + (lname ? ' ' + lname : '');
-            
-            const res = await supabaseClient.auth.signUp({ 
-                email, 
+
+            const res = await supabaseClient.auth.signUp({
+                email,
                 password,
-                options: {
-                    data: {
-                        first_name: first_name
-                    }
-                }
+                options: { data: { first_name } }
             });
             error = res.error;
-            if(!error && res.data.user && !res.data.session) {
+            if (!error && res.data.user && !res.data.session) {
                 showAuthStatus('Please check your email for a confirmation link.', 'success');
                 return;
             } else if (!error) {
-                showAuthStatus('Signed up successfully!', 'success');
+                showAuthStatus('Account created successfully!', 'success');
             }
         }
 
-        if (error) {
-            showAuthStatus(error.message, 'error');
-        }
+        if (error) showAuthStatus(error.message, 'error');
     });
 
-    // Handle Google Login
+    // ---- OAuth Login ----
     document.getElementById('google-login').addEventListener('click', async () => {
+        if (!supabaseClient) { showAuthStatus('Please wait, loading...', 'loading'); return; }
         await supabaseClient.auth.signInWithOAuth({
             provider: 'google',
             options: { redirectTo: window.location.origin + '/account.html' }
         });
     });
-
-    // Handle Apple Login
     document.getElementById('apple-login').addEventListener('click', async () => {
+        if (!supabaseClient) { showAuthStatus('Please wait, loading...', 'loading'); return; }
         await supabaseClient.auth.signInWithOAuth({
             provider: 'apple',
             options: { redirectTo: window.location.origin + '/account.html' }
         });
     });
 
-    // Handle Logout
+    // ---- Logout ----
     document.getElementById('logout-btn').addEventListener('click', async () => {
         await supabaseClient.auth.signOut();
     });
 
-    // Fetch Backend Data
+    // ============================================
+    // TAB NAVIGATION
+    // ============================================
+    document.getElementById('dash-tabs').addEventListener('click', (e) => {
+        const tab = e.target.closest('.dash-tab');
+        if (!tab) return;
+
+        const tabName = tab.dataset.tab;
+
+        // Update active tab
+        document.querySelectorAll('.dash-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+
+        // Update active panel
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        document.getElementById(`panel-${tabName}`).classList.add('active');
+    });
+
+    // ============================================
+    // DATA FETCHING
+    // ============================================
     async function fetchProfile() {
-        if(!currentSession) return;
+        if (!currentSession) return;
         try {
-            const res = await fetch('http://localhost:3000/api/my-profile', {
+            const res = await fetch(`${API_BASE}/my-profile`, {
                 headers: { 'Authorization': `Bearer ${currentSession.access_token}` }
             });
             const data = await res.json();
-            if(data.success && data.profile) {
-                if(data.profile.first_name) {
+            if (data.success && data.profile) {
+                if (data.profile.first_name) {
                     const parts = data.profile.first_name.split(' ');
                     document.getElementById('prof-fname').value = parts[0] || '';
                     document.getElementById('prof-lname').value = parts.slice(1).join(' ') || '';
                 }
                 document.getElementById('prof-phone').value = data.profile.phone || '';
             }
-        } catch(e) { console.error(e); }
+        } catch(e) { console.error('Error fetching profile:', e); }
     }
 
-    let allOrders = [];
-    let showingAll = false;
-
     async function fetchOrders() {
-        if(!currentSession) return;
+        if (!currentSession) return;
         try {
-            const res = await fetch('http://localhost:3000/api/my-orders', {
+            const res = await fetch(`${API_BASE}/my-orders`, {
                 headers: { 'Authorization': `Bearer ${currentSession.access_token}` }
             });
             const data = await res.json();
-            if(data.success && data.orders) {
-                allOrders = data.orders.sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
-                renderOrders();
+            if (data.success && data.orders) {
+                allOrders = data.orders.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                renderOverview();
+                renderAllOrders();
+                renderActiveOrderChips();
             }
-        } catch(e) { console.error(e); }
+        } catch(e) { console.error('Error fetching orders:', e); }
     }
 
-    function renderOrders() {
-        const list = document.getElementById('orders-list');
-        const btn = document.getElementById('view-all-orders-btn');
-        if(allOrders.length === 0) {
-            list.innerHTML = '<p style="color: #666; font-family: \'Inter\', sans-serif;">You haven\'t placed any orders yet.</p>';
-            btn.style.display = 'none';
+    // ============================================
+    // RENDER: OVERVIEW TAB
+    // ============================================
+    function renderOverview() {
+        // Stats
+        const totalOrders = allOrders.length;
+        const activeOrders = allOrders.filter(o => !['Delivered', 'Cancelled'].includes(o.status)).length;
+        const totalSpent = allOrders.reduce((sum, o) => sum + (o.total_amount || 0), 0);
+
+        document.getElementById('stat-total-orders').textContent = totalOrders;
+        document.getElementById('stat-active-orders').textContent = activeOrders;
+        document.getElementById('stat-total-spent').textContent = '₹' + totalSpent.toLocaleString('en-IN');
+
+        // Recent 3 orders
+        const recentList = document.getElementById('recent-orders-list');
+        if (allOrders.length === 0) {
+            recentList.innerHTML = `
+                <div class="orders-empty">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                    <p>No orders yet</p>
+                    <p style="font-size: 0.8rem;">Start shopping to see your orders here</p>
+                </div>`;
             return;
         }
-        
-        let displayOrders = showingAll ? allOrders : allOrders.slice(0, 5);
-        if (allOrders.length > 5) {
-            btn.style.display = 'block';
-            btn.textContent = showingAll ? 'Show Recent 5' : 'See All Orders';
-        } else {
-            btn.style.display = 'none';
+
+        recentList.innerHTML = allOrders.slice(0, 3).map(o => renderOrderCard(o)).join('');
+    }
+
+    // ============================================
+    // RENDER: ORDERS TAB
+    // ============================================
+    function renderAllOrders(searchTerm = '', statusFilter = 'all') {
+        const list = document.getElementById('all-orders-list');
+        let filtered = allOrders;
+
+        if (searchTerm) {
+            const term = searchTerm.toLowerCase();
+            filtered = filtered.filter(o =>
+                (o.id && o.id.toLowerCase().includes(term)) ||
+                (o.customer_name && o.customer_name.toLowerCase().includes(term))
+            );
+        }
+        if (statusFilter !== 'all') {
+            filtered = filtered.filter(o => o.status === statusFilter);
         }
 
-        list.innerHTML = displayOrders.map(o => `
-            <div class="order-item">
-                <div class="order-header">
-                    <strong style="color: #4B3621; font-family: 'Inter', sans-serif; font-weight: 600;">Order #${o.id.substring(0, 8)}</strong>
-                    <span class="order-status" style="background: ${o.status === 'Shipped' ? '#d4edda' : '#eee'}; color: ${o.status === 'Shipped' ? '#155724' : '#333'};">${o.status || 'Placed'}</span>
+        if (filtered.length === 0) {
+            list.innerHTML = `
+                <div class="orders-empty">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                    <p>${searchTerm || statusFilter !== 'all' ? 'No matching orders found' : 'You haven\'t placed any orders yet'}</p>
+                </div>`;
+            return;
+        }
+
+        list.innerHTML = filtered.map(o => renderOrderCard(o)).join('');
+    }
+
+    function renderOrderCard(o) {
+        const statusClass = getStatusClass(o.status);
+        const date = new Date(o.created_at).toLocaleDateString('en-IN', {
+            day: 'numeric', month: 'short', year: 'numeric'
+        });
+        const orderId = o.id ? o.id.substring(0, 10) : 'N/A';
+
+        let itemsSummary = '';
+        if (o.items) {
+            if (typeof o.items === 'string') {
+                itemsSummary = o.items;
+            } else if (Array.isArray(o.items)) {
+                itemsSummary = o.items.map(i => `${i.name} (×${i.quantity})`).join(', ');
+            }
+        }
+
+        return `
+            <div class="order-card">
+                <div class="order-card__header">
+                    <span class="order-card__id">Order #${orderId}</span>
+                    <span class="status-badge ${statusClass}">${o.status || 'Placed'}</span>
                 </div>
-                <div style="font-size: 0.9rem; color: #666; font-family: 'Inter', sans-serif; line-height: 1.5;">
-                    <div><strong>Date:</strong> ${new Date(o.created_at).toLocaleDateString()}</div>
-                    <div><strong>Total:</strong> ₹${o.total_amount}</div>
+                <div class="order-card__body">
+                    <div>
+                        <span class="order-card__amount">₹${(o.total_amount || 0).toLocaleString('en-IN')}</span>
+                        <span class="order-card__date" style="margin-left: 12px;">${date}</span>
+                    </div>
                 </div>
-            </div>
+                ${itemsSummary ? `<div class="order-card__items">${itemsSummary}</div>` : ''}
+            </div>`;
+    }
+
+    function getStatusClass(status) {
+        const s = (status || 'placed').toLowerCase();
+        if (s === 'placed') return 'status-badge--placed';
+        if (s === 'processing') return 'status-badge--processing';
+        if (s === 'shipped') return 'status-badge--shipped';
+        if (s === 'delivered') return 'status-badge--delivered';
+        if (s === 'cancelled') return 'status-badge--cancelled';
+        return 'status-badge--placed';
+    }
+
+    // Search & Filter
+    document.getElementById('orders-search').addEventListener('input', (e) => {
+        renderAllOrders(e.target.value, document.getElementById('orders-filter').value);
+    });
+    document.getElementById('orders-filter').addEventListener('change', (e) => {
+        renderAllOrders(document.getElementById('orders-search').value, e.target.value);
+    });
+
+    // ============================================
+    // RENDER: TRACK TAB
+    // ============================================
+    function renderActiveOrderChips() {
+        const activeOrders = allOrders.filter(o => !['Delivered', 'Cancelled'].includes(o.status));
+        const container = document.getElementById('active-orders-chips');
+        const section = document.getElementById('active-orders-section');
+
+        if (activeOrders.length === 0) {
+            section.style.display = 'none';
+            return;
+        }
+        section.style.display = 'block';
+        container.innerHTML = activeOrders.map(o => `
+            <span class="active-order-chip" data-order-id="${o.id}" onclick="trackOrderById('${o.id}')">
+                #${o.id.substring(0, 8)} · ${o.status || 'Placed'}
+            </span>
         `).join('');
     }
 
-    document.getElementById('view-all-orders-btn').addEventListener('click', () => {
-        showingAll = !showingAll;
-        renderOrders();
+    // Track button click
+    document.getElementById('track-btn').addEventListener('click', () => {
+        const input = document.getElementById('track-order-input').value.trim();
+        if (!input) return;
+        trackOrderById(input);
+    });
+    document.getElementById('track-order-input').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            document.getElementById('track-btn').click();
+        }
     });
 
-    // Update Profile
+    async function trackOrderById(orderId) {
+        const result = document.getElementById('tracking-result');
+        const trackInput = document.getElementById('track-order-input');
+
+        trackInput.value = orderId;
+
+        // Find order locally first
+        let order = allOrders.find(o => o.id === orderId || o.id.startsWith(orderId));
+
+        if (!order) {
+            // Try fetching from API
+            try {
+                const res = await fetch(`${API_BASE}/track-order/${encodeURIComponent(orderId)}`, {
+                    headers: { 'Authorization': `Bearer ${currentSession.access_token}` }
+                });
+                const data = await res.json();
+                if (data.success) {
+                    order = data.order;
+                }
+            } catch(e) {
+                console.error('Track error:', e);
+            }
+        }
+
+        if (!order) {
+            result.classList.add('visible');
+            document.getElementById('track-display-id').textContent = 'Order not found';
+            document.getElementById('track-display-awb').innerHTML = '';
+            document.getElementById('track-display-status').innerHTML = '';
+            document.getElementById('tracking-timeline').innerHTML =
+                '<p style="color: rgba(255,255,255,0.4); font-family: Inter, sans-serif; font-size: 0.85rem;">No order found with that ID. Please check and try again.</p>';
+            return;
+        }
+
+        // Display tracking info
+        result.classList.add('visible');
+        document.getElementById('track-display-id').textContent = `Order #${order.id.substring(0, 10)}`;
+
+        const awb = order.shiprocket_awb || order.shiprocketAwb;
+        if (awb && awb !== 'Pending') {
+            document.getElementById('track-display-awb').innerHTML =
+                `AWB: <a href="https://shiprocket.co/tracking/${awb}" target="_blank" rel="noopener">${awb} ↗</a>`;
+        } else {
+            document.getElementById('track-display-awb').innerHTML = 'AWB: Awaiting shipment';
+        }
+
+        const statusClass = getStatusClass(order.status);
+        document.getElementById('track-display-status').innerHTML =
+            `<span class="status-badge ${statusClass}">${order.status || 'Placed'}</span>`;
+
+        // Render timeline
+        renderTimeline(order);
+    }
+
+    function renderTimeline(order) {
+        const steps = [
+            { key: 'Placed', title: 'Order Placed', icon: 'check' },
+            { key: 'Processing', title: 'Processing', icon: 'loader' },
+            { key: 'Shipped', title: 'Shipped', icon: 'truck' },
+            { key: 'Out for Delivery', title: 'Out for Delivery', icon: 'map-pin' },
+            { key: 'Delivered', title: 'Delivered', icon: 'home' }
+        ];
+
+        const statusOrder = ['Placed', 'Processing', 'Shipped', 'Out for Delivery', 'Delivered'];
+        const currentIndex = statusOrder.indexOf(order.status || 'Placed');
+
+        const checkIcon = '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>';
+
+        const timeline = document.getElementById('tracking-timeline');
+        const orderDate = new Date(order.created_at);
+
+        timeline.innerHTML = steps.map((step, i) => {
+            let stepClass = '';
+            let timeText = '';
+
+            if (i < currentIndex) {
+                stepClass = 'completed';
+                const stepDate = new Date(orderDate.getTime() + i * 86400000);
+                timeText = stepDate.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+            } else if (i === currentIndex) {
+                stepClass = 'current';
+                timeText = 'Current status';
+            }
+
+            return `
+                <div class="timeline-step ${stepClass}">
+                    <div class="timeline-step__dot">
+                        ${checkIcon}
+                    </div>
+                    <div class="timeline-step__title">${step.title}</div>
+                    ${timeText ? `<div class="timeline-step__time">${timeText}</div>` : ''}
+                </div>
+            `;
+        }).join('');
+    }
+
+    // ============================================
+    // PROFILE TAB
+    // ============================================
     document.getElementById('profile-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const fname = document.getElementById('prof-fname').value.trim();
         const lname = document.getElementById('prof-lname').value.trim();
         const first_name = fname + (lname ? ' ' + lname : '');
         const phone = document.getElementById('prof-phone').value;
-        
+
         showProfileStatus('Saving changes...', 'loading');
 
         try {
-            const res = await fetch('http://localhost:3000/api/my-profile', {
+            const res = await fetch(`${API_BASE}/my-profile`, {
                 method: 'POST',
-                headers: { 
+                headers: {
                     'Authorization': `Bearer ${currentSession.access_token}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ first_name, phone })
             });
-            
+
             if (res.ok) {
                 showProfileStatus('Profile updated successfully!', 'success');
+                // Update welcome name
+                document.getElementById('user-display-name').textContent = fname || 'there';
             } else {
                 showProfileStatus('Failed to update profile.', 'error');
             }
-            
+
             const btn = e.target.querySelector('button[type="submit"]');
             const originalText = btn.textContent;
-            const originalBg = btn.style.backgroundColor;
-            btn.textContent = 'Saved!';
-            btn.style.backgroundColor = '#28a745';
+            btn.textContent = '✓ Saved!';
+            btn.style.background = 'linear-gradient(135deg, #2e7d32, #43a047)';
             setTimeout(() => {
                 btn.textContent = originalText;
-                btn.style.backgroundColor = originalBg;
+                btn.style.background = '';
             }, 2000);
-        } catch(e) { 
-            console.error(e); 
+        } catch(err) {
+            console.error(err);
             showProfileStatus('Network error. Please try again.', 'error');
         }
     });
 </script>
 </body>
 </html>
-
