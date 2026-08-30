@@ -1504,11 +1504,10 @@
     // ============================================
     function updateTabIndicator(activeTabElement) {
         const indicator = document.getElementById('tab-indicator');
-        const container = document.getElementById('dash-tabs');
-        if (!indicator || !activeTabElement || !container) return;
+        if (!indicator || !activeTabElement) return;
         
-        // Use offsetLeft relative to the container for correct position
-        const left = activeTabElement.offsetLeft - container.offsetLeft;
+        // Since dash-tabs is position: relative, offsetLeft is exactly what we need
+        const left = activeTabElement.offsetLeft;
         const width = activeTabElement.offsetWidth;
         
         indicator.style.transform = `translateX(${left}px)`;
