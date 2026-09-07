@@ -1,22 +1,19 @@
 {
     "rest-nest-soft-pillow-pack-of-2-premium-recron-fiber-17x27-inch": {
-        "title": "Rest Nest Soft Pillow Pack Of 2 \u2013 Premium Recron Fiber (17x27 Inch)",
+        "title": "Rest Nest Soft Pillow Pack Of 2 – Premium Recron Fiber (17x27 Inch)",
         "imgUrl": "product-5/31.jpg",
         "salePrice": "Rs. 899.00",
         "originalPrice": "Rs. 1,000.00",
         "discount": "-10%",
         "id": "rest-nest-soft-pillow-pack-of-2-premium-recron-fiber-17x27-inch",
         "category": "Pillow",
-        "description": "Experience unmatched comfort and support with our premium pillow, designed for deeper sleep and a refreshed you.",
-        "sizes": [
-            {
-                "label": "Standard",
-                "desc": "(24\" x 16\")"
-            },
-            {
-                "label": "Queen",
-                "desc": "(28\" x 18\")"
-            }
+        "description": "Crafted with premium Reliance Recron Fiber filling and a soft polycotton outer fabric, this pillow delivers a plush yet supportive sleeping experience. At 1000g per piece, it strikes the perfect balance between softness and firmness for all sleep positions.",
+        "benefits": [
+            "Provides optimal head, neck, and shoulder support",
+            "Lightweight and easy to carry or adjust",
+            "Soft yet firm filling for restful sleep",
+            "Breathable fabric keeps you cool and comfortable",
+            "Durable construction with strong stitched edges"
         ],
         "images": [
             "product-5/31.jpg",
@@ -31,23 +28,20 @@
         "available": true
     },
     "rest-nest-orthopedic-cervical-memory-foam-pillow-white-1-pc": {
-        "title": "Rest Nest Orthopedic Cervical Memory Foam Pillow \u2013 White (1 Pc)",
+        "title": "Rest Nest Orthopedic Cervical Memory Foam Pillow – White (1 Pc)",
         "imgUrl": "product-2/9.jpg",
         "salePrice": "Rs. 899.00",
         "originalPrice": "Rs. 1,000.00",
         "discount": "-10%",
         "id": "rest-nest-orthopedic-cervical-memory-foam-pillow-white-1-pc",
         "category": "Pillow",
-        "description": "Experience unmatched comfort and support with our premium pillow, designed for deeper sleep and a refreshed you.",
-        "sizes": [
-            {
-                "label": "Standard",
-                "desc": "(24\" x 16\")"
-            },
-            {
-                "label": "Queen",
-                "desc": "(28\" x 18\")"
-            }
+        "description": "Designed with high-density memory foam and a contoured cervical shape, this orthopedic pillow cradles your neck and head for proper spinal alignment. Ideal for side and back sleepers seeking therapeutic relief from neck pain and stiffness.",
+        "benefits": [
+            "Ergonomic contour design for cervical spine alignment",
+            "High-density memory foam adapts to your shape",
+            "Reduces neck pain, stiffness, and headaches",
+            "Hypoallergenic and dust-mite resistant",
+            "Removable and washable outer cover"
         ],
         "images": [
             "product-2/9.jpg",
@@ -62,23 +56,20 @@
         "available": true
     },
     "rest-nest-slim-microfiber-pillow-17x27-inch-white-1-pcs": {
-        "title": "Rest Nest Slim Microfiber Pillow \u2013 17x27 Inch, White 1 Pcs",
+        "title": "Rest Nest Slim Microfiber Pillow – 17x27 Inch, White 1 Pcs",
         "imgUrl": "product-3/xd_image.png",
         "salePrice": "Rs. 899.00",
         "originalPrice": "Rs. 1,000.00",
         "discount": "-10%",
         "id": "rest-nest-slim-microfiber-pillow-17x27-inch-white-1-pcs",
         "category": "Pillow",
-        "description": "Experience unmatched comfort and support with our premium pillow, designed for deeper sleep and a refreshed you.",
-        "sizes": [
-            {
-                "label": "Standard",
-                "desc": "(24\" x 16\")"
-            },
-            {
-                "label": "Queen",
-                "desc": "(28\" x 18\")"
-            }
+        "description": "Ultra-slim and feather-light, this microfiber pillow is perfect for stomach sleepers and those who prefer a low-profile pillow. Filled with fine microfiber strands for a silky-smooth feel, it keeps your spine naturally aligned without excessive loft.",
+        "benefits": [
+            "Slim profile ideal for stomach and back sleepers",
+            "Ultra-soft microfiber filling for cloud-like comfort",
+            "Lightweight design at just the right thickness",
+            "Breathable and moisture-wicking fabric",
+            "Machine washable for easy maintenance"
         ],
         "images": [
             "product-3/xd_image.png",
@@ -93,23 +84,20 @@
         "available": true
     },
     "rest-nest-premium-white-glace-cotton-pillows-pack-of-2-800g-each": {
-        "title": "Rest Nest Premium White Glace Cotton Pillows \u2013 Pack Of 2 (800g Each)",
+        "title": "Rest Nest Premium White Glace Cotton Pillows – Pack Of 2 (800g Each)",
         "imgUrl": "product-4/25.jpg",
         "salePrice": "Rs. 899.00",
         "originalPrice": "Rs. 1,000.00",
         "discount": "-10%",
         "id": "rest-nest-premium-white-glace-cotton-pillows-pack-of-2-800g-each",
         "category": "Pillow",
-        "description": "Experience unmatched comfort and support with our premium pillow, designed for deeper sleep and a refreshed you.",
-        "sizes": [
-            {
-                "label": "Standard",
-                "desc": "(24\" x 16\")"
-            },
-            {
-                "label": "Queen",
-                "desc": "(28\" x 18\")"
-            }
+        "description": "Wrapped in premium glace cotton with a smooth, lustrous finish, these 800g pillows offer a luxurious sleeping experience. The high-quality microfiber filling provides medium-firm support that holds its shape night after night.",
+        "benefits": [
+            "Premium glace cotton outer for a silky-smooth touch",
+            "800g optimal weight for balanced support",
+            "Retains shape and loft over extended use",
+            "Breathable fabric keeps you cool and comfortable",
+            "Durable construction with strong stitched edges"
         ],
         "images": [
             "product-4/25.jpg",
@@ -122,46 +110,40 @@
         "available": true
     },
     "rest-nest-contourcare-memory-foam-pillow-orthopedic-support-for-perfect-sleep": {
-        "title": "Rest Nest ContourCare\u2122 Memory Foam Pillow \u2013 Orthopedic Support For Perfect Sleep",
+        "title": "Rest Nest ContourCare™ Memory Foam Pillow – Orthopedic Support For Perfect Sleep",
         "imgUrl": "sold_out.jpg",
         "salePrice": "Rs. 899.00",
         "originalPrice": "Rs. 1,000.00",
         "discount": "-10%",
         "id": "rest-nest-contourcare-memory-foam-pillow-orthopedic-support-for-perfect-sleep",
         "category": "Pillow",
-        "description": "Experience unmatched comfort and support with our premium pillow, designed for deeper sleep and a refreshed you.",
-        "sizes": [
-            {
-                "label": "Standard",
-                "desc": "(24\" x 16\")"
-            },
-            {
-                "label": "Queen",
-                "desc": "(28\" x 18\")"
-            }
+        "description": "The ContourCare™ pillow features advanced memory foam technology that moulds to your unique head and neck contours. Engineered for orthopedic-grade support, it gently cradles pressure points to deliver deeper, uninterrupted sleep.",
+        "benefits": [
+            "Advanced memory foam conforms to your shape",
+            "Orthopedic-grade support for neck and spine",
+            "Pressure-relieving design for pain-free mornings",
+            "Temperature-sensitive foam adapts to body heat",
+            "Premium breathable cover for all-season comfort"
         ],
         "images": [
             "sold_out.jpg"
         ]
     },
     "rest-nest-white-gold-glace-cotton-sleeping-pillows-pack-of-2-lightweight-750g-each": {
-        "title": "Rest Nest White & Gold Glace Cotton Sleeping Pillows \u2013 Pack Of 2 (Lightweight, 750g Each)",
+        "title": "Rest Nest White & Gold Glace Cotton Sleeping Pillows – Pack Of 2 (Lightweight, 750g Each)",
         "imgUrl": "sold_out.jpg",
         "salePrice": "Rs. 899.00",
         "originalPrice": "Rs. 1,000.00",
         "discount": "-10%",
         "id": "rest-nest-white-gold-glace-cotton-sleeping-pillows-pack-of-2-lightweight-750g-each",
         "category": "Pillow",
-        "description": "Experience unmatched comfort and support with our premium pillow, designed for deeper sleep and a refreshed you.",
-        "sizes": [
-            {
-                "label": "Standard",
-                "desc": "(24\" x 16\")"
-            },
-            {
-                "label": "Queen",
-                "desc": "(28\" x 18\")"
-            }
+        "description": "Elegantly designed with a white and gold glace cotton finish, these lightweight 750g pillows combine refined aesthetics with everyday comfort. The soft, breathable fabric and plush microfiber filling make them perfect for a restful night's sleep.",
+        "benefits": [
+            "Elegant white and gold design adds a luxurious touch",
+            "Lightweight 750g for easy handling and adjustment",
+            "Soft microfiber filling for gentle comfort",
+            "Breathable glace cotton keeps you cool all night",
+            "Durable stitching ensures long-lasting performance"
         ],
         "images": [
             "sold_out.jpg"
@@ -185,67 +167,58 @@
         "discount": "-10%",
         "id": "rest-nest-premium-white-sleeping-pillow-glace-cotton-fabric-lightweight-comfortable-pack-of-2",
         "category": "Pillow",
-        "description": "Experience unmatched comfort and support with our premium pillow, designed for deeper sleep and a refreshed you.",
-        "sizes": [
-            {
-                "label": "Standard",
-                "desc": "(24\" x 16\")"
-            },
-            {
-                "label": "Queen",
-                "desc": "(28\" x 18\")"
-            }
+        "description": "Introducing the Super Soft (SS) sleeping pillow — wrapped in soft and durable polycotton outer fabric and filled with Premium Reliance Micro Fiber for a cloud-like feel. Each pillow weighs 1000g and measures 17x27 inches, delivering the ideal combination of plush comfort and dependable support. The white pillow with blue print piping adds a clean, elegant look to any bedroom. Comes as a set of 2 pillows, packaged at 2200g total weight in a 12x13x4 inch package.",
+        "benefits": [
+            "Provides optimal head, neck, and shoulder support",
+            "Lightweight and easy to carry or adjust",
+            "Soft yet firm filling for restful sleep",
+            "Breathable fabric keeps you cool and comfortable",
+            "Durable construction with strong stitched edges"
         ],
         "available": true
     },
     "rest-nest-blue-white-polycotton-pillow-pack-of-2-16x26-inch-light-weight-soft-supportive-filled-with-reliance-recron-fiber": {
-        "title": "Rest Nest Blue & White Polycotton Pillow \u2013 Pack Of 2 (16x26 Inch, Light Weight, Soft & Supportive, Filled With Reliance Recron Fiber)",
+        "title": "Rest Nest Blue & White Polycotton Pillow – Pack Of 2 (16x26 Inch, Light Weight, Soft & Supportive, Filled With Reliance Recron Fiber)",
         "imgUrl": "sold_out.jpg",
         "salePrice": "Rs. 899.00",
         "originalPrice": "Rs. 1,000.00",
         "discount": "-10%",
         "id": "rest-nest-blue-white-polycotton-pillow-pack-of-2-16x26-inch-light-weight-soft-supportive-filled-with-reliance-recron-fiber",
         "category": "Pillow",
-        "description": "Experience unmatched comfort and support with our premium pillow, designed for deeper sleep and a refreshed you.",
-        "sizes": [
-            {
-                "label": "Standard",
-                "desc": "(24\" x 16\")"
-            },
-            {
-                "label": "Queen",
-                "desc": "(28\" x 18\")"
-            }
+        "description": "Vibrant blue and white polycotton pillows filled with genuine Reliance Recron Fiber for lasting bounce and support. At 16x26 inches, these lightweight pillows are designed for everyday comfort, offering a soft, supportive feel that doesn't go flat over time.",
+        "benefits": [
+            "Genuine Reliance Recron Fiber for lasting loft",
+            "Lightweight design for easy daily use",
+            "Soft and supportive with medium firmness",
+            "Polycotton fabric is durable and skin-friendly",
+            "Retains shape and bounce through regular use"
         ],
         "images": [
             "sold_out.jpg"
         ]
     },
     "rest-nest-premium-polycotton-pillow-with-recron-fiber-filling-black-white-16x26-inch-pack-of-2": {
-        "title": "Rest Nest Premium Polycotton Pillow With Recron Fiber Filling \u2013 Black & White, 16x26 Inch (Pack Of 2)",
+        "title": "Rest Nest Premium Polycotton Pillow With Recron Fiber Filling – Black & White, 16x26 Inch (Pack Of 2)",
         "imgUrl": "sold_out.jpg",
         "salePrice": "Rs. 899.00",
         "originalPrice": "Rs. 1,000.00",
         "discount": "-10%",
         "id": "rest-nest-premium-polycotton-pillow-with-recron-fiber-filling-black-white-16x26-inch-pack-of-2",
         "category": "Pillow",
-        "description": "Experience unmatched comfort and support with our premium pillow, designed for deeper sleep and a refreshed you.",
-        "sizes": [
-            {
-                "label": "Standard",
-                "desc": "(24\" x 16\")"
-            },
-            {
-                "label": "Queen",
-                "desc": "(28\" x 18\")"
-            }
+        "description": "Make a bold statement with these black and white polycotton pillows, filled with premium Recron Fiber for plush comfort. The 16x26 inch size fits standard pillowcases perfectly, while the high-quality filling ensures consistent support and softness wash after wash.",
+        "benefits": [
+            "Striking black and white design for modern bedrooms",
+            "Premium Recron Fiber for plush, resilient support",
+            "Standard 16x26 inch size fits all pillowcases",
+            "Polycotton outer is soft, breathable, and durable",
+            "Maintains loft and comfort even after washing"
         ],
         "images": [
             "sold_out.jpg"
         ]
     },
     "rest-nest-16x16-white-stripe-soft-cushions-pack-of-5": {
-        "title": "Rest Nest 16x16 White Stripe Soft Cushions \u2013 Pack of 5",
+        "title": "Rest Nest 16x16 White Stripe Soft Cushions – Pack of 5",
         "imgUrl": "sold_out.jpg",
         "salePrice": "Rs. 899.00",
         "originalPrice": "Rs. 1,000.00",
@@ -268,7 +241,7 @@
         ]
     },
     "rest-nest-soft-cushion-pack-of-2-premium-recron-fiber-17x27-inch": {
-        "title": "Rest Nest Soft Cushion Pack Of 2 \u2013 Premium Recron Fiber (17x27 Inch)",
+        "title": "Rest Nest Soft Cushion Pack Of 2 – Premium Recron Fiber (17x27 Inch)",
         "imgUrl": "sold_out.jpg",
         "salePrice": "Rs. 899.00",
         "originalPrice": "Rs. 1,000.00",
@@ -291,7 +264,7 @@
         ]
     },
     "rest-nest-orthopedic-cervical-memory-foam-cushion-white-1-pc": {
-        "title": "Rest Nest Orthopedic Cervical Memory Foam Cushion \u2013 White (1 Pc)",
+        "title": "Rest Nest Orthopedic Cervical Memory Foam Cushion – White (1 Pc)",
         "imgUrl": "sold_out.jpg",
         "salePrice": "Rs. 899.00",
         "originalPrice": "Rs. 1,000.00",
@@ -314,7 +287,7 @@
         ]
     },
     "rest-nest-slim-microfiber-cushion-17x27-inch-white-1-pcs": {
-        "title": "Rest Nest Slim Microfiber Cushion \u2013 17x27 Inch, White 1 Pcs",
+        "title": "Rest Nest Slim Microfiber Cushion – 17x27 Inch, White 1 Pcs",
         "imgUrl": "sold_out.jpg",
         "salePrice": "Rs. 899.00",
         "originalPrice": "Rs. 1,000.00",
@@ -337,7 +310,7 @@
         ]
     },
     "rest-nest-premium-white-glace-cotton-cushions-pack-of-2-800g-each": {
-        "title": "Rest Nest Premium White Glace Cotton Cushions \u2013 Pack Of 2 (800g Each)",
+        "title": "Rest Nest Premium White Glace Cotton Cushions – Pack Of 2 (800g Each)",
         "imgUrl": "sold_out.jpg",
         "salePrice": "Rs. 899.00",
         "originalPrice": "Rs. 1,000.00",
@@ -360,7 +333,7 @@
         ]
     },
     "rest-nest-contourcare-memory-foam-cushion-orthopedic-support-for-perfect-sleep": {
-        "title": "Rest Nest ContourCare\u2122 Memory Foam Cushion \u2013 Orthopedic Support For Perfect Sleep",
+        "title": "Rest Nest ContourCare™ Memory Foam Cushion – Orthopedic Support For Perfect Sleep",
         "imgUrl": "sold_out.jpg",
         "salePrice": "Rs. 899.00",
         "originalPrice": "Rs. 1,000.00",
@@ -383,7 +356,7 @@
         ]
     },
     "rest-nest-white-gold-glace-cotton-sleeping-cushions-pack-of-2-lightweight-750g-each": {
-        "title": "Rest Nest White & Gold Glace Cotton Sleeping Cushions \u2013 Pack Of 2 (Lightweight, 750g Each)",
+        "title": "Rest Nest White & Gold Glace Cotton Sleeping Cushions – Pack Of 2 (Lightweight, 750g Each)",
         "imgUrl": "sold_out.jpg",
         "salePrice": "Rs. 899.00",
         "originalPrice": "Rs. 1,000.00",
@@ -429,7 +402,7 @@
         ]
     },
     "rest-nest-blue-white-polycotton-cushion-pack-of-2-16x26-inch-light-weight-soft-supportive-filled-with-reliance-recron-fiber": {
-        "title": "Rest Nest Blue & White Polycotton Cushion \u2013 Pack Of 2 (16x26 Inch, Light Weight, Soft & Supportive, Filled With Reliance Recron Fiber)",
+        "title": "Rest Nest Blue & White Polycotton Cushion – Pack Of 2 (16x26 Inch, Light Weight, Soft & Supportive, Filled With Reliance Recron Fiber)",
         "imgUrl": "sold_out.jpg",
         "salePrice": "Rs. 899.00",
         "originalPrice": "Rs. 1,000.00",
@@ -452,7 +425,7 @@
         ]
     },
     "rest-nest-premium-polycotton-cushion-with-recron-fiber-filling-black-white-16x26-inch-pack-of-2": {
-        "title": "Rest Nest Premium Polycotton Cushion With Recron Fiber Filling \u2013 Black & White, 16x26 Inch (Pack Of 2)",
+        "title": "Rest Nest Premium Polycotton Cushion With Recron Fiber Filling – Black & White, 16x26 Inch (Pack Of 2)",
         "imgUrl": "sold_out.jpg",
         "salePrice": "Rs. 899.00",
         "originalPrice": "Rs. 1,000.00",

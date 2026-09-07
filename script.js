@@ -617,9 +617,30 @@ async function initProductPage() {
             });
         }
 
-        // Generate Sizes
+        // Generate Description & Benefits (for pillows) or Sizes (for cushions)
         const sizesContainer = document.getElementById('product-sizes');
-        if (sizesContainer && product.sizes) {
+        const descSection = document.getElementById('product-description-section');
+        const benefitsSection = document.getElementById('product-benefits-section');
+        const fullDescEl = document.getElementById('product-full-desc');
+        const benefitsListEl = document.getElementById('product-benefits');
+
+        if (product.benefits && product.benefits.length > 0 && descSection && benefitsSection) {
+            // Show description section
+            if (fullDescEl) {
+                fullDescEl.innerText = product.description;
+            }
+            descSection.style.display = 'block';
+
+            // Show benefits section
+            benefitsListEl.innerHTML = '';
+            product.benefits.forEach(benefit => {
+                const li = document.createElement('li');
+                li.style.cssText = 'display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.9rem; color: #6B5B4F; line-height: 1.5;';
+                li.innerHTML = `<span style="color: #7BA05B; font-size: 1rem; flex-shrink: 0;">✓</span> ${benefit}`;
+                benefitsListEl.appendChild(li);
+            });
+            benefitsSection.style.display = 'block';
+        } else if (sizesContainer && product.sizes) {
             sizesContainer.innerHTML = '';
             product.sizes.forEach((size, index) => {
                 const btn = document.createElement('button');
