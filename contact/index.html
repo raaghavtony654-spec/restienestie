@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Bulk Orders – RestNest</title>
-    <meta name="description" content="Complete your RestNest order. Secure checkout with fast shipping on handcrafted luxury pillows and cushions.">
+    <title>Contact Us – RestNest</title>
+    <meta name="description" content="Get in touch with RestNest. We'd love to hear from you.">
     <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -834,36 +834,31 @@
         <nav class="checkout-breadcrumb" aria-label="Breadcrumb">
             <a href="../index.html">Home</a>
             <span class="separator">›</span>
-            <span class="current">Bulk Orders</span>
+            <span class="current">Contact Us</span>
         </nav>
 
         <div class="checkout-container">
             
-            <!-- Left: Shipping Form -->
+            <!-- Left: Contact Form -->
             <div class="checkout-card" id="shipping-card">
                 <div class="card-glow"></div>
                 <h2>
                     <span class="icon">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                            <circle cx="12" cy="10" r="3"/>
+                            <line x1="22" y1="2" x2="11" y2="13"/>
+                            <polygon points="22 2 15 22 11 13 2 9 22 2"/>
                         </svg>
                     </span>
-                    Order Information
+                    Send Us a Message
                 </h2>
                 
                 <div id="checkout-status"></div>
 
                 <form id="checkout-form" autocomplete="on">
                     <div class="form-row">
-                        <div class="form-group">
-                            <label for="fname">First Name</label>
-                            <input type="text" id="fname" required placeholder="Raj" autocomplete="given-name">
-                            <span class="input-highlight"></span>
-                        </div>
-                        <div class="form-group">
-                            <label for="lname">Last Name</label>
-                            <input type="text" id="lname" required placeholder="Gupta" autocomplete="family-name">
+                        <div class="form-group" style="flex: 1;">
+                            <label for="name">Name</label>
+                            <input type="text" id="name" required placeholder="Raj Gupta" autocomplete="name">
                             <span class="input-highlight"></span>
                         </div>
                     </div>
@@ -882,30 +877,27 @@
                     </div>
 
                     <div class="form-row">
-                        <div class="form-group">
-                            <label for="businessName">Business Name</label>
-                            <input type="text" id="businessName" required placeholder="Your Business Name">
+                        <div class="form-group" style="flex: 1;">
+                            <label for="company">Company (Optional)</label>
+                            <input type="text" id="company" placeholder="Your Business Name">
                             <span class="input-highlight"></span>
                         </div>
-                        <div class="form-group">
-                            <label for="quantity">Quantity (Min 50)</label>
-                            <input type="number" id="quantity" required min="50" placeholder="50">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group" style="flex: 1;">
+                            <label for="message">Message</label>
+                            <textarea id="message" required placeholder="How can we help you?" style="width: 100%; padding: 0.8rem 1rem; border: 1.5px solid #E8E2DA; border-radius: 12px; font-family: 'Inter', sans-serif; font-size: 0.95rem; color: #333; background: rgba(255, 255, 255, 0.6); resize: vertical; min-height: 100px; transition: all 0.3s ease;"></textarea>
                             <span class="input-highlight"></span>
                         </div>
                     </div>
                 
                     <button type="submit" class="pay-btn" style="margin-top: 2rem;">
-                        Submit Bulk Request
+                        Send Message
                         <span class="btn-icon">→</span>
                     </button>
 
                 </form>
-            </div>
-
-            
-
-                    
-                </div>
             </div>
         </div>
 
@@ -985,20 +977,19 @@
             e.preventDefault();
             const btn = e.target.querySelector('button[type="submit"]');
             btn.disabled = true;
-            btn.innerHTML = 'Submitting...';
-            showStatus('Submitting your request...', 'loading');
+            btn.innerHTML = 'Sending...';
+            showStatus('Sending your message...', 'loading');
 
             const payload = {
-                first_name: document.getElementById('fname').value,
-                last_name: document.getElementById('lname').value,
+                name: document.getElementById('name').value,
                 email: document.getElementById('email').value,
                 phone: document.getElementById('phone').value,
-                business_name: document.getElementById('businessName').value,
-                quantity: document.getElementById('quantity').value
+                company: document.getElementById('company').value,
+                message: document.getElementById('message').value
             };
 
             try {
-                const res = await fetch('https://restienestie.onrender.com/api/bulk-orders', {
+                const res = await fetch('https://restienestie.onrender.com/api/contact', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
@@ -1006,17 +997,17 @@
                 const data = await res.json();
                 
                 if (data.success) {
-                    showStatus('Thank you! Your bulk order request has been submitted successfully.', 'success');
+                    showStatus('Thank you! Your message has been sent successfully.', 'success');
                     e.target.reset();
                 } else {
-                    showStatus('Error: ' + (data.error || 'Failed to submit request.'), 'error');
+                    showStatus('Error: ' + (data.error || 'Failed to send message.'), 'error');
                 }
             } catch (err) {
                 console.error(err);
                 showStatus('Network error. Please try again.', 'error');
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = 'Submit Bulk Request <span class="btn-icon">→</span>';
+                btn.innerHTML = 'Send Message <span class="btn-icon">→</span>';
             }
         });
     </script>

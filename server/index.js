@@ -76,7 +76,7 @@ if (mongoose) {
         .catch(err => console.error('MongoDB connection error:', err));
 }
 
-let Order, UserProfile, BulkOrder, PageTraffic;
+let Order, UserProfile, BulkOrder, ContactMessage, PageTraffic;
 
 if (mongoose) {
     // Mongoose Schema
@@ -130,6 +130,19 @@ if (mongoose) {
     });
 
     BulkOrder = mongoose.model('BulkOrder', bulkOrderSchema);
+
+    const contactMessageSchema = new mongoose.Schema({
+        id: { type: String, required: true, unique: true },
+        name: String,
+        email: String,
+        phone: String,
+        company: String,
+        message: String,
+        status: { type: String, default: 'Unread' },
+        created_at: { type: Date, default: Date.now }
+    });
+
+    ContactMessage = mongoose.model('ContactMessage', contactMessageSchema);
 
     const pageTrafficSchema = new mongoose.Schema({
         page: { type: String, required: true, unique: true },
@@ -624,6 +637,38 @@ app.get('/api/bulk-orders', async (req, res) => {
         res.json({ success: true, bulkOrders });
     } catch (error) {
         console.error('Error fetching bulk orders:', error);
+        res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+});
+
+// ----------------------------------------------------
+// Contact Messages Endpoints
+// ----------------------------------------------------
+app.post('/api/contact', async (req, res) => {
+    try {
+        const { name, company, email, phone, message } = req.body;
+        const newContact = new ContactMessage({
+            id: `contact_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+            name,
+            company,
+            email,
+            phone,
+            message
+        });
+        await newContact.save();
+        res.json({ success: true, contact: newContact });
+    } catch (error) {
+        console.error('Error creating contact message:', error);
+        res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+});
+
+app.get('/api/contact', async (req, res) => {
+    try {
+        const contacts = await ContactMessage.find().sort({ created_at: -1 });
+        res.json({ success: true, contacts });
+    } catch (error) {
+        console.error('Error fetching contact messages:', error);
         res.status(500).json({ success: false, error: 'Internal Server Error' });
     }
 });
