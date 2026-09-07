@@ -201,7 +201,7 @@ app.get('/api/config', (req, res) => {
 // ----------------------------------------------------
 const PRODUCT_REGISTRY = {
     "Glace Cotton Pillow | 17x27 Inch | Lightweight & Comfortable | Pack Of 2": 1063.0,
-    "Rest Nest Orthopedic Cervical Memory Foam Pillow": 1175.0,
+    "Contour Memory Foam Pillow | 16x24x3 Inch | White (1 Pc)": 1175.0,
     "Rest Nest Slim Microfiber Pillow – 17x27 Inch": 1014.0,
     "Rest Nest Premium White Glace Cotton Pillows – Pack of 2": 1140.0,
     "Rest Nest 16x16 White Stripe Soft Cushions – Pack of 5": 1270.0,
@@ -211,7 +211,7 @@ const PRODUCT_REGISTRY = {
     "Rest Nest Soft Cushion Set of 5 – Glace Cotton": 1386.0,
     "Rest Nest White & Gold Glace Cotton Pillows – Pack of 2": 1110.0,
     "Rest Nest Soft Pillow Pack Of 2 – Premium Recron Fiber (17x27 Inch)": 1065.0,
-    "Rest Nest Orthopedic Cervical Memory Foam Pillow – White (1 Pc)": 1175.0,
+    "Contour Memory Foam Pillow": 1175.0,
     "Rest Nest Slim Microfiber Pillow – 17x27 Inch, White 1 Pcs": 1014.0,
     "Rest Nest Premium White Glace Cotton Pillows – Pack Of 2 (800g Each)": 1140.0,
     "Rest Nest ContourCare™ Memory Foam Pillow – Orthopedic Support For Perfect Sleep": 1175.0,
