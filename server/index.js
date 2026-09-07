@@ -200,7 +200,7 @@ app.get('/api/config', (req, res) => {
 // Secure Product Registry (Anti-Tampering)
 // ----------------------------------------------------
 const PRODUCT_REGISTRY = {
-    "Rest Nest Premium White Sleeping Pillow | Glace Cotton Fabric | Lightweight & Comfortable | Pack Of 2": 1063.0,
+    "Glace Cotton Pillow | 17x27 Inch | Lightweight & Comfortable | Pack Of 2": 1063.0,
     "Rest Nest Orthopedic Cervical Memory Foam Pillow": 1175.0,
     "Rest Nest Slim Microfiber Pillow – 17x27 Inch": 1014.0,
     "Rest Nest Premium White Glace Cotton Pillows – Pack of 2": 1140.0,
