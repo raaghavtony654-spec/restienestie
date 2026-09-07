@@ -17,6 +17,7 @@ const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || 'dummy';
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 const app = express();
+app.set('trust proxy', 1);
 app.use(cors());
 app.use(express.json());
 
