@@ -210,7 +210,7 @@ const PRODUCT_REGISTRY = {
     "Rest Nest ContourCare Memory Foam Pillow": 1175.0,
     "Rest Nest Soft Cushion Set of 5 – Glace Cotton": 1386.0,
     "Rest Nest White & Gold Glace Cotton Pillows – Pack of 2": 1110.0,
-    "Rest Nest Soft Pillow Pack Of 2 – Premium Recron Fiber (17x27 Inch)": 1065.0,
+    "Stripe Pillow | 17x27 Inch | Pack Of 2": 1065.0,
     "Contour Memory Foam Pillow": 1175.0,
     "Slim Pillow": 1014.0,
     "Pipe Pillow": 1140.0,
